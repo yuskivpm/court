@@ -4,7 +4,7 @@
     <title>Login</title>
 </head>
 <body>
-    <form name="LoginForm" method="POST" action="controller">
+    <form name="LoginForm" method="POST" action="/login">
         <input type="hidden" name="command" value="Login" />
         Login:
         <br />

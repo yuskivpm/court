@@ -1,15 +1,16 @@
 package com.dsa.dao.services;
 
-import java.sql.*;
-
 import com.dsa.dao.entity.CourtDao;
 import com.dsa.dao.entity.UserDao;
 import com.dsa.model.Court;
 import com.dsa.model.CourtInstance;
 import com.dsa.model.Role;
 import com.dsa.model.User;
+
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+
+import java.sql.*;
 
 public final class DbCreator {
   private static final Logger log = Logger.getLogger(DbCreator.class);

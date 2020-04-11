@@ -1,18 +1,20 @@
 package com.dsa.dao.entity;
 
+import com.dsa.model.pure.MyEntity;
+
+import org.apache.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
-import com.dsa.model.pure.MyEntity;
-import org.apache.log4j.Logger;
-import org.jetbrains.annotations.NotNull;
 
 interface EntityDao<E extends MyEntity> {
 
   List<E> getAll();
 
-  E getEntity(long id);
+  E getEntity(long id) throws SQLException;
 
   boolean add(E entity);
 
