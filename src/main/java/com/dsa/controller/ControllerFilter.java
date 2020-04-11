@@ -4,10 +4,11 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import java.io.IOException;
 
-@WebFilter(
-    urlPatterns = "/*",
-    dispatcherTypes = {DispatcherType.REQUEST}
-)
+// TODO: UNREADY ControllerFilter!!!
+//@WebFilter(
+//    urlPatterns = "/ccdcdcd/*",
+//    dispatcherTypes = {DispatcherType.REQUEST}
+//)
 public class ControllerFilter implements Filter{
 
   @Override
