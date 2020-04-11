@@ -8,7 +8,7 @@
     <hr />
     ${user}, hello!
     <hr />
-    <form name="LogoutForm" method="POST" action="controller">
+    <form name="LogoutForm" method="POST" action="/controller">
         <input type="hidden" name="command" value="Logout" />
         <input type="submit" value="Log out" />
     </form>

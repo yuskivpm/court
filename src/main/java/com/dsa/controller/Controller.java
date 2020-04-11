@@ -1,5 +1,10 @@
 package com.dsa.controller;
 
+import com.dsa.service.command.ActionCommand;
+import com.dsa.service.ActionFactory;
+import com.dsa.service.resource.ConfigManager;
+import com.dsa.service.resource.MessageManager;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,12 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import com.dsa.service.command.ActionCommand;
-import com.dsa.service.ActionFactory;
-import com.dsa.service.resource.ConfigManager;
-import com.dsa.service.resource.MessageManager;
-
-@WebServlet("/controller")
+@WebServlet({"/controller/*"})
+//@WebServlet(name="MainServlet", displayName="Main servlet", urlPatterns={"/", "/index", "/controller"})
 public class Controller extends HttpServlet {
 
   static{

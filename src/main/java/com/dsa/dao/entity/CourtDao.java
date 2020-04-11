@@ -1,14 +1,12 @@
 package com.dsa.dao.entity;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.sql.SQLException;
-import java.sql.Connection;
-import java.sql.Statement;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import com.dsa.model.Court;
 import com.dsa.model.CourtInstance;
+
+import java.sql.SQLException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class CourtDao extends AbstractEntityDao<Court> {
   private static final String SQL_INSERT="INSERT INTO COURT (COURT_NAME,COURT_INSTANCE,MAIN_COURT_ID) VALUES(?, ?, ?)";

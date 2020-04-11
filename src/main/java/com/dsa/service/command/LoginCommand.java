@@ -6,9 +6,12 @@ import com.dsa.service.LoginLogic;
 import com.dsa.service.resource.ConfigManager;
 import com.dsa.service.resource.MessageManager;
 
+import javax.servlet.http.HttpSession;
+
 public class LoginCommand implements ActionCommand {
   private static final String PARAM_NAME_LOGIN = "login";
   private static final String PARAM_NAME_PASSWORD = "password";
+  private static final String USER_SESSION_ID = "user_id";
 
   @Override
   public String execute(ProxyRequest request){
@@ -17,12 +20,24 @@ public class LoginCommand implements ActionCommand {
     String password = request.getParameter(PARAM_NAME_PASSWORD);
     User user=LoginLogic.checkLogin(login, password);
     if (user!=null){
-      request.setAttribute("user", user.getName());
+      LoginCommand.startUserSession(request,user);
       page = ConfigManager.getProperty("path.page.main");
     }else{
       request.setAttribute("errorFailLoginPassMessage", MessageManager.getProperty("message.loginError"));
       page = ConfigManager.getProperty("path.page.login");
     }
     return page;
+  }
+
+  public static void startUserSession(ProxyRequest request, User user){
+    request.setAttribute("user", user.getName());
+    HttpSession session=request.getSession();
+    session.setAttribute(USER_SESSION_ID, user.getId());
+  }
+
+  public static String getUserSessionId(ProxyRequest request){
+    HttpSession session=request.getSession();
+    Object UserSessionId=session.getAttribute(USER_SESSION_ID);
+    return UserSessionId==null?"":UserSessionId.toString();
   }
 }

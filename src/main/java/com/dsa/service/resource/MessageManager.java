@@ -1,6 +1,7 @@
 package com.dsa.service.resource;
 
 import java.util.ResourceBundle;
+
 public class MessageManager {
   private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("messages");
 

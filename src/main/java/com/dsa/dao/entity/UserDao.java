@@ -1,16 +1,12 @@
 package com.dsa.dao.entity;
 
-import com.dsa.model.Court;
 import com.dsa.model.Role;
 import com.dsa.model.User;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.PreparedStatement;
-import java.util.ArrayList;
-import java.util.List;
 
 public class UserDao extends AbstractEntityDao<User> {
   private static final String SQL_INSERT="INSERT INTO USER (LOGIN,PASSWORD,ROLE_ID,NAME,COURT_ID,IS_ACTIVE) "+
