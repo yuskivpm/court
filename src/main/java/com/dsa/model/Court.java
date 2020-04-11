@@ -8,10 +8,6 @@ public class Court extends CourtPure {
   public Court(){
     super();
   }
-//
-//  public Court(long id, String courtName, CourtInstance courtInstance, long mainCourtId){
-//    super(id, courtName, courtInstance, mainCourtId);
-//  }
 
   public Court(long id, String courtName, CourtInstance courtInstance, Court mainCourt){
     super(id, courtName, courtInstance, mainCourt==null?0:mainCourt.getId());

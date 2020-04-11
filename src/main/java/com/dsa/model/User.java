@@ -8,10 +8,6 @@ public class User extends UserPure {
   public User(){
     super();
   }
-//
-//  public User(long id, String login, String password, Role role, String name, long courtId, boolean isActive) {
-//    super(id, login, password, role, name, courtId, isActive);
-//  }
 
   public User(long id, String login, String password, Role role, String name, Court court, boolean isActive) {
     super(id, login, password, role, name, court==null?0:court.getId(), isActive);

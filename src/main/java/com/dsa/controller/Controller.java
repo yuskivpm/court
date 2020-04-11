@@ -13,7 +13,8 @@ import com.dsa.service.ActionFactory;
 import com.dsa.service.resource.ConfigManager;
 import com.dsa.service.resource.MessageManager;
 
-@WebServlet("/controller")
+@WebServlet({"/controller"})
+//@WebServlet(name="MainServlet", displayName="Main servlet", urlPatterns={"/", "/index", "/controller"})
 public class Controller extends HttpServlet {
 
   static{
