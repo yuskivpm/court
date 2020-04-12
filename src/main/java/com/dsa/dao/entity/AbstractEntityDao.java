@@ -11,8 +11,7 @@ import java.util.List;
 
 public abstract class AbstractEntityDao <E extends MyEntity> implements EntityDao<E> {
   protected static final Logger log = Logger.getLogger(AbstractEntityDao.class);
-  private static final String SQL_SELECT_ALL= "SELECT * FROM ";;
-//  private static final String SQL_SELECT_BY_FIELD_NAME="SELECT * FROM %s WHERE %s=?";
+  private static final String SQL_SELECT_ALL= "SELECT * FROM ";
   private static final String SQL_SELECT_BY_MAP="SELECT * FROM %s WHERE";
   protected final Connection connection;
   protected final String TABLE_NAME;

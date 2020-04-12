@@ -4,7 +4,7 @@
     <title>Main</title>
 </head>
 <body>
-    <h3>Welcome</h3>
+    <h3>Welcome admin</h3>
     <hr />
     ${user}, hello!
     <hr />
