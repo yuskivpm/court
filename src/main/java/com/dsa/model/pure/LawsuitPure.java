@@ -2,7 +2,7 @@ package com.dsa.model.pure;
 
 import java.util.Date;
 import java.util.Objects;
-
+//todo: create Lawsuit & LawsuitDao
 public class LawsuitPure extends MyEntity {
   private long suitorId;
   private long defendantId;

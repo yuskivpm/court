@@ -4,6 +4,7 @@ import com.dsa.model.VerdictType;
 
 import java.util.Date;
 import java.util.Objects;
+//todo: create Verdict & VerdictDao
 
 public class VerdictPure extends MyEntity {
   long lawsuitId;

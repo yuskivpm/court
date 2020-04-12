@@ -10,6 +10,11 @@ public enum CommandEnum {
     {
       this.command = new LogoutCommand();
     }
+  },
+  WRONG_COMMAND {
+    {
+      this.command = new EmptyCommand();
+    }
   };
 
   ActionCommand command;

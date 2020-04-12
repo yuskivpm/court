@@ -7,18 +7,35 @@ import com.dsa.service.command.EmptyCommand;
 import com.dsa.service.resource.MessageManager;
 
 public class ActionFactory {
-  public ActionCommand defineCommand(ProxyRequest request){
-    ActionCommand currentCommand = new EmptyCommand();
+  public static CommandEnum getCommandEnum(String command){
+    try{
+      return CommandEnum.valueOf(command.toUpperCase());
+    }catch(IllegalArgumentException e){
+//      request.setAttribute("wrongAction", action + MessageManager.getProperty("message.wrongAction"));
+      return CommandEnum.WRONG_COMMAND;
+    }
+  }
+
+  public static CommandEnum getCommandEnum(ProxyRequest request){
+    return getCommandEnum(getCommand(request));
+  }
+
+  public static String getCommand(ProxyRequest request){
     String action = request.getParameter("command");
+    return action==null?"":action;
+  }
+
+  public static ActionCommand defineCommand(ProxyRequest request){
+    ActionCommand currentCommand = new EmptyCommand();
+    String action = getCommand(request);
     if (action==null || action.isEmpty()){
       return currentCommand;
     }else{
-      try{
-        CommandEnum currentEnum = CommandEnum.valueOf(action.toUpperCase());
+        CommandEnum currentEnum = getCommandEnum(action);
+        if (currentEnum==CommandEnum.WRONG_COMMAND){
+          request.setAttribute("wrongAction", action + MessageManager.getProperty("message.wrongAction"));
+        }
         currentCommand = currentEnum.getCommand();
-      }catch(IllegalArgumentException e){
-        request.setAttribute("wrongAction", action + MessageManager.getProperty("message.wrongAction"));
-      }
       return currentCommand;
     }
   }

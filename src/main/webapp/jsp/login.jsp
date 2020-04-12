@@ -4,7 +4,7 @@
     <title>Login</title>
 </head>
 <body>
-    <form name="LoginForm" method="POST" action="/login">
+    <form name="LoginForm" method="POST" action="/api/v1">
         <input type="hidden" name="command" value="Login" />
         Login:
         <br />

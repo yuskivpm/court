@@ -4,25 +4,31 @@ import com.dsa.service.command.ActionCommand;
 import com.dsa.service.ActionFactory;
 import com.dsa.service.resource.ConfigManager;
 import com.dsa.service.resource.MessageManager;
+import org.apache.log4j.Logger;
 
+import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import javax.servlet.annotation.WebServlet;
 
-@WebServlet({"/controller/*"})
+@WebServlet({"/api/v1/*"})
 //@WebServlet(name="MainServlet", displayName="Main servlet", urlPatterns={"/", "/index", "/controller"})
 public class Controller extends HttpServlet {
+  private static final Logger log = Logger.getLogger(Controller.class);
+  private static final String PATH_PAGE_INDEX;
+  private static final String NULL_PAGE_MESSAGE;
 
   static{
-//    create in-memory db
+    PATH_PAGE_INDEX=ConfigManager.getProperty("path.page.index");
+    NULL_PAGE_MESSAGE=MessageManager.getProperty("message.nullPage");
+    // initialization of DbCreator
     try{
       Class.forName("com.dsa.dao.services.DbCreator");
     }catch(ClassNotFoundException e){
-//      log.error(e);
+      log.error("Fail to initialize DbCreator: "+e);
     }
   }
 
@@ -39,15 +45,14 @@ public class Controller extends HttpServlet {
   private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     String page = null;
     ProxyRequest proxyRequest= new ProxyRequest(request);
-    ActionFactory client = new ActionFactory();
-    ActionCommand command = client.defineCommand(proxyRequest);
+    ActionCommand command = ActionFactory.defineCommand(proxyRequest);
     page=command.execute(proxyRequest);
     if(page != null){
       RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
       dispatcher.forward(request, response);
     }else{
-      page = ConfigManager.getProperty("path.page.index");
-      request.getSession().setAttribute("nullPage", MessageManager.getProperty("message.nullPage"));
+      page = PATH_PAGE_INDEX;
+      request.getSession().setAttribute("nullPage", NULL_PAGE_MESSAGE);
       response.sendRedirect(request.getContextPath() + page);
     }
   }
