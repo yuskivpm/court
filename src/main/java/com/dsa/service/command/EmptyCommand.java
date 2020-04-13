@@ -8,5 +8,4 @@ public class EmptyCommand implements ActionCommand {
   public String execute(ProxyRequest request){
     return ConfigManager.getProperty("path.page.login");
   }
-
 }

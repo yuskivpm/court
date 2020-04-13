@@ -20,10 +20,6 @@ public class LawsuitPure extends MyEntity {
   private String defendantAppealText;
   private Date executionDate;
 
-  static{
-    MyEntity.entityName="Lawsuit";
-  }
-
   public LawsuitPure(
       long id,
       long suitorId,
@@ -42,6 +38,7 @@ public class LawsuitPure extends MyEntity {
       Date executionDate
   ) {
     super(id);
+    entityName="Lawsuit";
     this.suitorId = suitorId;
     this.defendantId = defendantId;
     this.jurisdictionCourtId = jurisdictionCourtId;

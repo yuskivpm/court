@@ -11,12 +11,9 @@ public class SuePure extends MyEntity {
   Date sueDate;
   String claimText;
 
-  static{
-    MyEntity.entityName="Sue";
-  }
-
   public SuePure(long id, long suitorId, long defendantId, long courtId, Date sueDate, String claimText) {
     super(id);
+    entityName="Sue";
     this.suitorId = suitorId;
     this.defendantId=defendantId;
     this.courtId=courtId;

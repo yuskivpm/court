@@ -9,14 +9,13 @@ public class CourtPure extends MyEntity {
   private CourtInstance courtInstance;
   protected long mainCourtId;
 
-  static{
-    MyEntity.entityName="Court";
+  public CourtPure(){
+    entityName="Court";
   }
-
-  public CourtPure(){}
 
   public CourtPure(long id, String courtName, CourtInstance courtInstance, long mainCourtId){
     super(id);
+    entityName="Court";
     this.courtName=courtName;
     this.courtInstance=courtInstance;
     this.mainCourtId=mainCourtId;

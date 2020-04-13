@@ -1,5 +1,7 @@
 package com.dsa.dao.entity;
 
+import com.dsa.dao.services.DbPool;
+import com.dsa.dao.services.DbPoolException;
 import com.dsa.model.pure.MyEntity;
 
 import org.apache.log4j.Logger;
@@ -9,15 +11,19 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractEntityDao <E extends MyEntity> implements EntityDao<E> {
+public abstract class AbstractEntityDao <E extends MyEntity> implements EntityDao<E>, AutoCloseable {
   protected static final Logger log = Logger.getLogger(AbstractEntityDao.class);
   private static final String SQL_SELECT_ALL= "SELECT * FROM ";
   private static final String SQL_SELECT_BY_MAP="SELECT * FROM %s WHERE";
-  protected final Connection connection;
+  protected Connection connection;
   protected final String TABLE_NAME;
   protected final String SQL_INSERT;
 
-  public AbstractEntityDao(Connection connection, String entityTableName, String sqlInsert){
+  public AbstractEntityDao(String entityTableName, String sqlInsert) throws DbPoolException, SQLException {
+    this(DbPool.getConnection(), entityTableName, sqlInsert);
+  }
+
+  public AbstractEntityDao(@NotNull Connection connection, String entityTableName, String sqlInsert){
     this.connection = connection;
     this.TABLE_NAME=entityTableName;
     this.SQL_INSERT=sqlInsert;
@@ -109,6 +115,12 @@ public abstract class AbstractEntityDao <E extends MyEntity> implements EntityDa
       }catch(SQLException e){
         log.error("SQLException in closeStatement()"+e);
       }
+    }
+  }
+
+  public void close() throws SQLException{
+    if(connection!=null){
+      connection.close();
     }
   }
 }

@@ -1,5 +1,6 @@
 package com.dsa.dao.entity;
 
+import com.dsa.dao.services.DbPoolException;
 import com.dsa.model.Role;
 import com.dsa.model.User;
 
@@ -9,9 +10,10 @@ import java.sql.SQLException;
 import java.sql.PreparedStatement;
 
 public class UserDao extends AbstractEntityDao<User> {
-  private static final String SQL_INSERT="INSERT INTO USER (LOGIN,PASSWORD,ROLE_ID,NAME,COURT_ID,IS_ACTIVE) "+
+  private static final String USER_TABLE_NAME="USER";
+  private static final String SQL_INSERT="INSERT INTO "+USER_TABLE_NAME+" (LOGIN,PASSWORD,ROLE_ID,NAME,COURT_ID,IS_ACTIVE) "+
       "VALUES(?, ?, ?, ?, ?, ?)";
-  public static final String SQL_CREATE_TABLE="CREATE TABLE IF NOT EXISTS USER(" +
+  public static final String SQL_CREATE_TABLE="CREATE TABLE IF NOT EXISTS "+USER_TABLE_NAME+"(" +
       "ID BIGINT AUTO_INCREMENT PRIMARY KEY, " +
       "LOGIN VARCHAR(255) NOT NULL, " +
       "PASSWORD VARCHAR(255) NOT NULL, " +
@@ -22,8 +24,12 @@ public class UserDao extends AbstractEntityDao<User> {
       "FOREIGN KEY (COURT_ID) REFERENCES COURT(ID) ON DELETE CASCADE" +
       ")";
 
+  public UserDao() throws SQLException, DbPoolException {
+    super(USER_TABLE_NAME, SQL_INSERT);
+  }
+
   public UserDao(Connection connection){
-    super(connection,"USER", SQL_INSERT);
+    super(connection,USER_TABLE_NAME, SQL_INSERT);
   }
 
   @Override

@@ -1,5 +1,6 @@
 package com.dsa.dao.entity;
 
+import com.dsa.dao.services.DbPoolException;
 import com.dsa.model.Court;
 import com.dsa.model.CourtInstance;
 
@@ -9,8 +10,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class CourtDao extends AbstractEntityDao<Court> {
-  private static final String SQL_INSERT="INSERT INTO COURT (COURT_NAME,COURT_INSTANCE,MAIN_COURT_ID) VALUES(?, ?, ?)";
-  public static final String SQL_CREATE_TABLE="CREATE TABLE IF NOT EXISTS COURT(" +
+  private static final String COURT_TABLE_NAME="COURT";
+  private static final String SQL_INSERT="INSERT INTO "+COURT_TABLE_NAME+" (COURT_NAME,COURT_INSTANCE,MAIN_COURT_ID) VALUES(?, ?, ?)";
+  public static final String SQL_CREATE_TABLE="CREATE TABLE IF NOT EXISTS "+COURT_TABLE_NAME+" (" +
       "ID BIGINT AUTO_INCREMENT PRIMARY KEY, " +
       "COURT_NAME VARCHAR(255) NOT NULL, " +
       "COURT_INSTANCE VARCHAR(20) NOT NULL, " +
@@ -18,8 +20,11 @@ public class CourtDao extends AbstractEntityDao<Court> {
       "FOREIGN KEY (MAIN_COURT_ID) REFERENCES (ID) ON DELETE CASCADE" +
       ")";
 
+  public CourtDao() throws SQLException, DbPoolException {
+    super(COURT_TABLE_NAME, SQL_INSERT);
+  }
   public CourtDao(Connection connection){
-    super(connection,"COURT", SQL_INSERT);
+    super(connection,COURT_TABLE_NAME, SQL_INSERT);
   }
 
   @Override

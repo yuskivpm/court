@@ -4,16 +4,39 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProxyRequest {
   private HttpServletRequest request;
+  Map<String,String> params;
 
   public ProxyRequest(@NotNull HttpServletRequest request){
+    params=new HashMap<>();
+      String line = null;
+      try{
+        BufferedReader reader = request.getReader();
+        String[] arr;
+        while ((line = reader.readLine()) != null){
+          arr=line.split("=");
+          if(arr.length==1){
+            params.put(line,"");
+          }else if(arr.length>=1){
+            params.put(arr[0],arr[1]);
+          }
+        }
+      }catch(IOException e){}
     this.request = request;
   }
 
   public String getParameter(String key){
-    return request.getParameter(key);
+    String result=request.getParameter(key);
+    if(result==null || result.isEmpty()){
+      result=params.get(key);
+    }
+    return result==null?"":result;
   }
 
   public void setAttribute(String key, Object value){
