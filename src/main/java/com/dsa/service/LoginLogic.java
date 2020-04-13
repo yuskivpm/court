@@ -13,24 +13,36 @@ import java.sql.SQLException;
 public class LoginLogic {
   private static final Logger log = Logger.getLogger(LoginLogic.class);
   public static User checkLogin(String login, String password){
-    Connection connection=null;
     User user=null;
-    try {
-      connection = DbPool.getConnection();
-      UserDao userDao = new UserDao(connection);
+    try(UserDao userDao = new UserDao()) {
       String[] loginRequest={"LOGIN", login, "PASSWORD",password};
       user = userDao.getEntity(loginRequest);
     }catch(DbPoolException | SQLException e){
       log.error("Can not get connection in checkLogin: "+e);
-    }finally{
-      if(connection!=null){
-        try{
-          connection.close();
-        }catch(SQLException e){
-          log.error("Can not close connection in checkLogin: "+e);
-        }
-      }
     }
     return user;
   }
 }
+
+
+//  public static User checkLogin(String login, String password){
+//    Connection connection=null;
+//    User user=null;
+//    try {
+//      connection = DbPool.getConnection();
+//      UserDao userDao = new UserDao(connection);
+//      String[] loginRequest={"LOGIN", login, "PASSWORD",password};
+//      user = userDao.getEntity(loginRequest);
+//    }catch(DbPoolException | SQLException e){
+//      log.error("Can not get connection in checkLogin: "+e);
+//    }finally{
+//      if(connection!=null){
+//        try{
+//          connection.close();
+//        }catch(SQLException e){
+//          log.error("Can not close connection in checkLogin: "+e);
+//        }
+//      }
+//    }
+//    return user;
+//  }

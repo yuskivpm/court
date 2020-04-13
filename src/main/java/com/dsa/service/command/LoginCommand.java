@@ -29,9 +29,9 @@ public class LoginCommand implements ActionCommand {
     return page;
   }
 
-  public static void startUserSession(ProxyRequest request, User user){
-    request.setAttribute("user", user.getName());
+  private static void startUserSession(ProxyRequest request, User user){
     HttpSession session=request.getSession();
+    request.setAttribute("user", user.getName());
     session.setAttribute(USER_SESSION_ID, user.getId());
   }
 
@@ -40,4 +40,5 @@ public class LoginCommand implements ActionCommand {
     Object UserSessionId=session.getAttribute(USER_SESSION_ID);
     return UserSessionId==null?"":UserSessionId.toString();
   }
+
 }

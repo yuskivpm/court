@@ -33,13 +33,9 @@ import java.io.IOException;
 )
 public class ControllerFilter implements Filter{
   private static final String LOGIN_PAGE;
-//  private static final String CHECK_LOGIN_REQUEST;
-//  private static final String LOGIN_PROCESS_PAGE;
 
   static{
     LOGIN_PAGE=ConfigManager.getProperty("path.page.login");
-//    CHECK_LOGIN_REQUEST=ConfigManager.getProperty("request.login");
-//    LOGIN_PROCESS_PAGE=ConfigManager.getProperty("path.controller");
   }
 
   @Override
@@ -60,26 +56,3 @@ public class ControllerFilter implements Filter{
     chain.doFilter(request,response);
   }
 }
-
-
-
-//  @Override
-//  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException{
-//    HttpServletRequest req=(HttpServletRequest)request;
-//    String path = req.getRequestURI();
-//    if(path.equals(CHECK_LOGIN_REQUEST)){
-//      // receive "/login" - redirect it to controller
-//      req.getRequestDispatcher(LOGIN_PROCESS_PAGE).forward(request,response);
-//      return;
-//    }else if (!path.equals(LOGIN_PAGE)) {
-//      // all requests except "/jsp/login.jsp" check for prior login
-//      ProxyRequest proxyRequest = new ProxyRequest((HttpServletRequest) request);
-//      String UserSession = LoginCommand.getUserSessionId(proxyRequest);
-//      if (UserSession.isEmpty()) {
-//        // user wasn't authorized - redirect to "/jsp/login.jsp"
-//        req.getRequestDispatcher(LOGIN_PAGE).forward(request,response);
-//        return;
-//      }
-//    }
-//    chain.doFilter(request,response);
-//  }
