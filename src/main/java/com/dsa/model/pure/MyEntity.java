@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public abstract class MyEntity implements Serializable, Cloneable{
-  protected static String entityName="MyEntity";
+  protected String entityName="MyEntity";
   private long id;
 
   public MyEntity(){}

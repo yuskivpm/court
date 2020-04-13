@@ -21,7 +21,8 @@ public class LoginCommand implements ActionCommand {
     User user=LoginLogic.checkLogin(login, password);
     if (user!=null){
       LoginCommand.startUserSession(request,user);
-      page = ConfigManager.getProperty("path.page.main."+user.getRole());
+      return new MainPageCommand().execute(request);
+//      page = ConfigManager.getProperty("path.page.main."+user.getRole());
     }else{
       request.setAttribute("errorFailLoginPassMessage", MessageManager.getProperty("message.loginError"));
       page = ConfigManager.getProperty("path.page.login");

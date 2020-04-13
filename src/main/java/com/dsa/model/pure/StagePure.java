@@ -17,10 +17,6 @@ public class StagePure extends MyEntity {
   private Date defendantAppealDate;
   private String defendantAppealText;
 
-  static{
-    MyEntity.entityName="Stage";
-  }
-
   public StagePure(
       long id,
       long lawsuitId,
@@ -36,6 +32,7 @@ public class StagePure extends MyEntity {
       String defendantAppealText
   ) {
     super(id);
+    entityName="Stage";
     this.lawsuitId = lawsuitId;
     this.judgeId = judgeId;
     this.sueDate = sueDate;

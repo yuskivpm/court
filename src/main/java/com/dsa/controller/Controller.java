@@ -2,10 +2,12 @@ package com.dsa.controller;
 
 import com.dsa.service.command.ActionCommand;
 import com.dsa.service.ActionFactory;
+import com.dsa.service.initJsp.InitJsp;
 import com.dsa.service.resource.ConfigManager;
 import com.dsa.service.resource.MessageManager;
 import org.apache.log4j.Logger;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -42,12 +44,18 @@ public class Controller extends HttpServlet {
     processRequest(request, response);
   }
 
+  @Override
+  protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    processRequest(request, response);
+  }
+
   private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     String page = null;
     ProxyRequest proxyRequest= new ProxyRequest(request);
     ActionCommand command = ActionFactory.defineCommand(proxyRequest);
     page=command.execute(proxyRequest);
     if(page != null){
+      InitJsp.InitializeJsp(page,proxyRequest);
       RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
       dispatcher.forward(request, response);
     }else{

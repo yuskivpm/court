@@ -13,10 +13,6 @@ public class VerdictPure extends MyEntity {
   String verdictText;
   long jurisdictionCourtId;
 
-  static{
-    MyEntity.entityName="Verdict";
-  }
-
   public VerdictPure(
       long id,
       long lawsuitId,
@@ -26,6 +22,7 @@ public class VerdictPure extends MyEntity {
       long jurisdictionCourtId
   ) {
     super(id);
+    entityName="Verdict";
     this.lawsuitId = lawsuitId;
     this.effectiveDate = effectiveDate;
     this.verdictResult = verdictResult;

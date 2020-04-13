@@ -11,6 +11,11 @@ public enum CommandEnum {
       this.command = new LogoutCommand();
     }
   },
+  MAINPAGE{
+    {
+      this.command = new MainPageCommand();
+    }
+  },
   WRONG_COMMAND {
     {
       this.command = new EmptyCommand();

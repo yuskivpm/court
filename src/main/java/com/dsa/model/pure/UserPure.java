@@ -12,14 +12,13 @@ public class UserPure extends MyEntity {
   long courtId;
   boolean isActive;
 
-  static{
-    MyEntity.entityName="User";
+  public UserPure(){
+    entityName="User";
   }
-
-  public UserPure(){}
 
   public UserPure(long id, String login, String password, Role role, String name, long courtId, boolean isActive) {
     super(id);
+    entityName="User";
     this.login = login;
     this.password = password;
     this.role = role;
