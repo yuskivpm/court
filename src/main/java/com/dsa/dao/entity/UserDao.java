@@ -13,6 +13,9 @@ public class UserDao extends AbstractEntityDao<User> {
   private static final String USER_TABLE_NAME="USER";
   private static final String SQL_INSERT="INSERT INTO "+USER_TABLE_NAME+" (LOGIN,PASSWORD,ROLE_ID,NAME,COURT_ID,IS_ACTIVE) "+
       "VALUES(?, ?, ?, ?, ?, ?)";
+  private static final String SQL_UPDATE="UPDATE "+USER_TABLE_NAME+
+      " SET LOGIN = ?, PASSWORD = ?, ROLE_ID = ?,  NAME= ?,  COURT_ID= ?,  IS_ACTIVE= ?" +
+      " WHERE ID = ?";
   public static final String SQL_CREATE_TABLE="CREATE TABLE IF NOT EXISTS "+USER_TABLE_NAME+"(" +
       "ID BIGINT AUTO_INCREMENT PRIMARY KEY, " +
       "LOGIN VARCHAR(255) NOT NULL, " +
@@ -25,11 +28,11 @@ public class UserDao extends AbstractEntityDao<User> {
       ")";
 
   public UserDao() throws SQLException, DbPoolException {
-    super(USER_TABLE_NAME, SQL_INSERT);
+    super(USER_TABLE_NAME, SQL_INSERT,SQL_UPDATE);
   }
 
   public UserDao(Connection connection){
-    super(connection,USER_TABLE_NAME, SQL_INSERT);
+    super(connection,USER_TABLE_NAME, SQL_INSERT,SQL_UPDATE);
   }
 
   @Override
@@ -41,7 +44,7 @@ public class UserDao extends AbstractEntityDao<User> {
       user.setPassword(resultSet.getString("PASSWORD"));
       user.setRole(Role.valueOf(resultSet.getString("ROLE_ID")));
       user.setName(resultSet.getString("NAME"));
-      user.setCourt(new CourtDao(connection).getEntity(resultSet.getLong("COURT_ID")));
+      user.setCourt(new CourtDao(connection).readEntity(resultSet.getLong("COURT_ID")));
       user.setIsActive(resultSet.getBoolean("IS_ACTIVE"));
       return user;
     }catch(SQLException e){
@@ -51,24 +54,14 @@ public class UserDao extends AbstractEntityDao<User> {
   }
 
   @Override
-  protected void setAllPreparedValues(PreparedStatement preparedStatement, User user) throws SQLException{
-    preparedStatement.setString(1, user.getLogin());
-    preparedStatement.setString(2, user.getPassword());
-    preparedStatement.setString(3, user.getRole().toString());
-    preparedStatement.setString(4, user.getName());
-    setPreparedValueOrNull(preparedStatement,5,user.getCourtId());
-    preparedStatement.setBoolean(6, user.getIsActive());
+  protected int setAllPreparedValues(PreparedStatement preparedStatement, User user, boolean isAddOperation) throws SQLException{
+      preparedStatement.setString(1, user.getLogin());
+      preparedStatement.setString(2, user.getPassword());
+      preparedStatement.setString(3, user.getRole().toString());
+      preparedStatement.setString(4, user.getName());
+      setPreparedValueOrNull(preparedStatement,5,user.getCourtId());
+      preparedStatement.setBoolean(6, user.getIsActive());
+    return 7; // next index for preparedStatement.set_()
   };
 
-  @Override
-  public boolean update(User entity){
-//    TODO: update for User
-    throw new RuntimeException("Unready!!");
-  };
-
-  @Override
-  public boolean remove(long id){
-//    TODO: remove for Use
-    throw new RuntimeException("Unready!!");
-  };
 }

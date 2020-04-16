@@ -15,41 +15,42 @@ public abstract class AbstractEntityDao <E extends MyEntity> implements EntityDa
   protected static final Logger log = Logger.getLogger(AbstractEntityDao.class);
   private static final String SQL_SELECT_ALL= "SELECT * FROM ";
   private static final String SQL_SELECT_BY_MAP="SELECT * FROM %s WHERE";
+  private static final String SQL_DELETE_BY_ID="DELETE FROM %s WHERE ID=?";
   protected Connection connection;
   protected final String TABLE_NAME;
   protected final String SQL_INSERT;
+  protected final String SQL_UPDATE_BY_ID;
 
-  public AbstractEntityDao(String entityTableName, String sqlInsert) throws DbPoolException, SQLException {
-    this(DbPool.getConnection(), entityTableName, sqlInsert);
+  public AbstractEntityDao(String entityTableName, String sqlInsert, String sqlUpdate) throws DbPoolException, SQLException {
+    this(DbPool.getConnection(), entityTableName, sqlInsert, sqlUpdate);
   }
 
-  public AbstractEntityDao(@NotNull Connection connection, String entityTableName, String sqlInsert){
+  public AbstractEntityDao(@NotNull Connection connection, String entityTableName, String sqlInsert, String sqlUpdate){
     this.connection = connection;
     this.TABLE_NAME=entityTableName;
     this.SQL_INSERT=sqlInsert;
+    this.SQL_UPDATE_BY_ID=sqlUpdate;
   }
 
   @Override
-  public boolean add(E entity){
+  public boolean createEntity(E entity){
     boolean result=false;
-    try{
-      PreparedStatement st = connection.prepareStatement(SQL_INSERT);
-      setAllPreparedValues(st,entity);
-      st.executeUpdate();
-      result=true;
+    try(PreparedStatement st = connection.prepareStatement(SQL_INSERT)){
+      setAllPreparedValues(st,entity,true);
+      result=st.executeUpdate()>0;
     }catch(SQLException e){
-      log.error("SQLException in EntityDao.add("+entity+"): "+e);
+      log.error("SQLException in EntityDao.createEntity("+entity+"): "+e);
     }
     return result;
   };
 
   @Override
-  public List<E> getAll(){
+  public List<E> readAll(){
     List<E> entities = new ArrayList<>();
-    Statement st = null;
-    try{
-      st = connection.createStatement();
-      ResultSet rs=st.executeQuery(SQL_SELECT_ALL+TABLE_NAME);
+    try(
+        Statement st = connection.createStatement();
+        ResultSet rs=st.executeQuery(SQL_SELECT_ALL+TABLE_NAME);
+    ){
       while(rs.next()){
         E entity= recordToEntity(rs);
         if(entity!=null){
@@ -57,24 +58,22 @@ public abstract class AbstractEntityDao <E extends MyEntity> implements EntityDa
         }
       }
     }catch(SQLException e){
-      log.error("SQLException in getAll: "+e);
-    }finally{
-      closeStatements(st);
+      log.error("SQLException in readAll: "+e);
     }
     return entities;
   }
 
   @Override
-  public E getEntity(long id) throws SQLException {
-    return getEntity("ID", Long.toString(id));
+  public E readEntity(long id) throws SQLException {
+    return readEntity("ID", Long.toString(id));
   }
 
-  public E getEntity(String fieldName, String value) throws SQLException{
+  public E readEntity(String fieldName, String value) throws SQLException{
     String[] where={fieldName, value};
-    return getEntity(where);
+    return readEntity(where);
   }
 
-  public E getEntity(@NotNull String[] whereArray) throws SQLException{
+  public E readEntity(@NotNull String[] whereArray) throws SQLException{
     if((whereArray.length==0)||((whereArray.length&1)==1)){
       log.error("Incorrect whereArray length: "+whereArray);
       throw new SQLException("Incorrect whereArray length: "+whereArray.length);
@@ -84,16 +83,43 @@ public abstract class AbstractEntityDao <E extends MyEntity> implements EntityDa
     for(int i=0; i<whereArray.length;){
       selectString+=" "+whereArray[i++]+"='"+whereArray[i++]+"'"+(i<whereArray.length?" and":"");
     }
-    try{
-      PreparedStatement st = connection.prepareStatement(selectString);
-      ResultSet rs=st.executeQuery();
+    try(
+        PreparedStatement st = connection.prepareStatement(selectString);
+        ResultSet rs=st.executeQuery();
+    ){
       if (rs.next()){
         entity=recordToEntity(rs);
       }
     }catch(SQLException e){
-      log.error("SQLException in EntityDao.getItem("+whereArray+"): "+e);
+      log.error("SQLException in EntityDao.readEntity("+whereArray+"): "+e);
     }
     return entity;
+  }
+
+  public boolean updateEntity(E entity){
+    boolean result=false;
+    try(PreparedStatement st = connection.prepareStatement(SQL_UPDATE_BY_ID)){
+      st.setLong(setAllPreparedValues(st,entity,false), entity.getId());
+      result=st.executeUpdate()>0;
+    }catch(SQLException e){
+      log.error("Fail updateEntity("+entity+"): "+e);
+    }
+    return result;
+  }
+
+  public boolean deleteEntity(String id){
+    boolean result=false;
+    try(PreparedStatement st = connection.prepareStatement(String.format(SQL_DELETE_BY_ID,TABLE_NAME))){
+      st.setString(1, id);
+      result=st.executeUpdate() > 0;
+    }catch(SQLException e){
+      log.error("deleteEntity("+id+") fail: "+e);
+    }
+    return result;
+  }
+
+  public boolean deleteEntity(long id){
+    return deleteEntity(Long.toString(id));
   }
 
   protected void setPreparedValueOrNull(PreparedStatement preparedStatement, int parameterIndex, long value) throws SQLException {
@@ -104,7 +130,7 @@ public abstract class AbstractEntityDao <E extends MyEntity> implements EntityDa
     }
   }
 
-  protected abstract void setAllPreparedValues(PreparedStatement preparedStatement, E entity) throws SQLException;
+  protected abstract int setAllPreparedValues(PreparedStatement preparedStatement, E entity, boolean isAddOperation) throws SQLException;
 
   protected abstract E recordToEntity(ResultSet resultSet);
 

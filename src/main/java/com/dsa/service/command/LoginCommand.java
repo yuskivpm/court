@@ -21,8 +21,8 @@ public class LoginCommand implements ActionCommand {
     User user=LoginLogic.checkLogin(login, password);
     if (user!=null){
       LoginCommand.startUserSession(request,user);
-      return new MainPageCommand().execute(request);
-//      page = ConfigManager.getProperty("path.page.main."+user.getRole());
+      return new MainPageCommand().execute(request,user);
+//      return MainPageCommand.getMainPageForUser(user);
     }else{
       request.setAttribute("errorFailLoginPassMessage", MessageManager.getProperty("message.loginError"));
       page = ConfigManager.getProperty("path.page.login");
@@ -32,7 +32,6 @@ public class LoginCommand implements ActionCommand {
 
   private static void startUserSession(ProxyRequest request, User user){
     HttpSession session=request.getSession();
-    request.setAttribute("user", user.getName());
     session.setAttribute(USER_SESSION_ID, user.getId());
   }
 

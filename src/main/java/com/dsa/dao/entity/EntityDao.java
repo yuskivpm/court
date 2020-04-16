@@ -12,18 +12,18 @@ import java.util.List;
 
 interface EntityDao<E extends MyEntity> {
 
-  List<E> getAll();
+  boolean createEntity(E entity);
 
-  E getEntity(long id) throws SQLException;
+  List<E> readAll();
 
-  boolean add(E entity);
+  E readEntity(long id) throws SQLException;
 
-  boolean update(E entity);
+  boolean updateEntity(E entity);
 
-  boolean remove(long id);
+  boolean deleteEntity(long id);
 
-  default boolean remove(E entity){
-    return remove(entity.getId());
+  default boolean deleteEntity(E entity){
+    return deleteEntity(entity.getId());
   }
 
   default void createTable(Connection connection, String sql, Logger log) {

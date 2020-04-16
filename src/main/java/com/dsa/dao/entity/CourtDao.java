@@ -12,6 +12,9 @@ import java.sql.ResultSet;
 public class CourtDao extends AbstractEntityDao<Court> {
   private static final String COURT_TABLE_NAME="COURT";
   private static final String SQL_INSERT="INSERT INTO "+COURT_TABLE_NAME+" (COURT_NAME,COURT_INSTANCE,MAIN_COURT_ID) VALUES(?, ?, ?)";
+  private static final String SQL_UPDATE="UPDATE "+COURT_TABLE_NAME+
+      " SET COURT_NAME = ?, COURT_INSTANCE = ?, MAIN_COURT_ID = ?" +
+      " WHERE ID = ?";
   public static final String SQL_CREATE_TABLE="CREATE TABLE IF NOT EXISTS "+COURT_TABLE_NAME+" (" +
       "ID BIGINT AUTO_INCREMENT PRIMARY KEY, " +
       "COURT_NAME VARCHAR(255) NOT NULL, " +
@@ -21,10 +24,11 @@ public class CourtDao extends AbstractEntityDao<Court> {
       ")";
 
   public CourtDao() throws SQLException, DbPoolException {
-    super(COURT_TABLE_NAME, SQL_INSERT);
+    super(COURT_TABLE_NAME, SQL_INSERT, SQL_UPDATE);
   }
+
   public CourtDao(Connection connection){
-    super(connection,COURT_TABLE_NAME, SQL_INSERT);
+    super(connection,COURT_TABLE_NAME, SQL_INSERT, SQL_UPDATE);
   }
 
   @Override
@@ -34,7 +38,7 @@ public class CourtDao extends AbstractEntityDao<Court> {
       court.setId(resultSet.getLong("ID"));
       court.setCourtName(resultSet.getString("COURT_NAME"));
       court.setCourtInstance(CourtInstance.valueOf(resultSet.getString("COURT_INSTANCE")));
-      court.setMainCourt(getEntity(resultSet.getLong("MAIN_COURT_ID")));
+      court.setMainCourt(readEntity(resultSet.getLong("MAIN_COURT_ID")));
       return court;
     }catch(SQLException e){
       log.error("SQLException in CourtDao.recordToEntity: "+e);
@@ -43,21 +47,11 @@ public class CourtDao extends AbstractEntityDao<Court> {
   }
 
   @Override
-  protected void setAllPreparedValues(PreparedStatement preparedStatement, Court court) throws SQLException{
+  protected int setAllPreparedValues(PreparedStatement preparedStatement, Court court, boolean isAddOperation) throws SQLException{
     preparedStatement.setString(1, court.getCourtName());
     preparedStatement.setString(2, court.getCourtInstance().toString());
     setPreparedValueOrNull(preparedStatement,3,court.getMainCourtId());
+    return 4; // next index for preparedStatement.set_()
   };
 
-  @Override
-  public boolean update(Court entity){
-//    TODO: update for Court
-    throw new RuntimeException("Unready!!");
-  };
-
-  @Override
-  public boolean remove(long id){
-//    TODO: remove for Court
-    throw new RuntimeException("Unready!!");
-  };
 }

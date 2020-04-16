@@ -26,17 +26,16 @@ public class ActionFactory {
   }
 
   public static ActionCommand defineCommand(ProxyRequest request){
-    ActionCommand currentCommand = new EmptyCommand();
+    ActionCommand currentCommand = null;
+// todo: check!!   ActionCommand currentCommand = new EmptyCommand();
     String action = getCommand(request);
-    if (action==null || action.isEmpty()){
-      return currentCommand;
-    }else{
+    if (action!=null && !action.isEmpty()){
         CommandEnum currentEnum = getCommandEnum(action);
         if (currentEnum==CommandEnum.WRONG_COMMAND){
           request.setAttribute("wrongAction", action + MessageManager.getProperty("message.wrongAction"));
         }
         currentCommand = currentEnum.getCommand();
-      return currentCommand;
     }
+    return currentCommand;
   }
 }

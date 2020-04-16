@@ -1,7 +1,24 @@
-.authorised{
+table, th, td {
+    border: 1px solid black;
+}
+
+form{
+    border: 1px solid black;
+    padding: 10px;
+    width: fit-content;
+}
+
+form input {
+    margin: 10px;
+}
+input.form:checked+form,
+.hide{
     display: none;
 }
 
-table, th, td {
+.likeButton{
     border: 1px solid black;
+    padding: 5px 10px;
+    background-color: lightgray;
+    display: inline-block;
 }
