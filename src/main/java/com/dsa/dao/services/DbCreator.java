@@ -129,16 +129,16 @@ public final class DbCreator {
       Court supremeCourt=new Court(1,"Supreme court", CourtInstance.CASSATION, null);
       Court appealCourt= new Court(2,"Appeal court", CourtInstance.APPEAL, supremeCourt);
       Court localCourt=new Court(3,"Local court", CourtInstance.LOCAL, appealCourt);
-      courtDao.add(supremeCourt);
-      courtDao.add(appealCourt);
-      courtDao.add(localCourt);
+      courtDao.createEntity(supremeCourt);
+      courtDao.createEntity(appealCourt);
+      courtDao.createEntity(localCourt);
       // User table add value
-      userDao.add(new User(1,"admin", "admin", Role.ADMIN,"admin name",null,true));
-      userDao.add(new User(2,"supreme1", "supreme1", Role.JUDGE,"Supreme name",supremeCourt,true));
-      userDao.add(new User(3,"appeal1", "appeal1", Role.JUDGE,"Appeal name",appealCourt,true));
-      userDao.add(new User(4,"local1", "local1", Role.JUDGE,"Local name",localCourt,true));
-      userDao.add(new User(5,"attorney1", "attorney1", Role.ATTORNEY,"Attorney1 name",null,true));
-      userDao.add(new User(6,"attorney2", "attorney2", Role.ATTORNEY,"Attorney2",null,true));
+      userDao.createEntity(new User(1,"admin", "admin", Role.ADMIN,"admin name",null,true));
+      userDao.createEntity(new User(2,"supreme1", "supreme1", Role.JUDGE,"Supreme name",supremeCourt,true));
+      userDao.createEntity(new User(3,"appeal1", "appeal1", Role.JUDGE,"Appeal name",appealCourt,true));
+      userDao.createEntity(new User(4,"local1", "local1", Role.JUDGE,"Local name",localCourt,true));
+      userDao.createEntity(new User(5,"attorney1", "attorney1", Role.ATTORNEY,"Attorney1 name",null,true));
+      userDao.createEntity(new User(6,"attorney2", "attorney2", Role.ATTORNEY,"Attorney2",null,true));
 
     }catch(SQLException e){
       log.error("Exception in DbCreator.recreateTables: "+e);

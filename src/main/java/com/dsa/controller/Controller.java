@@ -1,22 +1,22 @@
 package com.dsa.controller;
 
+import com.dsa.service.Initialization;
 import com.dsa.service.command.ActionCommand;
 import com.dsa.service.ActionFactory;
-import com.dsa.service.initJsp.InitJsp;
+import com.dsa.service.command.RedirectCommand;
+import com.dsa.service.crud.CrudExecutor;
 import com.dsa.service.resource.ConfigManager;
 import com.dsa.service.resource.MessageManager;
 import org.apache.log4j.Logger;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.annotation.WebServlet;
 
-@WebServlet({"/api/v1/*"})
+@WebServlet({"/api/*"})
 //@WebServlet(name="MainServlet", displayName="Main servlet", urlPatterns={"/", "/index", "/controller"})
 public class Controller extends HttpServlet {
   private static final Logger log = Logger.getLogger(Controller.class);
@@ -26,11 +26,11 @@ public class Controller extends HttpServlet {
   static{
     PATH_PAGE_INDEX=ConfigManager.getProperty("path.page.index");
     NULL_PAGE_MESSAGE=MessageManager.getProperty("message.nullPage");
-    // initialization of DbCreator
+    // general initialization
     try{
-      Class.forName("com.dsa.dao.services.DbCreator");
-    }catch(ClassNotFoundException e){
-      log.error("Fail to initialize DbCreator: "+e);
+      Initialization.initialize();
+    }catch(Exception e){
+      log.error("Fail to initialize some classes in Controller: "+e);
     }
   }
 
@@ -46,22 +46,40 @@ public class Controller extends HttpServlet {
 
   @Override
   protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    processRequest(request, response);
+        processRequest(request, response);
   }
 
   private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     String page = null;
-    ProxyRequest proxyRequest= new ProxyRequest(request);
+    ProxyRequest proxyRequest= new ProxyRequest(request,true);
     ActionCommand command = ActionFactory.defineCommand(proxyRequest);
-    page=command.execute(proxyRequest);
-    if(page != null){
-      InitJsp.InitializeJsp(page,proxyRequest);
-      RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
-      dispatcher.forward(request, response);
-    }else{
-      page = PATH_PAGE_INDEX;
-      request.getSession().setAttribute("nullPage", NULL_PAGE_MESSAGE);
-      response.sendRedirect(request.getContextPath() + page);
+    if(command==null){// without "command" parameter - crud operation requested
+      switch (CrudExecutor.execute(proxyRequest,response)){
+        case EXECUTED:
+          return;
+        case REDIRECT:
+          page=new RedirectCommand().execute(proxyRequest);
+          if(page != null){
+            getServletContext().getRequestDispatcher(page).forward(request, response);
+            return;
+          }
+        case FAILED:  // ignore
+        default:      // ignore
+      }
+    }else{// with "command" parameter - forward to specific page
+      page=command.execute(proxyRequest);
+      if(page != null){
+        getServletContext().getRequestDispatcher(page).forward(request, response);
+        return;
+      }
     }
+    page = PATH_PAGE_INDEX;
+    request.getSession().setAttribute("nullPage", NULL_PAGE_MESSAGE);
+    response.sendRedirect(request.getContextPath() + page);
   }
 }
+//"/court_war/api/v1/users/add?id=2"
+//request.getContextPath() "/court_war"
+//request.getServletPath() "/api/v1/"
+//request.getPathInfo()    "/users/add"
+//request.getQueryString() "id=2"

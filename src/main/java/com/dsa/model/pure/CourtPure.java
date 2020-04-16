@@ -41,7 +41,7 @@ public class CourtPure extends MyEntity {
     return mainCourtId;
   }
 
-  protected void setMainCourtId(long mainCourtId){
+  public void setMainCourtId(long mainCourtId){
     this.mainCourtId=mainCourtId;
   }
 

@@ -24,6 +24,6 @@ public class User extends UserPure {
 
   @Override
   public long getCourtId(){
-    return court==null?0:court.getId();
+    return court==null?super.getCourtId():court.getId();
   }
 }

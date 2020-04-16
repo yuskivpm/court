@@ -10,40 +10,59 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ProxyRequest {
+  private Map<String, String> params;
   private HttpServletRequest request;
-  Map<String,String> params;
 
-  public ProxyRequest(@NotNull HttpServletRequest request){
-    params=new HashMap<>();
+  public ProxyRequest(@NotNull HttpServletRequest request, boolean readBuffer) {
+    params = new HashMap<>();
+    if (readBuffer){
       String line = null;
-      try{
+      try {
         BufferedReader reader = request.getReader();
         String[] arr;
-        while ((line = reader.readLine()) != null){
-          arr=line.split("=");
-          if(arr.length==1){
-            params.put(line,"");
-          }else if(arr.length>=1){
-            params.put(arr[0],arr[1]);
+        while ((line = reader.readLine()) != null) {
+          arr = line.split("=");
+          if (arr.length == 1) {
+            params.put(line, "");
+          } else if (arr.length >= 1) {
+            params.put(arr[0], arr[1]);
           }
         }
-      }catch(IOException e){}
+      } catch (IOException e) {
+      }
+    }
     this.request = request;
   }
 
-  public String getParameter(String key){
-    String result=request.getParameter(key);
-    if(result==null || result.isEmpty()){
-      result=params.get(key);
+  public String getParameter(String key) {
+    String result = request.getParameter(key);
+    if (result == null || result.isEmpty()) {
+      result = params.get(key);
     }
-    return result==null?"":result;
+    return result == null ? "" : result;
   }
 
-  public void setAttribute(String key, Object value){
+  public void setAttribute(String key, Object value) {
     request.setAttribute(key, value);
   }
 
-  public HttpSession getSession(){
+  public HttpSession getSession() {
     return request.getSession();
+  }
+
+  public String getPathInfo(){
+    return request.getPathInfo();
+  }
+
+  public String getQueryString(){
+    return request.getQueryString();
+  }
+
+  public HttpServletRequest getRequest(){
+    return request;
+  }
+
+  public String getMethod(){
+    return request.getMethod().toUpperCase();
   }
 }

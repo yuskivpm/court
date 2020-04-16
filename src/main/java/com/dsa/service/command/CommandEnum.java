@@ -16,9 +16,14 @@ public enum CommandEnum {
       this.command = new MainPageCommand();
     }
   },
+  REDIRECT{
+    {
+      this.command= new RedirectCommand();
+    }
+  },
   WRONG_COMMAND {
     {
-      this.command = new EmptyCommand();
+      this.command = null;//todo: check!!! new EmptyCommand();
     }
   };
 

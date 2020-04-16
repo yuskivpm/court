@@ -41,7 +41,7 @@ public class ControllerFilter implements Filter{
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException{
     HttpServletRequest req=(HttpServletRequest)request;
-    ProxyRequest proxyRequest = new ProxyRequest((HttpServletRequest) request);
+    ProxyRequest proxyRequest = new ProxyRequest((HttpServletRequest) request,false);
     CommandEnum commandEnum=ActionFactory.getCommandEnum(proxyRequest);
     String path = req.getRequestURI();
     if (!path.equals(LOGIN_PAGE) && commandEnum!=CommandEnum.LOGIN) {

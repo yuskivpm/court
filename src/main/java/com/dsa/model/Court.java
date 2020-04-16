@@ -24,6 +24,6 @@ public class Court extends CourtPure {
 
   @Override
   public long getMainCourtId(){
-    return mainCourt==null?0:mainCourt.getId();
+    return mainCourt==null?super.getMainCourtId():mainCourt.getId();
   }
 }

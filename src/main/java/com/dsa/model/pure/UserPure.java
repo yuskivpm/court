@@ -5,10 +5,10 @@ import com.dsa.model.Role;
 import java.util.Objects;
 
 public class UserPure extends MyEntity {
+  String name;
   String login;
   String password;
   Role role;
-  String name;
   long courtId;
   boolean isActive;
 
@@ -23,8 +23,16 @@ public class UserPure extends MyEntity {
     this.password = password;
     this.role = role;
     this.name=name;
-    this.courtId=courtId;
+    this.courtId=role!=Role.JUDGE?0:courtId;
     this.isActive=isActive;
+  }
+
+  public String getName(){
+    return name;
+  }
+
+  public void setName(String name){
+    this.name=name;
   }
 
   public String getLogin() {
@@ -51,20 +59,12 @@ public class UserPure extends MyEntity {
     this.role = role;
   }
 
-  public String getName(){
-    return name;
-  }
-
-  public void setName(String name){
-    this.name=name;
-  }
-
   public long getCourtId() {
     return courtId;
   }
 
-  protected void setCourtId(long courtId) {
-    this.courtId = courtId;
+  public void setCourtId(long courtId) {
+    this.courtId = role!=Role.JUDGE?0:courtId;
   }
 
   public boolean getIsActive(){
