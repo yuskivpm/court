@@ -3,7 +3,6 @@ package com.dsa.service;
 import com.dsa.controller.ProxyRequest;
 import com.dsa.service.command.ActionCommand;
 import com.dsa.service.command.CommandEnum;
-import com.dsa.service.command.EmptyCommand;
 import com.dsa.service.resource.MessageManager;
 
 public class ActionFactory {
@@ -11,7 +10,7 @@ public class ActionFactory {
     try{
       return CommandEnum.valueOf(command.toUpperCase());
     }catch(IllegalArgumentException e){
-//      request.setAttribute("wrongAction", action + MessageManager.getProperty("message.wrongAction"));
+//  todo: check    request.setAttribute("wrongAction", action + MessageManager.getProperty("message.wrongAction"));
       return CommandEnum.WRONG_COMMAND;
     }
   }

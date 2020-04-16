@@ -59,11 +59,9 @@
     <hr/>
 
     <h1>Courts</h1>
-    <h2>
-        <a href="api/courts/create">Add New Court</a>
-        &nbsp;&nbsp;&nbsp;
-        <a href="api/courts/read">List All Courts</a>
-    </h2>
+    <button type="button" onclick="sendGetRequest('api?command=redirect&page=/jsp/models/CourtForm.jsp')">
+        Add New Court
+    </button>
     <table>
         <thead>
         <tr>
@@ -83,10 +81,20 @@
                 <td>${court.courtInstance}</td>
                 <td>${court.mainCourt.courtName}</td>
                 <td>
-                    <a href="api/courts/edit?id=${court.id}">Edit</a>
+                    <button
+                            type="button"
+                            onclick="sendGetRequest('api/courts?id=${court.id}&redirect=1&page=/jsp/models/CourtForm.jsp')"
+                    >
+                        Edit
+                    </button>
                 </td>
                 <td>
-                    <a href="api/courts/delete?id=${court.id}">Delete</a>
+                    <button
+                            type="button"
+                            onclick="deleteEntity('api/courts', ${court.id},()=>sendGetRequest('api?command=mainPage'))"
+                    >
+                        Delete
+                    </button>
                 </td>
             </tr>
         </c:forEach>

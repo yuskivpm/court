@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ProxyRequest {
+  private static final String DEFAULT_REQUEST_CHARSET="ISO-8859-1";
   private Map<String, String> params;
   private HttpServletRequest request;
 
@@ -39,6 +40,9 @@ public class ProxyRequest {
     if (result == null || result.isEmpty()) {
       result = params.get(key);
     }
+    try{
+      result=new String(result.getBytes(DEFAULT_REQUEST_CHARSET),"UTF-8");
+    }catch(Exception e){}
     return result == null ? "" : result;
   }
 

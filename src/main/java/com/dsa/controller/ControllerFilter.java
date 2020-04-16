@@ -42,9 +42,8 @@ public class ControllerFilter implements Filter{
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException{
     HttpServletRequest req=(HttpServletRequest)request;
     ProxyRequest proxyRequest = new ProxyRequest((HttpServletRequest) request,false);
-    CommandEnum commandEnum=ActionFactory.getCommandEnum(proxyRequest);
     String path = req.getRequestURI();
-    if (!path.equals(LOGIN_PAGE) && commandEnum!=CommandEnum.LOGIN) {
+    if (!path.equals(LOGIN_PAGE) && ActionFactory.getCommandEnum(proxyRequest)!=CommandEnum.LOGIN) {
       // all requests except "/jsp/login.jsp" check for prior login
       String UserSession = LoginCommand.getUserSessionId(proxyRequest);
       if (UserSession.isEmpty()) {

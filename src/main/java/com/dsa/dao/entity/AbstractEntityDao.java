@@ -11,7 +11,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractEntityDao <E extends MyEntity> implements EntityDao<E>, AutoCloseable {
+public abstract class AbstractEntityDao <E extends MyEntity> implements AutoCloseable {
   protected static final Logger log = Logger.getLogger(AbstractEntityDao.class);
   private static final String SQL_SELECT_ALL= "SELECT * FROM ";
   private static final String SQL_SELECT_BY_MAP="SELECT * FROM %s WHERE";
@@ -32,7 +32,6 @@ public abstract class AbstractEntityDao <E extends MyEntity> implements EntityDa
     this.SQL_UPDATE_BY_ID=sqlUpdate;
   }
 
-  @Override
   public boolean createEntity(E entity){
     boolean result=false;
     try(PreparedStatement st = connection.prepareStatement(SQL_INSERT)){
@@ -44,7 +43,6 @@ public abstract class AbstractEntityDao <E extends MyEntity> implements EntityDa
     return result;
   };
 
-  @Override
   public List<E> readAll(){
     List<E> entities = new ArrayList<>();
     try(
@@ -63,7 +61,6 @@ public abstract class AbstractEntityDao <E extends MyEntity> implements EntityDa
     return entities;
   }
 
-  @Override
   public E readEntity(long id) throws SQLException {
     return readEntity("ID", Long.toString(id));
   }
@@ -122,6 +119,10 @@ public abstract class AbstractEntityDao <E extends MyEntity> implements EntityDa
     return deleteEntity(Long.toString(id));
   }
 
+  public boolean deleteEntity(E entity){
+    return deleteEntity(entity.getId());
+  }
+
   protected void setPreparedValueOrNull(PreparedStatement preparedStatement, int parameterIndex, long value) throws SQLException {
     if(value==0){
       preparedStatement.setNull(parameterIndex,0);
@@ -149,4 +150,32 @@ public abstract class AbstractEntityDao <E extends MyEntity> implements EntityDa
       connection.close();
     }
   }
+
+  public void createTable(Connection connection, String sql, Logger log) {
+    Statement st = null;
+    try {
+      st = connection.createStatement();
+      sqlExecute(st,sql,true,log);
+      st.execute(sql);
+    } catch (SQLException e) {
+      log.error("SQLException in createTable: " + e);
+    }
+  }
+
+  public void sqlExecute(@NotNull Statement st, String sqlQuery, boolean autoClose, Logger log){
+    try{
+      st.execute(sqlQuery);
+    }catch(SQLException e){
+      log.error("SQLException in sqlExecute["+sqlQuery+"]: "+e);
+    }finally{
+      if(autoClose){
+        try{
+          st.close();
+        }catch(SQLException e){
+          log.error("SQLException in sqlExecute.onAutoCloseStatement["+sqlQuery+"]: "+e);
+        }
+      }
+    }
+  }
+
 }

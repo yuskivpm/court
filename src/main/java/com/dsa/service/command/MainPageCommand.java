@@ -7,6 +7,7 @@ import com.dsa.dao.services.DbPoolException;
 import com.dsa.model.Court;
 import com.dsa.model.User;
 import com.dsa.service.resource.ConfigManager;
+
 import org.apache.log4j.Logger;
 
 import java.sql.SQLException;
@@ -17,19 +18,11 @@ public class MainPageCommand implements ActionCommand {
 
   @Override
   public String execute(ProxyRequest request){
-    User user=null;
-    try(UserDao userDao= new UserDao()){
-      String UserSession = LoginCommand.getUserSessionId(request);
-      user=userDao.readEntity("id",UserSession);
-    }catch(DbPoolException | SQLException e){
-      log.error("Fail get user.getEntity in MainPageCommand: "+e);
-    }
+    User user=LoginCommand.getSessionUser(request);
     if(user==null){// if session user not found - redirect to Login page
       return new EmptyCommand().execute(request);
     }
     return execute(request, user);
-//    MainPageCommand.InitializeJsp(user.getRole().toString(), request);
-//    return MainPageCommand.getMainPageForUser(user);
   }
 
   public String execute(ProxyRequest request, User user){
