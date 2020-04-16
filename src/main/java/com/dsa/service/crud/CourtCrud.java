@@ -1,7 +1,10 @@
 package com.dsa.service.crud;
 
 import com.dsa.controller.ProxyRequest;
-import com.dsa.dao.entity.UserDao;
+
+import com.dsa.dao.entity.CourtDao;
+import com.dsa.model.Court;
+import com.dsa.model.CourtInstance;
 import com.dsa.model.Role;
 import com.dsa.model.User;
 import com.dsa.service.command.LoginCommand;
@@ -10,21 +13,21 @@ import org.apache.log4j.Logger;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletResponse;
 
-public class UserCrud {
-  private static final Logger log = Logger.getLogger(UserCrud.class);
-  public static final String path="/users";
+public class CourtCrud {
+  private static final Logger log = Logger.getLogger(CourtCrud.class);
+  public static final String path="/courts";
 
   public static CrudResult execute(ProxyRequest request, HttpServletResponse response){
     User user= LoginCommand.getSessionUser(request);
-    if(user!=null && user.getRole()==Role.ADMIN){// only ADMIN can execute it
+    if(user!=null && user.getRole()== Role.ADMIN){// only ADMIN can execute it
       CrudEnum ce=CrudExecutor.getCrudOperation(request,path);
       switch (ce) {
         case CREATE:
         case UPDATE:
-          createOrUpdateUser(request, response,ce==CrudEnum.CREATE);
+          createOrUpdateCourt(request, response,ce==CrudEnum.CREATE);
           return CrudResult.EXECUTED;
         case DELETE:
-          deleteUser(request, response);
+          deleteCourt(request, response);
           return CrudResult.EXECUTED;
         case PREPARE_UPDATE_FORM:
           return prepareEditForm(request, response);
@@ -34,7 +37,7 @@ public class UserCrud {
     return CrudResult.FAILED;
   }
 
-  private static void createOrUpdateUser(ProxyRequest request, HttpServletResponse response, boolean create) {
+  private static void createOrUpdateCourt(ProxyRequest request, HttpServletResponse response, boolean create) {
     PrintWriter out =null;
     try{
       out = response.getWriter();
@@ -42,18 +45,16 @@ public class UserCrud {
       if(!create){
         id=Long.parseLong(request.getParameter("id"));
       }
-      String name= request.getParameter("name");
-      String login= request.getParameter("login");
-      String password= request.getParameter("password");
-      Role role= Role.valueOf(request.getParameter("role"));
-      long courtId= Long.parseLong(request.getParameter("courtId"));
-      boolean isActive= "on".equals(request.getParameter("isActive"));
-      if(name!=null && !name.isEmpty()&& login!=null && !login.isEmpty()&& password!=null && !password.isEmpty()){
+      String courtName= request.getParameter("courtName");
+//      courtName=new String(courtName.getBytes("ISO-8859-1"),"UTF-8");
+      CourtInstance courtInstance= CourtInstance.valueOf(request.getParameter("courtInstance"));
+      long mainCourtId= Long.parseLong(request.getParameter("mainCourtId"));
+      if(courtName!=null && !courtName.isEmpty()){
         boolean result=false;
-        User user=new User(id, login, password, role, name, null, isActive);
-        user.setCourtId(courtId);
-        try(UserDao userDao=new UserDao()){
-          result=create?userDao.createEntity(user):userDao.updateEntity(user);
+        Court court=new Court(id,courtName, courtInstance, null);
+        court.setMainCourtId(mainCourtId);
+        try(CourtDao courtDao=new CourtDao()){
+          result=create?courtDao.createEntity(court):courtDao.updateEntity(court);
         }
         if (result){
           out.print("{\"status\":\"ok\"}");
@@ -65,19 +66,19 @@ public class UserCrud {
       }
     }catch(Exception e){
       if(out != null){
-        out.print("{\"error\":\"Exception in createOrUpdateUser(): "+e+"\"}");
+        out.print("{\"error\":\"Exception in createOrUpdateCourt(): "+e+"\"}");
       }
     }
   }
 
-  private static void deleteUser(ProxyRequest request, HttpServletResponse response) {
+  private static void deleteCourt(ProxyRequest request, HttpServletResponse response) {
     PrintWriter out =null;
     try{
       out = response.getWriter();
       String id = request.getParameter("id");
       boolean result=false;
-      try(UserDao userDao=new UserDao()){
-        result=userDao.deleteEntity(id);
+      try(CourtDao courtDao=new CourtDao()){
+        result=courtDao.deleteEntity(id);
       }
       if (result){
         out.print("{\"status\":\"ok\"}");
@@ -86,21 +87,21 @@ public class UserCrud {
       }
     }catch(Exception e){
       if(out != null){
-        out.print("{\"error\":\"Exception in deleteUser(): "+e+"\"}");
+        out.print("{\"error\":\"Exception in deleteCourt(): "+e+"\"}");
       }
     }
   }
 
   private static CrudResult prepareEditForm(ProxyRequest request, HttpServletResponse response) {
     String id = request.getParameter("id");
-    try(UserDao userDao=new UserDao()){
-      User user= userDao.readEntity("ID",id);
-      if (user!=null){
-        request.setAttribute("editUser",user);
+    try(CourtDao courtDao=new CourtDao()){
+      Court court= courtDao.readEntity("ID",id);
+      if (court!=null){
+        request.setAttribute("editCourt",court);
         return CrudResult.REDIRECT;
       };
     }catch(Exception e){
-      log.error("Fail get User in prepareEditForm for User.id("+id+"): "+e);
+      log.error("Fail get User in prepareEditForm for Court.id("+id+"): "+e);
     }
     return CrudResult.FAILED;
   }
