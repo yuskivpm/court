@@ -2,7 +2,6 @@ package com.dsa.model.pure;
 
 import java.util.Date;
 import java.util.Objects;
-//todo: create Sue & SueDao
 
 public class SuePure extends MyEntity {
   long suitorId;

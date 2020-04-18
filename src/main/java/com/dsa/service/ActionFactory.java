@@ -1,7 +1,7 @@
 package com.dsa.service;
 
 import com.dsa.controller.ProxyRequest;
-import com.dsa.service.command.ActionCommand;
+import com.dsa.service.command.IActionCommand;
 import com.dsa.service.command.CommandEnum;
 import com.dsa.service.resource.MessageManager;
 
@@ -24,9 +24,9 @@ public class ActionFactory {
     return action==null?"":action;
   }
 
-  public static ActionCommand defineCommand(ProxyRequest request){
-    ActionCommand currentCommand = null;
-// todo: check!!   ActionCommand currentCommand = new EmptyCommand();
+  public static IActionCommand defineCommand(ProxyRequest request){
+    IActionCommand currentCommand = null;
+// todo: check!!   IActionCommand currentCommand = new EmptyCommand();
     String action = getCommand(request);
     if (action!=null && !action.isEmpty()){
         CommandEnum currentEnum = getCommandEnum(action);

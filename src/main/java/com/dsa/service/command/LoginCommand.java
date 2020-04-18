@@ -7,12 +7,13 @@ import com.dsa.model.User;
 import com.dsa.service.LoginLogic;
 import com.dsa.service.resource.ConfigManager;
 import com.dsa.service.resource.MessageManager;
+
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
 
-public class LoginCommand implements ActionCommand {
+public class LoginCommand implements IActionCommand {
   private static final Logger log = Logger.getLogger(LoginCommand.class);
   private static final String PARAM_NAME_LOGIN = "login";
   private static final String PARAM_NAME_PASSWORD = "password";

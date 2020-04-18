@@ -1,7 +1,6 @@
 package com.dsa.dao.entity;
 
 import com.dsa.dao.services.DbPoolException;
-import com.dsa.model.Court;
 import com.dsa.model.Verdict;
 import com.dsa.model.VerdictType;
 

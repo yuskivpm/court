@@ -2,7 +2,6 @@ package com.dsa.model.pure;
 
 import java.util.Date;
 import java.util.Objects;
-//todo: create Stage & StageDao
 
 public class StagePure extends MyEntity {
   private long lawsuitId;

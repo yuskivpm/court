@@ -2,6 +2,6 @@ package com.dsa.service.command;
 
 import com.dsa.controller.ProxyRequest;
 
-public interface ActionCommand {
+public interface IActionCommand {
   String execute(ProxyRequest request);
 }

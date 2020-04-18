@@ -3,7 +3,7 @@ package com.dsa.service.command;
 import com.dsa.controller.ProxyRequest;
 import com.dsa.service.resource.ConfigManager;
 
-public class RedirectCommand implements ActionCommand {
+public class RedirectCommand implements IActionCommand {
   @Override
   public String execute(ProxyRequest request){
     String pageName=request.getParameter("page");

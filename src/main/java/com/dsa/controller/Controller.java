@@ -1,7 +1,7 @@
 package com.dsa.controller;
 
 import com.dsa.service.Initialization;
-import com.dsa.service.command.ActionCommand;
+import com.dsa.service.command.IActionCommand;
 import com.dsa.service.ActionFactory;
 import com.dsa.service.command.RedirectCommand;
 import com.dsa.service.crud.CrudExecutor;
@@ -53,7 +53,7 @@ public class Controller extends HttpServlet {
   private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     String page = null;
     ProxyRequest proxyRequest= new ProxyRequest(request,true);
-    ActionCommand command = ActionFactory.defineCommand(proxyRequest);
+    IActionCommand command = ActionFactory.defineCommand(proxyRequest);
     if(command==null){// without "command" parameter - crud operation requested
       switch (CrudExecutor.execute(proxyRequest,response)){
         case EXECUTED:

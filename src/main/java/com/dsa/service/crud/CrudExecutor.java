@@ -7,10 +7,9 @@ import org.jetbrains.annotations.NotNull;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.function.BiFunction;
 
 public class CrudExecutor {
-  private static final Map<String, BiFunction<ProxyRequest, HttpServletResponse, CrudResult>> executors = new HashMap<>();
+  private static final Map<String, Icrud> executors = new HashMap<>();
   private static final String POST="POST";
   private static final String PUT="PUT";
     // /? or /create - create
@@ -23,7 +22,7 @@ public class CrudExecutor {
     // ?id or /delete?id
   private static final String ID="id";
 
-  public static void register(String pathInfo, BiFunction<ProxyRequest, HttpServletResponse, CrudResult> exeFunction){
+  public static void register(String pathInfo, Icrud exeFunction){
     executors.put(pathInfo.toLowerCase()+"/",exeFunction);
   }
 
@@ -33,7 +32,7 @@ public class CrudExecutor {
       String path = pathInfo.toLowerCase() + "/";
       for (String entityPath : executors.keySet()) {
         if (path.startsWith(entityPath)) {
-          return executors.get(entityPath).apply(request, response);
+          return executors.get(entityPath).execute(request, response);
         }
       }
     }

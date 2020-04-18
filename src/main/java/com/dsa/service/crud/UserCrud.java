@@ -2,151 +2,51 @@ package com.dsa.service.crud;
 
 import com.dsa.controller.ProxyRequest;
 import com.dsa.dao.entity.UserDao;
+import com.dsa.dao.services.DbPoolException;
 import com.dsa.model.Role;
 import com.dsa.model.User;
 import com.dsa.service.command.LoginCommand;
-import org.apache.log4j.Logger;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.io.PrintWriter;
-import javax.servlet.http.HttpServletResponse;
+import org.jetbrains.annotations.NotNull;
 
-public class UserCrud {
-  private static final Logger log = Logger.getLogger(UserCrud.class);
+import java.sql.SQLException;
+
+public class UserCrud extends AbstractCrud<User, UserDao>{
   public static final String path="/users";
 
-  public static CrudResult execute(ProxyRequest request, HttpServletResponse response){
-    User user= LoginCommand.getSessionUser(request);
-    if(user!=null && user.getRole()==Role.ADMIN){// only ADMIN can execute it
-      CrudEnum ce=CrudExecutor.getCrudOperation(request,path);
-      switch (ce) {
-        case CREATE:
-        case UPDATE:
-          createOrUpdateUser(request, response,ce==CrudEnum.CREATE);
-          return CrudResult.EXECUTED;
-        case DELETE:
-          deleteUser(request, response);
-          return CrudResult.EXECUTED;
-        case PREPARE_UPDATE_FORM:
-          return prepareEditForm(request, response);
-        case READ:
-        case READ_ALL:
-          readUser(request, response,ce==CrudEnum.READ_ALL);
-          return CrudResult.EXECUTED;
-        default: //skip
-      }
-    }
-    return CrudResult.FAILED;
+  public UserCrud(){
+    super(path);
   }
 
-  private static void createOrUpdateUser(ProxyRequest request, HttpServletResponse response, boolean create) {
-    PrintWriter out =null;
-    try{
-      out = response.getWriter();
-      long id=0;
-      if(!create){
-        id=Long.parseLong(request.getParameter("id"));
-      }
-      String name= request.getParameter("name");
-      String login= request.getParameter("login");
-      String password= request.getParameter("password");
+  public static UserCrud newInstance(){
+    return new UserCrud();
+  }
+
+  @Override
+  protected boolean checkAuthority(ProxyRequest request){
+    User user= LoginCommand.getSessionUser(request);
+    return user!=null && user.getRole()== Role.ADMIN;
+  }
+
+  @Override
+  protected User createEntityFromParameters(@NotNull ProxyRequest request, long id){
+    User user=null;
+    String name= request.getParameter("name");
+    String login= request.getParameter("login");
+    String password= request.getParameter("password");
+    if(name!=null && !name.isEmpty()&& login!=null && !login.isEmpty()&& password!=null && !password.isEmpty()){
       Role role= Role.valueOf(request.getParameter("role"));
       long courtId= Long.parseLong(request.getParameter("courtId"));
       boolean isActive= "on".equals(request.getParameter("isActive"));
-      if(name!=null && !name.isEmpty()&& login!=null && !login.isEmpty()&& password!=null && !password.isEmpty()){
-        boolean result=false;
-        User user=new User(id, login, password, role, name, null, isActive);
-        user.setCourtId(courtId);
-        try(UserDao userDao=new UserDao()){
-          result=create?userDao.createEntity(user):userDao.updateEntity(user);
-        }
-        if (result){
-          out.print("{\"status\":\"ok\"}");
-        }else{
-          out.print("{\"error\":\"db error\"}");
-        }
-      }else{
-        out.print("{\"error\":\"All fields are required\"}");
-      }
-    }catch(Exception e){
-      if(out != null){
-        out.print("{\"error\":\"Exception in createOrUpdateUser(): "+e+"\"}");
-      }
+      user=new User(id, login, password, role, name, null, isActive);
+      user.setCourtId(courtId);
     }
+    return user;
   }
 
-  private static void deleteUser(ProxyRequest request, HttpServletResponse response) {
-    PrintWriter out =null;
-    try{
-      out = response.getWriter();
-      String id = request.getParameter("id");
-      boolean result=false;
-      try(UserDao userDao=new UserDao()){
-        result=userDao.deleteEntity(id);
-      }
-      if (result){
-        out.print("{\"status\":\"ok\"}");
-      }else{
-        out.print("{\"error\":\"db error\"}");
-      }
-    }catch(Exception e){
-      if(out != null){
-        out.print("{\"error\":\"Exception in deleteUser(): "+e+"\"}");
-      }
-    }
+  @Override
+  protected UserDao createEntityDao() throws SQLException, DbPoolException {
+    return new UserDao();
   }
 
-  private static CrudResult prepareEditForm(ProxyRequest request, HttpServletResponse response) {
-    String id = request.getParameter("id");
-    try(UserDao userDao=new UserDao()){
-      User user= userDao.readEntity("ID",id);
-      if (user!=null){
-        request.setAttribute("editUser",user);
-        return CrudResult.REDIRECT;
-      };
-    }catch(Exception e){
-      log.error("Fail get User in prepareEditForm for User.id("+id+"): "+e);
-    }
-    return CrudResult.FAILED;
-  }
-
-  private static void readUser(ProxyRequest request, HttpServletResponse response, boolean readAll){
-    PrintWriter out =null;
-    try{
-      out = response.getWriter();
-      long id=0;
-      if(!readAll){
-        id=Long.parseLong(request.getParameter("id"));
-      }
-      User user=null;
-      List<User> users=null;
-      String responseText="";
-      try(UserDao userDao=new UserDao()){
-        if(readAll){
-          users=userDao.readAll();
-          responseText="["+
-              users.stream()
-              .map(User::toString)
-              .collect(Collectors.joining(","))+
-              "]";
-        }else{
-          user=userDao.readEntity(id);
-          responseText=user.toString();
-        }
-      }
-      if (!responseText.isEmpty()){
-        out.print("{" +
-            "\"status\":\"ok\"," +
-            "\"data\":"+responseText+"}"
-        );
-      }else{
-        out.print("{\"error\":\"db error\"}");
-      }
-    }catch(Exception e){
-      if(out != null){
-        out.print("{\"error\":\"Exception in readUser(): "+e+"\"}");
-      }
-    }
-  }
 }

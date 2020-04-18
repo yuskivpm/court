@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
 import java.sql.SQLException;
 import java.util.List;
 
-public class MainPageCommand implements ActionCommand {
+public class MainPageCommand implements IActionCommand {
   private static final Logger log = Logger.getLogger(MainPageCommand.class);
 
   @Override
