@@ -20,6 +20,10 @@ public class LawsuitPure extends MyEntity {
   private String defendantAppealText;
   private Date executionDate;
 
+  public LawsuitPure(){
+    entityName="Lawsuit";
+  }
+
   public LawsuitPure(
       long id,
       long suitorId,
@@ -190,21 +194,21 @@ public class LawsuitPure extends MyEntity {
 
   @Override
   public String toString(){
-    return super.toString()+", "
-        +"suitorId="+suitorId+", "
-        +"defendantId="+defendantId+", "
-        +"jurisdictionCourtId="+jurisdictionCourtId+", "
-        +"judgeId="+judgeId+", "
-        +"sueDate="+sueDate+", "
-        +"startDate="+startDate+", "
-        +"ClaimText="+ClaimText+", "
-        +"DefendantText="+DefendantText+", "
-        +"verdictId="+verdictId+", "
-        +"suitorAppealDate="+suitorAppealDate+", "
-        +"suitorAppealText="+suitorAppealText+", "
-        +"defendantAppealDate="+defendantAppealDate+", "
-        +"defendantAppealText="+defendantAppealText+", "
-        +"executionDate="+executionDate
-        +"]";
+    return "{"+super.toString()+", "
+        +"\"suitorId\":\""+suitorId+"\", "
+        +"\"defendantId\":\""+defendantId+"\", "
+        +"\"jurisdictionCourtId\":\""+jurisdictionCourtId+"\", "
+        +"\"judgeId\":\""+judgeId+"\", "
+        +"\"sueDate\":\""+sueDate+"\", "
+        +"\"startDate\":\""+startDate+"\", "
+        +"\"claimText\":\""+ClaimText+"\", "
+        +"\"defendantText\":\""+DefendantText+"\", "
+        +"\"verdictId\":\""+verdictId+"\", "
+        +"\"suitorAppealDate\":\""+suitorAppealDate+"\", "
+        +"\"suitorAppealText\":\""+suitorAppealText+"\", "
+        +"\"defendantAppealDate\":\""+defendantAppealDate+"\", "
+        +"\"defendantAppealText\":\""+defendantAppealText+"\", "
+        +"\"executionDate\":\""+executionDate+"\""
+        +"}";
   }
 }

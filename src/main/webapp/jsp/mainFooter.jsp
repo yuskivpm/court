@@ -21,8 +21,8 @@
         }
     }
 
-    function sendGetRequest(url){
-        fetchThis({url,method:'GET'});
+    function sendGetRequest(url,callback){
+        fetchThis({url,method:'GET'},callback);
     }
 
     function sendForm(formId,url='api',callback){

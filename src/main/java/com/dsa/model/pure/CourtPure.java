@@ -52,10 +52,10 @@ public class CourtPure extends MyEntity {
 
   @Override
   public String toString(){
-    return super.toString()+", "
-        +"courtName="+courtName+", "
-        +"courtInstance="+courtInstance+", "
-        +"mainCourtId="+mainCourtId
-        +"]";
+    return "{"+super.toString()+", "
+        +"\"courtName\":\""+courtName+"\", "
+        +"\"courtInstance\":\""+courtInstance+"\", "
+        +"\"mainCourtId\":\""+mainCourtId+"\""
+        +"}";
       }
 }

@@ -2,7 +2,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <h1>Court Management</h1>
 <h2>
-    <button form="simpleForm" type="submit" name="command" value="mainPage">Back to main page</button>
+<%--    <button form="simpleForm" type="submit" name="command" value="mainPage">Back to main page</button>--%>
+    <button type="button" onclick="sendGetRequest('api?command=mainPage')">
+        Back to main page
+    </button>
 </h2>
 <form id="courtForm">
     <c:if test="${editCourt != null}">

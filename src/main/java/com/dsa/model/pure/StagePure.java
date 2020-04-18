@@ -17,6 +17,10 @@ public class StagePure extends MyEntity {
   private Date defendantAppealDate;
   private String defendantAppealText;
 
+  public StagePure(){
+    entityName="Stage";
+  }
+
   public StagePure(
       long id,
       long lawsuitId,
@@ -154,19 +158,19 @@ public class StagePure extends MyEntity {
 
   @Override
   public String toString(){
-    return super.toString()+", "
-        +"lawsuitId="+lawsuitId+", "
-        +"judgeId="+judgeId+", "
-        +"sueDate="+sueDate+", "
-        +"startDate="+startDate+", "
-        +"ClaimText="+ClaimText+", "
-        +"DefendantText="+DefendantText+", "
-        +"verdictId="+verdictId+", "
-        +"suitorAppealDate="+suitorAppealDate+", "
-        +"suitorAppealText="+suitorAppealText+", "
-        +"defendantAppealDate="+defendantAppealDate+", "
-        +"defendantAppealText="+defendantAppealText
-        +"]";
+    return "{"+super.toString()+", "
+        +"\"lawsuitId\":\""+lawsuitId+"\", "
+        +"\"judgeId\":\""+judgeId+"\", "
+        +"\"sueDate\":\""+sueDate+"\", "
+        +"\"startDate\":\""+startDate+"\", "
+        +"\"claimText\":\""+ClaimText+"\", "
+        +"\"defendantText\":\""+DefendantText+"\", "
+        +"\"verdictId\":\""+verdictId+"\", "
+        +"\"suitorAppealDate\":\""+suitorAppealDate+"\", "
+        +"\"suitorAppealText\":\""+suitorAppealText+"\", "
+        +"\"defendantAppealDate\":\""+defendantAppealDate+"\", "
+        +"\"defendantAppealText\":\""+defendantAppealText+"\""
+        +"}";
   }
 
 }

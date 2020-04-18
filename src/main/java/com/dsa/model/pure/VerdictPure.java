@@ -13,6 +13,10 @@ public class VerdictPure extends MyEntity {
   String verdictText;
   long jurisdictionCourtId;
 
+  public VerdictPure(){
+    entityName="Verdict";
+  }
+
   public VerdictPure(
       long id,
       long lawsuitId,
@@ -84,12 +88,12 @@ public class VerdictPure extends MyEntity {
 
   @Override
   public String toString(){
-    return super.toString()+", "
-        +"lawsuitId="+lawsuitId+", "
-        +"effectiveDate="+effectiveDate+", "
-        +"verdictResult="+verdictResult+", "
-        +"verdictText="+verdictText+", "
-        +"jurisdictionCourtId="+jurisdictionCourtId
-        +"]";
+    return "{"+super.toString()+", "
+        +"\"lawsuitId\":\""+lawsuitId+"\", "
+        +"\"effectiveDate\":\""+effectiveDate+"\", "
+        +"\"verdictResult\":\""+verdictResult+"\", "
+        +"\"verdictText\":\""+verdictText+"\", "
+        +"\"jurisdictionCourtId\":"+jurisdictionCourtId+"\""
+        +"}";
   }
 }

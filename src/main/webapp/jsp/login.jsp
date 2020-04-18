@@ -8,11 +8,11 @@
     <input type="hidden" name="command" value="Login"/>
     Login:
     <br/>
-    <input type="text" name="login" value="admin"/>
+    <input type="text" name="login" value="attorney1"/>
     <br/>
     Password:
     <br/>
-    <input type="password" name="password" value="admin"/>
+    <input type="password" name="password" value="attorney1"/>
     <br/>
     ${errorFailLoginPassMessage}
     <br/>

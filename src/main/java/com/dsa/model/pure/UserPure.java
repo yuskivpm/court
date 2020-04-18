@@ -82,13 +82,13 @@ public class UserPure extends MyEntity {
 
   @Override
   public String toString(){
-    return super.toString()+", "
-        +"login="+login+", "
-        +"password="+password+", "
-        +"role="+role+", "
-        +"name="+name+", "
-        +"courtId="+courtId+", "
-        +"isActive="+isActive
-        +"]";
+    return "{"+super.toString()+", "
+        +"\"login\":\""+login+"\", "
+        +"\"password\":\""+password+"\", "
+        +"\"role\":\""+role+"\", "
+        +"\"name\":\""+name+"\", "
+        +"\"courtId\":\""+courtId+"\", "
+        +"\"isActive\":\""+isActive+"\""
+        +"}";
   }
 }

@@ -5,6 +5,7 @@ import com.dsa.dao.services.DbPoolException;
 import com.dsa.model.pure.MyEntity;
 
 import org.apache.log4j.Logger;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
@@ -151,7 +152,7 @@ public abstract class AbstractEntityDao <E extends MyEntity> implements AutoClos
     }
   }
 
-  public void createTable(Connection connection, String sql, Logger log) {
+  public static void createTable(Connection connection, String sql, Logger log) {
     Statement st = null;
     try {
       st = connection.createStatement();
@@ -162,7 +163,7 @@ public abstract class AbstractEntityDao <E extends MyEntity> implements AutoClos
     }
   }
 
-  public void sqlExecute(@NotNull Statement st, String sqlQuery, boolean autoClose, Logger log){
+  public static void sqlExecute(@NotNull Statement st, String sqlQuery, boolean autoClose, Logger log){
     try{
       st.execute(sqlQuery);
     }catch(SQLException e){
@@ -176,6 +177,15 @@ public abstract class AbstractEntityDao <E extends MyEntity> implements AutoClos
         }
       }
     }
+  }
+
+  @Contract("!null -> new; null -> null")
+  public static java.util.Date sqlDateToDate(java.sql.Date sqlDate) {
+    return sqlDate != null?new java.util.Date(sqlDate.getTime()):null;
+  }
+
+  public static java.sql.Date dateToSqlDate(java.util.Date date) {
+    return date != null?new java.sql.Date(date.getTime()):null;
   }
 
 }

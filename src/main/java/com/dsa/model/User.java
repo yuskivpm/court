@@ -10,7 +10,7 @@ public class User extends UserPure {
   }
 
   public User(long id, String login, String password, Role role, String name, Court court, boolean isActive) {
-    super(id, login, password, role, name, court==null?0:court.getId(), isActive);
+    super(id, login, password, role, name, getIdIfNotNull(court,0), isActive);
     this.court=court;
   }
 
@@ -24,6 +24,6 @@ public class User extends UserPure {
 
   @Override
   public long getCourtId(){
-    return court==null?super.getCourtId():court.getId();
+    return getIdIfNotNull(court,super.getCourtId());
   }
 }

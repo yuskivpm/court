@@ -7,6 +7,8 @@ import com.dsa.model.User;
 import com.dsa.service.command.LoginCommand;
 import org.apache.log4j.Logger;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletResponse;
 
@@ -28,6 +30,10 @@ public class UserCrud {
           return CrudResult.EXECUTED;
         case PREPARE_UPDATE_FORM:
           return prepareEditForm(request, response);
+        case READ:
+        case READ_ALL:
+          readUser(request, response,ce==CrudEnum.READ_ALL);
+          return CrudResult.EXECUTED;
         default: //skip
       }
     }
@@ -105,4 +111,42 @@ public class UserCrud {
     return CrudResult.FAILED;
   }
 
+  private static void readUser(ProxyRequest request, HttpServletResponse response, boolean readAll){
+    PrintWriter out =null;
+    try{
+      out = response.getWriter();
+      long id=0;
+      if(!readAll){
+        id=Long.parseLong(request.getParameter("id"));
+      }
+      User user=null;
+      List<User> users=null;
+      String responseText="";
+      try(UserDao userDao=new UserDao()){
+        if(readAll){
+          users=userDao.readAll();
+          responseText="["+
+              users.stream()
+              .map(User::toString)
+              .collect(Collectors.joining(","))+
+              "]";
+        }else{
+          user=userDao.readEntity(id);
+          responseText=user.toString();
+        }
+      }
+      if (!responseText.isEmpty()){
+        out.print("{" +
+            "\"status\":\"ok\"," +
+            "\"data\":"+responseText+"}"
+        );
+      }else{
+        out.print("{\"error\":\"db error\"}");
+      }
+    }catch(Exception e){
+      if(out != null){
+        out.print("{\"error\":\"Exception in readUser(): "+e+"\"}");
+      }
+    }
+  }
 }

@@ -10,7 +10,7 @@ public class Court extends CourtPure {
   }
 
   public Court(long id, String courtName, CourtInstance courtInstance, Court mainCourt){
-    super(id, courtName, courtInstance, mainCourt==null?0:mainCourt.getId());
+    super(id, courtName, courtInstance, getIdIfNotNull(mainCourt,0));
     this.mainCourt=mainCourt;
   }
 
@@ -24,6 +24,6 @@ public class Court extends CourtPure {
 
   @Override
   public long getMainCourtId(){
-    return mainCourt==null?super.getMainCourtId():mainCourt.getId();
+    return getIdIfNotNull(mainCourt,super.getMainCourtId());
   }
 }

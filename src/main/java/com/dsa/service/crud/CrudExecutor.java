@@ -55,7 +55,7 @@ public class CrudExecutor {
     if(method.equals(GET)){
       String redirect=request.getParameter("redirect");
       boolean hasIdValue=hasId(request.getParameter(ID));
-      if(redirect!=null){
+      if(redirect!=null && !redirect.isEmpty()){
         return hasIdValue?CrudEnum.PREPARE_UPDATE_FORM:CrudEnum.WRONG;
       }
       String path=request.getPathInfo();

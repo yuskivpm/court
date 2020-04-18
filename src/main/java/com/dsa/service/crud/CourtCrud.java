@@ -11,6 +11,8 @@ import com.dsa.service.command.LoginCommand;
 import org.apache.log4j.Logger;
 
 import java.io.PrintWriter;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
 
 public class CourtCrud {
@@ -31,6 +33,10 @@ public class CourtCrud {
           return CrudResult.EXECUTED;
         case PREPARE_UPDATE_FORM:
           return prepareEditForm(request, response);
+        case READ:
+        case READ_ALL:
+          readCourt(request, response,ce==CrudEnum.READ_ALL);
+          return CrudResult.EXECUTED;
         default: //skip
       }
     }
@@ -46,7 +52,6 @@ public class CourtCrud {
         id=Long.parseLong(request.getParameter("id"));
       }
       String courtName= request.getParameter("courtName");
-//      courtName=new String(courtName.getBytes("ISO-8859-1"),"UTF-8");
       CourtInstance courtInstance= CourtInstance.valueOf(request.getParameter("courtInstance"));
       long mainCourtId= Long.parseLong(request.getParameter("mainCourtId"));
       if(courtName!=null && !courtName.isEmpty()){
@@ -106,4 +111,42 @@ public class CourtCrud {
     return CrudResult.FAILED;
   }
 
+  private static void readCourt(ProxyRequest request, HttpServletResponse response, boolean readAll){
+    PrintWriter out =null;
+    try{
+      out = response.getWriter();
+      long id=0;
+      if(!readAll){
+        id=Long.parseLong(request.getParameter("id"));
+      }
+      Court court=null;
+      List<Court> courts=null;
+      String responseText="";
+      try(CourtDao courtDao=new CourtDao()){
+        if(readAll){
+          courts=courtDao.readAll();
+          responseText="["+
+              courts.stream()
+                  .map(Court::toString)
+                  .collect(Collectors.joining(","))+
+              "]";
+        }else{
+          court=courtDao.readEntity(id);
+          responseText=court.toString();
+        }
+      }
+      if (!responseText.isEmpty()){
+        out.print("{" +
+            "\"status\":\"ok\"," +
+            "\"data\":"+responseText+"}"
+        );
+      }else{
+        out.print("{\"error\":\"db error\"}");
+      }
+    }catch(Exception e){
+      if(out != null){
+        out.print("{\"error\":\"Exception in readUser(): "+e+"\"}");
+      }
+    }
+  }
 }

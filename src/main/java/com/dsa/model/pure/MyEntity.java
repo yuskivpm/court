@@ -33,6 +33,10 @@ public abstract class MyEntity implements Serializable, Cloneable{
 
   @Override
   public String toString(){
-    return entityName+" [id="+id;
+    return "\"entity\":\""+entityName+"\", \"id\":\""+id+"\"";
+  }
+
+  public static long getIdIfNotNull(MyEntity entity, long defaultValue){
+    return entity==null?defaultValue:entity.getId();
   }
 }

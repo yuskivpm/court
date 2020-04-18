@@ -11,6 +11,10 @@ public class SuePure extends MyEntity {
   Date sueDate;
   String claimText;
 
+  public SuePure(){
+    entityName="Sue";
+  }
+
   public SuePure(long id, long suitorId, long defendantId, long courtId, Date sueDate, String claimText) {
     super(id);
     entityName="Sue";
@@ -68,12 +72,12 @@ public class SuePure extends MyEntity {
 
   @Override
   public String toString(){
-    return super.toString()+", "
-        +"suitorId="+suitorId+", "
-        +"defendantId="+defendantId+", "
-        +"courtId="+courtId+", "
-        +"sueDate="+sueDate+", "
-        +"claimText="+claimText
-        +"]";
+    return "{"+super.toString()+", "
+        +"\"suitorId\":\""+suitorId+"\", "
+        +"\"defendantId\":\""+defendantId+"\", "
+        +"\"courtId\":\""+courtId+"\", "
+        +"\"sueDate\":\""+sueDate+"\", "
+        +"\"claimText\":\""+claimText+"\""
+        +"}";
   }
 }
