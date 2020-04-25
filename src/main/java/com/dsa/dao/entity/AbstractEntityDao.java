@@ -136,6 +136,8 @@ public abstract class AbstractEntityDao <E extends MyEntity> implements AutoClos
 
   protected abstract E recordToEntity(ResultSet resultSet);
 
+  protected abstract E loadAllSubEntities(E entity) throws SQLException;
+
   public void closeStatements(Statement st){
     if(st!=null){
       try{

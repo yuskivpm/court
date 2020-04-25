@@ -44,7 +44,7 @@ public class VerdictDao extends AbstractEntityDao<Verdict> {
       verdict.setEffectiveDate(sqlDateToDate(resultSet.getDate("EFFECTIVE_DATE")));
       verdict.setVerdictResult(VerdictType.valueOf(resultSet.getString("VERDICT_TYPE_ID")));
       verdict.setVerdictText(resultSet.getString("VERDICT_TEXT"));
-      verdict.setJurisdictionCourt(new CourtDao(connection).readEntity(resultSet.getLong("JURISDICTION_COURT_ID")));
+      verdict.setJurisdictionCourtId(resultSet.getLong("JURISDICTION_COURT_ID")); // verdict.setJurisdictionCourt(new CourtDao(connection).readEntity(resultSet.getLong("JURISDICTION_COURT_ID")));
       return verdict;
     }catch(SQLException e){
       log.error("SQLException in VerdictDao.recordToEntity: "+e);
@@ -60,6 +60,19 @@ public class VerdictDao extends AbstractEntityDao<Verdict> {
     preparedStatement.setString(4, verdict.getVerdictText());
     setPreparedValueOrNull(preparedStatement,5,verdict.getJurisdictionCourtId());
     return 6; // next index for preparedStatement.set_()
+  };
+
+  @Override
+  public Verdict loadAllSubEntities(Verdict verdict) throws SQLException {
+    if (verdict!=null) {
+      if (verdict.getJurisdictionCourt()==null && verdict.getJurisdictionCourtId()>0) {
+        verdict.setJurisdictionCourt(new CourtDao(connection).readEntity(verdict.getJurisdictionCourtId()));
+      }
+      if (verdict.getLawsuit()==null && verdict.getLawsuitId()>0) {
+        verdict.setLawsuit(new LawsuitDao(connection).readEntity(verdict.getLawsuitId()));
+      }
+    }
+    return verdict;
   };
 
 }

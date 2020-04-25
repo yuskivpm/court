@@ -38,9 +38,9 @@ public class SueDao  extends AbstractEntityDao<Sue> {
     Sue sue= new Sue();
     try{
       sue.setId(resultSet.getLong("ID"));
-      sue.setSuitor(new UserDao(connection).readEntity(resultSet.getLong("SUITOR_ID")));
-      sue.setDefendant(new UserDao(connection).readEntity(resultSet.getLong("DEFENDANT_ID")));
-      sue.setCourt(new CourtDao(connection).readEntity(resultSet.getLong("COURT_ID")));
+      sue.setSuitorId(resultSet.getLong("SUITOR_ID")); // sue.setSuitor(new UserDao(connection).readEntity(resultSet.getLong("SUITOR_ID")));
+      sue.setDefendantId(resultSet.getLong("DEFENDANT_ID")); // sue.setDefendant(new UserDao(connection).readEntity(resultSet.getLong("DEFENDANT_ID")));
+      sue.setCourtId(resultSet.getLong("COURT_ID")); // sue.setCourt(new CourtDao(connection).readEntity(resultSet.getLong("COURT_ID")));
       sue.setSueDate(sqlDateToDate(resultSet.getDate("SUE_DATE")));
       sue.setClaimText(resultSet.getString("CLAIM_TEXT"));
       return sue;
@@ -58,6 +58,22 @@ public class SueDao  extends AbstractEntityDao<Sue> {
     preparedStatement.setDate(4, dateToSqlDate(sue.getSueDate()));
     preparedStatement.setString(5, sue.getClaimText());
     return 6; // next index for preparedStatement.set_()
+  };
+
+  @Override
+  public Sue loadAllSubEntities(Sue sue) throws SQLException {
+    if (sue!=null) {
+      if (sue.getSuitor()==null && sue.getSuitorId()>0) {
+        sue.setSuitor(new UserDao(connection).readEntity(sue.getSuitorId()));
+      }
+      if (sue.getDefendant()==null && sue.getDefendantId()>0) {
+        sue.setDefendant(new UserDao(connection).readEntity(sue.getDefendantId()));
+      }
+      if (sue.getCourt()==null && sue.getCourtId()>0) {
+        sue.setCourt(new CourtDao(connection).readEntity(sue.getCourtId()));
+      }
+    }
+    return sue;
   };
 
 }

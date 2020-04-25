@@ -38,7 +38,7 @@ public class CourtDao extends AbstractEntityDao<Court> {
       court.setId(resultSet.getLong("ID"));
       court.setCourtName(resultSet.getString("COURT_NAME"));
       court.setCourtInstance(CourtInstance.valueOf(resultSet.getString("COURT_INSTANCE")));
-      court.setMainCourt(readEntity(resultSet.getLong("MAIN_COURT_ID")));
+      court.setMainCourtId(resultSet.getLong("MAIN_COURT_ID")); //      court.setMainCourt(readEntity(resultSet.getLong("MAIN_COURT_ID")));
       return court;
     }catch(SQLException e){
       log.error("SQLException in CourtDao.recordToEntity: "+e);
@@ -52,6 +52,14 @@ public class CourtDao extends AbstractEntityDao<Court> {
     preparedStatement.setString(2, court.getCourtInstance().toString());
     setPreparedValueOrNull(preparedStatement,3,court.getMainCourtId());
     return 4; // next index for preparedStatement.set_()
+  };
+
+  @Override
+  public Court loadAllSubEntities(Court court) throws SQLException {
+    if (court!=null && court.getMainCourt()==null && court.getMainCourtId()>0) {
+        court.setMainCourt(readEntity(court.getMainCourtId()));
+    }
+    return court;
   };
 
 }

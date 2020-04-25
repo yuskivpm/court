@@ -44,7 +44,7 @@ public class UserDao extends AbstractEntityDao<User> {
       user.setPassword(resultSet.getString("PASSWORD"));
       user.setRole(Role.valueOf(resultSet.getString("ROLE_ID")));
       user.setName(resultSet.getString("NAME"));
-      user.setCourt(new CourtDao(connection).readEntity(resultSet.getLong("COURT_ID")));
+      user.setCourtId(resultSet.getLong("COURT_ID")); //      user.setCourt(new CourtDao(connection).readEntity(resultSet.getLong("COURT_ID")));
       user.setIsActive(resultSet.getBoolean("IS_ACTIVE"));
       return user;
     }catch(SQLException e){
@@ -62,6 +62,14 @@ public class UserDao extends AbstractEntityDao<User> {
       setPreparedValueOrNull(preparedStatement,5,user.getCourtId());
       preparedStatement.setBoolean(6, user.getIsActive());
     return 7; // next index for preparedStatement.set_()
+  };
+
+  @Override
+  public User loadAllSubEntities(User user) throws SQLException {
+    if (user!=null && user.getCourt()==null && user.getCourtId()>0) {
+      user.setCourt(new CourtDao(connection).readEntity(user.getCourtId()));
+    }
+    return user;
   };
 
 }

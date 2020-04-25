@@ -41,6 +41,9 @@ public class MainPageCommand implements IActionCommand {
         //users
         try(UserDao user=new UserDao()){
           List<User> users= user.readAll();
+          for(User curUser: users){
+            user.loadAllSubEntities(curUser);
+          }
           request.setAttribute("users",users);
         }catch(SQLException | DbPoolException e){
           log.error("Fail get Users list in MainPageCommand for "+currentUser.getRole()+": "+e);
@@ -48,6 +51,9 @@ public class MainPageCommand implements IActionCommand {
 //        courts
         try(CourtDao court=new CourtDao()){
           List<Court> courts= court.readAll();
+          for(Court curCourt: courts){
+            court.loadAllSubEntities(curCourt);
+          }
           request.setAttribute("courts",courts);
         }catch(SQLException | DbPoolException e){
           log.error("Fail get Courts list in MainPageCommand for "+currentUser.getRole()+": "+e);

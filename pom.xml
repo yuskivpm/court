@@ -139,8 +139,29 @@
             <version>19.0.0</version>
             <scope>compile</scope>
         </dependency>
-
+<!--    checkstyle, reports -->
+<!--        <dependency>-->
+<!--            <groupId>org.codehaus.mojo</groupId>-->
+<!--            <artifactId>findbugs-maven-plugin</artifactId>-->
+<!--            <version>3.0.5</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.maven.plugins</groupId>-->
+<!--            <artifactId>maven-pmd-plugin</artifactId>-->
+<!--            <version>3.13.0</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.maven.plugins</groupId>-->
+<!--            <artifactId>maven-checkstyle-plugin</artifactId>-->
+<!--            <version>3.1.1</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.maven.plugins</groupId>-->
+<!--            <artifactId>maven-project-info-reports-plugin</artifactId>-->
+<!--            <version>3.0.0</version>-->
+<!--        </dependency>-->
     </dependencies>
+
 
     <build>
         <plugins>
@@ -155,4 +176,33 @@
             </plugin>
         </plugins>
     </build>
+
+<!--    <reporting>-->
+<!--        <plugins>-->
+<!--            <plugin>-->
+<!--                <groupId>org.codehaus.mojo</groupId>-->
+<!--                <artifactId>findbugs-maven-plugin</artifactId>-->
+<!--                <version>3.0.5</version>-->
+<!--            </plugin>-->
+
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-pmd-plugin</artifactId>-->
+<!--                <version>3.13.0</version>-->
+<!--            </plugin>-->
+
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-checkstyle-plugin</artifactId>-->
+<!--                <version>3.1.1</version>-->
+<!--                <reportSets>-->
+<!--                    <reportSet>-->
+<!--                        <reports>-->
+<!--                            <report>checkstyle</report>-->
+<!--                        </reports>-->
+<!--                    </reportSet>-->
+<!--                </reportSets>-->
+<!--            </plugin>-->
+<!--        </plugins>-->
+<!--    </reporting>-->
 </project>

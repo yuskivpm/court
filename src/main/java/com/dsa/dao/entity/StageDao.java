@@ -49,13 +49,13 @@ public class StageDao  extends AbstractEntityDao<Stage> {
     Stage stage= new Stage();
     try{
       stage.setId(resultSet.getLong("ID"));
-      stage.setLawsuit(new LawsuitDao(connection).readEntity(resultSet.getLong("LAWSUIT_ID")));
-      stage.setJudge(new UserDao(connection).readEntity(resultSet.getLong("JUDGE_ID")));
+      stage.setLawsuitId(resultSet.getLong("LAWSUIT_ID")); // stage.setLawsuit(new LawsuitDao(connection).readEntity(resultSet.getLong("LAWSUIT_ID")));
+      stage.setJudgeId(resultSet.getLong("JUDGE_ID")); // stage.setJudge(new UserDao(connection).readEntity(resultSet.getLong("JUDGE_ID")));
       stage.setSueDate(sqlDateToDate(resultSet.getDate("SUE_DATE")));
       stage.setStartDate(sqlDateToDate(resultSet.getDate("START_DATE")));
       stage.setClaimText(resultSet.getString("CLAIM_TEXT"));
       stage.setDefendantText(resultSet.getString("DEFENDANT_TEXT"));
-      stage.setVerdict(new VerdictDao(connection).readEntity(resultSet.getLong("VERDICT_ID")));
+      stage.setVerdictId(resultSet.getLong("VERDICT_ID")); // stage.setVerdict(new VerdictDao(connection).readEntity(resultSet.getLong("VERDICT_ID")));
       stage.setSuitorAppealDate(sqlDateToDate(resultSet.getDate("SUITOR_APPEAL_DATE")));
       stage.setSuitorAppealText(resultSet.getString("SUITOR_APPEAL_TEXT"));
       stage.setDefendantAppealDate(sqlDateToDate(resultSet.getDate("DEFENDANT_APPEAL_DATE")));
@@ -81,6 +81,22 @@ public class StageDao  extends AbstractEntityDao<Stage> {
     preparedStatement.setDate(10, dateToSqlDate(stage.getDefendantAppealDate()));
     preparedStatement.setString(11, stage.getDefendantAppealText());
     return 12; // next index for preparedStatement.set_()
+  };
+
+  @Override
+  public Stage loadAllSubEntities(Stage stage) throws SQLException {
+    if (stage!=null) {
+      if (stage.getLawsuit()==null && stage.getLawsuitId()>0) {
+        stage.setLawsuit(new LawsuitDao(connection).readEntity(stage.getLawsuitId()));
+      }
+      if (stage.getJudge()==null && stage.getJudgeId()>0) {
+        stage.setJudge(new UserDao(connection).readEntity(stage.getJudgeId()));
+      }
+      if (stage.getVerdict()==null && stage.getVerdictId()>0) {
+        stage.setVerdict(new VerdictDao(connection).readEntity(stage.getVerdictId()));
+      }
+    }
+    return stage;
   };
 
 }
