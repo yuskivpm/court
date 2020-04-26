@@ -44,11 +44,16 @@ public abstract class AbstractEntityDao <E extends MyEntity> implements AutoClos
     return result;
   };
 
-  public List<E> readAll(){
+  public List<E> readAll() throws SQLException{
+    return readAll(null);
+  }
+
+  public List<E> readAll(String[] whereArray) throws SQLException{
+    String selectString =prepareSqlRequestByMap(whereArray);
     List<E> entities = new ArrayList<>();
     try(
         Statement st = connection.createStatement();
-        ResultSet rs=st.executeQuery(SQL_SELECT_ALL+TABLE_NAME);
+        ResultSet rs=st.executeQuery(selectString);
     ){
       while(rs.next()){
         E entity= recordToEntity(rs);
@@ -72,15 +77,8 @@ public abstract class AbstractEntityDao <E extends MyEntity> implements AutoClos
   }
 
   public E readEntity(@NotNull String[] whereArray) throws SQLException{
-    if((whereArray.length==0)||((whereArray.length&1)==1)){
-      log.error("Incorrect whereArray length: "+whereArray);
-      throw new SQLException("Incorrect whereArray length: "+whereArray.length);
-    }
+    String selectString =prepareSqlRequestByMap(whereArray);
     E entity=null;
-    String selectString = String.format(SQL_SELECT_BY_MAP,TABLE_NAME);
-    for(int i=0; i<whereArray.length;){
-      selectString+=" "+whereArray[i++]+"='"+whereArray[i++]+"'"+(i<whereArray.length?" and":"");
-    }
     try(
         PreparedStatement st = connection.prepareStatement(selectString);
         ResultSet rs=st.executeQuery();
@@ -189,5 +187,22 @@ public abstract class AbstractEntityDao <E extends MyEntity> implements AutoClos
   public static java.sql.Date dateToSqlDate(java.util.Date date) {
     return date != null?new java.sql.Date(date.getTime()):null;
   }
+
+
+  protected String prepareSqlRequestByMap(String[] whereArray) throws SQLException{
+    if(whereArray==null || whereArray.length==0){
+      return SQL_SELECT_ALL+TABLE_NAME;
+    }
+    if((whereArray.length&1)==1){
+      log.error("Incorrect whereArray length: "+whereArray);
+      throw new SQLException("Incorrect whereArray length: "+whereArray.length);
+    }
+    String selectString = String.format(SQL_SELECT_BY_MAP,TABLE_NAME);
+    for(int i=0; i<whereArray.length;){
+      selectString+=" "+whereArray[i++]+"='"+whereArray[i++]+"'"+(i<whereArray.length?" and":"");
+    }
+    return selectString;
+  }
+
 
 }

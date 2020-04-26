@@ -27,6 +27,7 @@ public class LoginCommand implements IActionCommand {
     User user=LoginLogic.checkLogin(login, password);
     if (user!=null){
       LoginCommand.startUserSession(request,user);
+      request.setAttribute("curUser", user);
       return new MainPageCommand().execute(request,user);
     }else{
       request.setAttribute("errorFailLoginPassMessage", MessageManager.getProperty("message.loginError"));

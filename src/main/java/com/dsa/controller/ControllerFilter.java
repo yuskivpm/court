@@ -52,6 +52,7 @@ public class ControllerFilter implements Filter{
         return;
       }
     }
+    request.setAttribute("curUser", LoginCommand.getSessionUser(proxyRequest));
     chain.doFilter(request,response);
   }
 }

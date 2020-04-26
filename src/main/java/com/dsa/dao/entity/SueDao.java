@@ -4,6 +4,8 @@ import com.dsa.dao.services.DbPoolException;
 import com.dsa.model.Sue;
 
 import java.sql.*;
+import java.util.List;
+import java.util.ArrayList;
 
 public class SueDao  extends AbstractEntityDao<Sue> {
   private static final String SUE_TABLE_NAME="SUE";
@@ -31,6 +33,11 @@ public class SueDao  extends AbstractEntityDao<Sue> {
 
   public SueDao(Connection connection){
     super(connection,SUE_TABLE_NAME, SQL_INSERT, SQL_UPDATE);
+  }
+
+  public List<Sue> readAllBySuitorId(long id) throws SQLException{
+    String[] where={"SUITOR_ID", Long.toString(id)};
+    return readAll(where);
   }
 
   @Override

@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Connection;
+import java.util.List;
 
 public class LawsuitDao  extends AbstractEntityDao<Lawsuit> {
   private static final String LAWSUIT_TABLE_NAME="LAWSUIT";
@@ -49,6 +50,16 @@ public class LawsuitDao  extends AbstractEntityDao<Lawsuit> {
 
   public LawsuitDao(Connection connection){
     super(connection,LAWSUIT_TABLE_NAME, SQL_INSERT, SQL_UPDATE);
+  }
+
+  public List<Lawsuit> readAllBySuitorId(long id) throws SQLException{
+    String[] where={"SUITOR_ID", Long.toString(id)};
+    return readAll(where);
+  }
+
+  public List<Lawsuit> readAllByDefendantId(long id) throws SQLException{
+    String[] where={"DEFENDANT_ID", Long.toString(id)};
+    return readAll(where);
   }
 
   @Override

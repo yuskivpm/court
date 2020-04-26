@@ -1,7 +1,7 @@
 <jsp:directive.include file="mainHeader.jsp"/>
     <h3>Welcome admin</h3>
     <hr/>
-    ${user}, hello!
+    ${curUser.name}, hello!
     <button form="simpleForm" type="submit" name="command" value="Logout">Logout</button>
     <hr/>
     <br/>
@@ -102,7 +102,5 @@
     </table>
 
     <hr/>
-
-</div>
 
 <jsp:directive.include file="mainFooter.jsp"/>

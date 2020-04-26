@@ -2,9 +2,13 @@ package com.dsa.service.command;
 
 import com.dsa.controller.ProxyRequest;
 import com.dsa.dao.entity.CourtDao;
+import com.dsa.dao.entity.LawsuitDao;
+import com.dsa.dao.entity.SueDao;
 import com.dsa.dao.entity.UserDao;
 import com.dsa.dao.services.DbPoolException;
 import com.dsa.model.Court;
+import com.dsa.model.Lawsuit;
+import com.dsa.model.Sue;
 import com.dsa.model.User;
 import com.dsa.service.resource.ConfigManager;
 
@@ -35,8 +39,34 @@ public class MainPageCommand implements IActionCommand {
   }
 
   private static void InitializeJsp(User currentUser, ProxyRequest request){
-    request.setAttribute("user", currentUser.getName());
+    request.setAttribute("curUser", currentUser);
     switch(currentUser.getRole().toString()){
+      case "ATTORNEY":
+        try(SueDao sueDao=new SueDao()){
+          List<Sue> sues=sueDao.readAllBySuitorId(currentUser.getId());
+          for(Sue sue: sues){
+            sueDao.loadAllSubEntities(sue);
+          }
+          request.setAttribute("sues",sues);
+        }catch(SQLException | DbPoolException e){
+          log.error("Fail get Sues list in MainPageCommand for "+currentUser.getRole()+": "+e);
+        }
+        try(LawsuitDao lawsuitDao=new LawsuitDao()){
+          List<Lawsuit> lawsuits=lawsuitDao.readAllBySuitorId(currentUser.getId());
+          for(Lawsuit lawsuit: lawsuits){
+            lawsuitDao.loadAllSubEntities(lawsuit);
+          }
+          request.setAttribute("ownLawsuits",lawsuits);
+          lawsuits=lawsuitDao.readAllByDefendantId(currentUser.getId());
+          for(Lawsuit lawsuit: lawsuits){
+            lawsuitDao.loadAllSubEntities(lawsuit);
+          }
+          request.setAttribute("asDefendantLawsuits",lawsuits);
+        }catch(SQLException | DbPoolException e){
+          log.error("Fail get Lawsuits list in MainPageCommand for "+currentUser.getRole()+": "+e);
+        }
+//        todo:  unready prepare jsp variables for ATTORNEY main page
+        break;
       case "ADMIN":
         //users
         try(UserDao user=new UserDao()){
@@ -60,16 +90,13 @@ public class MainPageCommand implements IActionCommand {
         }
         break;
       case "JUDGE":
-//        todo: unready
-//        break;
-      case "ATTORNEY":
-//        todo: unready
+//        todo: unready prepare jsp variables for JUDGE main page
 //        break;
       case "GUEST":
-//        todo: unready
+//        todo:  unready prepare jsp variables for GUEST main page
 //        break;
       default:
-//        todo: unready
+//        todo:  unready ERROR main page
     }
   }
 
