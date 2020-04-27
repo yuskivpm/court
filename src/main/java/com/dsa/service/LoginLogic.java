@@ -14,7 +14,7 @@ public class LoginLogic {
     User user=null;
     try(UserDao userDao = new UserDao()) {
       String[] loginRequest={"LOGIN", login, "PASSWORD",password};
-      user = userDao.readEntity(loginRequest);
+      user = userDao.loadAllSubEntities(userDao.readEntity(loginRequest));
     }catch(DbPoolException | SQLException e){
       log.error("Can not get connection in checkLogin: "+e);
     }

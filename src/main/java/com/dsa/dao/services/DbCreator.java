@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
+import java.util.Date;
 
 public final class DbCreator {
   private static final Logger log = Logger.getLogger(DbCreator.class);
@@ -41,6 +42,7 @@ public final class DbCreator {
       st=con.createStatement();
       CourtDao courtDao=new CourtDao(con);
       UserDao userDao=new UserDao(con);
+      SueDao sueDao=new SueDao(con);
 
       CourtDao.sqlExecute(st,CourtDao.SQL_CREATE_TABLE,false,log);
       UserDao.sqlExecute(st,UserDao.SQL_CREATE_TABLE,false,log);
@@ -68,9 +70,16 @@ public final class DbCreator {
       userDao.createEntity(new User(1,"admin", "admin", Role.ADMIN,"admin name",null,true));
       userDao.createEntity(new User(2,"supreme1", "supreme1", Role.JUDGE,"Supreme name",supremeCourt,true));
       userDao.createEntity(new User(3,"appeal1", "appeal1", Role.JUDGE,"Appeal name",appealCourt,true));
-      userDao.createEntity(new User(4,"local1", "local1", Role.JUDGE,"Local name",localCourt,true));
-      userDao.createEntity(new User(5,"attorney1", "attorney1", Role.ATTORNEY,"Attorney1 name",null,true));
-      userDao.createEntity(new User(6,"attorney2", "attorney2", Role.ATTORNEY,"Attorney2",null,true));
+      User localJudge = new User(4,"local1", "local1", Role.JUDGE,"Local name",localCourt,true);
+      User attorney1 = new User(5,"attorney1", "attorney1", Role.ATTORNEY,"Attorney1 name",null,true);
+      User attorney2 = new User(6,"attorney2", "attorney2", Role.ATTORNEY,"Attorney2",null,true);
+      userDao.createEntity(localJudge);
+      userDao.createEntity(attorney1);
+      userDao.createEntity(attorney2);
+//
+      sueDao.createEntity(new Sue(1,attorney1,attorney2,localCourt,new Date(), "First claim to att2"));
+      sueDao.createEntity(new Sue(2,attorney1,attorney2,localCourt,new Date(), "Second claim to att2"));
+      sueDao.createEntity(new Sue(3,attorney2,attorney2,localCourt,new Date(), "First claim to att1"));
 
     }catch(SQLException e){
       log.error("Exception in DbCreator.recreateTables: "+e);

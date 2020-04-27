@@ -8,11 +8,11 @@
     <input type="hidden" name="command" value="Login"/>
     Login:
     <br/>
-    <input type="text" name="login" value="attorney1"/>
+    <input type="text" name="login" value="local1"/>
     <br/>
     Password:
     <br/>
-    <input type="password" name="password" value="attorney1"/>
+    <input type="password" name="password" value="local1"/>
     <br/>
     ${errorFailLoginPassMessage}
     <br/>
@@ -23,5 +23,13 @@ ${wrongAction}
 <br/>
 ${nullPage}
 
+<table>
+    <tr><td>admin</td><td>admin</td></tr>
+    <tr><td>attorney1</td><td>attorney1</td></tr>
+    <tr><td>attorney2</td><td>attorney2</td></tr>
+    <tr><td>supreme1</td><td>supreme1</td></tr>
+    <tr><td>appeal1</td><td>appeal1</td></tr>
+    <tr><td>local1</td><td>local1</td></tr>
+</table>
 </body>
 </html>

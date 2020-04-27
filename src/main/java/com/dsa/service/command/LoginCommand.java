@@ -9,6 +9,7 @@ import com.dsa.service.resource.ConfigManager;
 import com.dsa.service.resource.MessageManager;
 
 import org.apache.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
 import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
@@ -36,12 +37,12 @@ public class LoginCommand implements IActionCommand {
     return page;
   }
 
-  private static void startUserSession(ProxyRequest request, User user){
+  private static void startUserSession(@NotNull ProxyRequest request, @NotNull User user){
     HttpSession session=request.getSession();
     session.setAttribute(USER_SESSION_ID, user.getId());
   }
 
-  public static String getUserSessionId(ProxyRequest request){
+  public static String getUserSessionId(@NotNull ProxyRequest request){
     HttpSession session=request.getSession();
     Object UserSessionId=session.getAttribute(USER_SESSION_ID);
     return UserSessionId==null?"":UserSessionId.toString();
@@ -50,7 +51,7 @@ public class LoginCommand implements IActionCommand {
   public static User getSessionUser(ProxyRequest request){
     User user=null;
     try(UserDao userDao= new UserDao()){
-      user=userDao.readEntity("id",LoginCommand.getUserSessionId(request));
+      user=userDao.loadAllSubEntities(userDao.readEntity("id",LoginCommand.getUserSessionId(request)));
     }catch(DbPoolException | SQLException e){
       log.error("Fail get user.readEntity in getSessionUser: "+e);
     }

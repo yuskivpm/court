@@ -1,10 +1,11 @@
 <jsp:directive.page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"/>
-<%@ page import="com.dsa.model.Role" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page import="com.dsa.model.Role" %>
+<%@ page import="com.dsa.model.Sue" %>
+<%@ page import="com.dsa.model.CourtInstance" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="java.text.SimpleDateFormat" %>
-<%@ page import="com.dsa.model.Sue" %>
-<%--<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>--%>
+
 <h1>Sue Management</h1>
 <h2>
     <button type="button" onclick="sendGetRequest('api?command=mainPage')">
@@ -52,17 +53,20 @@
         <tr>
             <th>Court:</th>
             <td>
+                <c:set var="localCourt" scope="page" value="<%=CourtInstance.LOCAL%>"/>
                 <select name="courtId"/>
                 <c:set var="courts" scope="page" value="<%=new com.dsa.dao.entity.CourtDao()%>"/>
                 <c:forEach var="court" items="${courts.readAll()}">
-                    <option
-                            value="${court.id}"
-                            <c:if test="${editEntity.courtId == court.id}">
-                                selected
-                            </c:if>
-                    >
-                            ${court.courtName}
-                    </option>
+                    <c:if test="${court.courtInstance == localCourt}">
+                        <option
+                                value="${court.id}"
+                                <c:if test="${editEntity.courtId == court.id}">
+                                    selected
+                                </c:if>
+                        >
+                                ${court.courtName}
+                        </option>
+                    </c:if>
                 </c:forEach>
                 </select>
             </td>
@@ -70,7 +74,7 @@
         <tr>
         <th>Sue date:</th>
             <td>
-                <input type="text" name="sueDate" size="45" required
+                <input type="text" name="sueDate" size="45" required readonly
                     <c:if test="${editEntity != null}">
                         value='<%= new SimpleDateFormat("dd.MM.yyyy").format(((Sue)request.getAttribute("editEntity")).getSueDate()) %>'
                     </c:if>

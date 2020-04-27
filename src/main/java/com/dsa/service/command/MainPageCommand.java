@@ -6,10 +6,7 @@ import com.dsa.dao.entity.LawsuitDao;
 import com.dsa.dao.entity.SueDao;
 import com.dsa.dao.entity.UserDao;
 import com.dsa.dao.services.DbPoolException;
-import com.dsa.model.Court;
-import com.dsa.model.Lawsuit;
-import com.dsa.model.Sue;
-import com.dsa.model.User;
+import com.dsa.model.*;
 import com.dsa.service.resource.ConfigManager;
 
 import org.apache.log4j.Logger;
@@ -41,7 +38,33 @@ public class MainPageCommand implements IActionCommand {
   private static void InitializeJsp(User currentUser, ProxyRequest request){
     request.setAttribute("curUser", currentUser);
     switch(currentUser.getRole().toString()){
+
+      case "JUDGE":
+        if(currentUser.getCourt().getCourtInstance()== CourtInstance.LOCAL){
+          // for local courts - get list of sues in court
+          try(SueDao sueDao=new SueDao()){
+            List<Sue> sues=sueDao.readAllForCourtId(currentUser.getCourtId());
+            for(Sue sue: sues){
+              sueDao.loadAllSubEntities(sue);
+            }
+            request.setAttribute("sues",sues);
+          }catch(SQLException | DbPoolException e){
+            log.error("Fail get Sues list in MainPageCommand for "+currentUser.getRole()+": "+e);
+          }
+        }
+        try(LawsuitDao lawsuitDao=new LawsuitDao()){
+          List<Lawsuit> lawsuits=lawsuitDao.readAllForJudgeId(currentUser.getId());
+          for(Lawsuit lawsuit: lawsuits){
+            lawsuitDao.loadAllSubEntities(lawsuit);
+          }
+          request.setAttribute("lawsuits",lawsuits);
+        }catch(SQLException | DbPoolException e){
+          log.error("Fail get Lawsuits list in MainPageCommand for "+currentUser.getRole()+": "+e);
+        }
+        break;
+
       case "ATTORNEY":
+        // list of own sues
         try(SueDao sueDao=new SueDao()){
           List<Sue> sues=sueDao.readAllBySuitorId(currentUser.getId());
           for(Sue sue: sues){
@@ -51,12 +74,14 @@ public class MainPageCommand implements IActionCommand {
         }catch(SQLException | DbPoolException e){
           log.error("Fail get Sues list in MainPageCommand for "+currentUser.getRole()+": "+e);
         }
+        // list of lawsuits for suitor role
         try(LawsuitDao lawsuitDao=new LawsuitDao()){
           List<Lawsuit> lawsuits=lawsuitDao.readAllBySuitorId(currentUser.getId());
           for(Lawsuit lawsuit: lawsuits){
             lawsuitDao.loadAllSubEntities(lawsuit);
           }
           request.setAttribute("ownLawsuits",lawsuits);
+          // list of lawsuits for defendant role
           lawsuits=lawsuitDao.readAllByDefendantId(currentUser.getId());
           for(Lawsuit lawsuit: lawsuits){
             lawsuitDao.loadAllSubEntities(lawsuit);
@@ -65,10 +90,10 @@ public class MainPageCommand implements IActionCommand {
         }catch(SQLException | DbPoolException e){
           log.error("Fail get Lawsuits list in MainPageCommand for "+currentUser.getRole()+": "+e);
         }
-//        todo:  unready prepare jsp variables for ATTORNEY main page
         break;
+
       case "ADMIN":
-        //users
+        // get users list
         try(UserDao user=new UserDao()){
           List<User> users= user.readAll();
           for(User curUser: users){
@@ -78,7 +103,7 @@ public class MainPageCommand implements IActionCommand {
         }catch(SQLException | DbPoolException e){
           log.error("Fail get Users list in MainPageCommand for "+currentUser.getRole()+": "+e);
         }
-//        courts
+        // get courts list
         try(CourtDao court=new CourtDao()){
           List<Court> courts= court.readAll();
           for(Court curCourt: courts){
@@ -89,9 +114,7 @@ public class MainPageCommand implements IActionCommand {
           log.error("Fail get Courts list in MainPageCommand for "+currentUser.getRole()+": "+e);
         }
         break;
-      case "JUDGE":
-//        todo: unready prepare jsp variables for JUDGE main page
-//        break;
+
       case "GUEST":
 //        todo:  unready prepare jsp variables for GUEST main page
 //        break;

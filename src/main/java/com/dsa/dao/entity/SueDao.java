@@ -40,6 +40,11 @@ public class SueDao  extends AbstractEntityDao<Sue> {
     return readAll(where);
   }
 
+  public List<Sue> readAllForCourtId(long id) throws SQLException{
+    String[] where={"COURT_ID", Long.toString(id)};
+    return readAll(where);
+  }
+
   @Override
   protected Sue recordToEntity(ResultSet resultSet){
     Sue sue= new Sue();

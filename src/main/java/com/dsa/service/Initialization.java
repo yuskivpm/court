@@ -1,9 +1,6 @@
 package com.dsa.service;
 
-import com.dsa.service.crud.CourtCrud;
-import com.dsa.service.crud.CrudExecutor;
-import com.dsa.service.crud.SueCrud;
-import com.dsa.service.crud.UserCrud;
+import com.dsa.service.crud.*;
 
 public class Initialization {
   public static void initialize() throws ClassNotFoundException{
@@ -12,7 +9,7 @@ public class Initialization {
     CrudExecutor.register(UserCrud.path, new UserCrud());
     CrudExecutor.register(CourtCrud.path, new CourtCrud());
     CrudExecutor.register(SueCrud.path, new SueCrud());
-
+    CrudExecutor.register(LawsuitCrud.path, new LawsuitCrud());
 //    todo: add ALL CrudExecutor's files here
   }
 }

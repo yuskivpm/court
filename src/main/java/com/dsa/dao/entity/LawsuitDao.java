@@ -62,6 +62,11 @@ public class LawsuitDao  extends AbstractEntityDao<Lawsuit> {
     return readAll(where);
   }
 
+  public List<Lawsuit> readAllForJudgeId(long id) throws SQLException{
+    String[] where={"JUDGE_ID", Long.toString(id)};
+    return readAll(where);
+  }
+
   @Override
   protected Lawsuit recordToEntity(ResultSet resultSet){
     Lawsuit lawsuit= new Lawsuit();
