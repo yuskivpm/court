@@ -5,34 +5,36 @@ import com.dsa.model.Role;
 import java.util.Objects;
 
 public class UserPure extends MyEntity {
-  String name;
-  String login;
-  String password;
-  Role role;
+
+  private static final String ENTITY_NAME = "User";
+  private String name;
+  private String login;
+  private String password;
+  private Role role;
   long courtId;
   boolean isActive;
 
-  public UserPure(){
-    entityName="User";
+  public UserPure() {
+    entityName = ENTITY_NAME;
   }
 
   public UserPure(long id, String login, String password, Role role, String name, long courtId, boolean isActive) {
     super(id);
-    entityName="User";
+    entityName = ENTITY_NAME;
     this.login = login;
     this.password = password;
     this.role = role;
-    this.name=name;
-    this.courtId=role!=Role.JUDGE?0:courtId;
-    this.isActive=isActive;
+    this.name = name;
+    this.courtId = role != Role.JUDGE ? 0 : courtId;
+    this.isActive = isActive;
   }
 
-  public String getName(){
+  public String getName() {
     return name;
   }
 
-  public void setName(String name){
-    this.name=name;
+  public void setName(String name) {
+    this.name = name;
   }
 
   public String getLogin() {
@@ -64,15 +66,15 @@ public class UserPure extends MyEntity {
   }
 
   public void setCourtId(long courtId) {
-    this.courtId = role!=Role.JUDGE?0:courtId;
+    this.courtId = role != Role.JUDGE ? 0 : courtId;
   }
 
-  public boolean getIsActive(){
+  public boolean getIsActive() {
     return isActive;
   }
 
-  public void setIsActive(boolean isActive){
-    this.isActive=isActive;
+  public void setIsActive(boolean isActive) {
+    this.isActive = isActive;
   }
 
   @Override
@@ -81,14 +83,15 @@ public class UserPure extends MyEntity {
   }
 
   @Override
-  public String toString(){
-    return "{"+super.toString()+", "
-        +"\"login\":\""+login+"\", "
-        +"\"password\":\""+password+"\", "
-        +"\"role\":\""+role+"\", "
-        +"\"name\":\""+name+"\", "
-        +"\"courtId\":\""+courtId+"\", "
-        +"\"isActive\":\""+isActive+"\""
-        +"}";
+  public String toString() {
+    return "{" + super.toString() + ", "
+        + "\"login\":\"" + login + "\", "
+        + "\"password\":\"" + password + "\", "
+        + "\"role\":\"" + role + "\", "
+        + "\"name\":\"" + name + "\", "
+        + "\"courtId\":\"" + courtId + "\", "
+        + "\"isActive\":\"" + isActive + "\""
+        + "}";
   }
+
 }

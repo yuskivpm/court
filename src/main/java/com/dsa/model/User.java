@@ -3,15 +3,16 @@ package com.dsa.model;
 import com.dsa.model.pure.UserPure;
 
 public class User extends UserPure {
+
   private Court court;
 
-  public User(){
+  public User() {
     super();
   }
 
   public User(long id, String login, String password, Role role, String name, Court court, boolean isActive) {
-    super(id, login, password, role, name, getIdIfNotNull(court,0), isActive);
-    this.court=court;
+    super(id, login, password, role, name, getIdIfNotNull(court, 0), isActive);
+    this.court = court;
   }
 
   public Court getCourt() {
@@ -23,7 +24,8 @@ public class User extends UserPure {
   }
 
   @Override
-  public long getCourtId(){
-    return getIdIfNotNull(court,super.getCourtId());
+  public long getCourtId() {
+    return getIdIfNotNull(court, super.getCourtId());
   }
+
 }

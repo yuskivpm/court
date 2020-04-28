@@ -1,13 +1,20 @@
 package com.dsa.service.resource;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ResourceBundle;
 
 public class MessageManager {
   private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("messages");
 
-  private MessageManager(){}
+  @Contract(pure = true)
+  private MessageManager() {
+  }
 
-  public static String getProperty(String key){
+  @NotNull
+  public static String getProperty(String key) {
     return resourceBundle.getString(key);
   }
+
 }

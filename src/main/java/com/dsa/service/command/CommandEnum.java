@@ -1,6 +1,7 @@
 package com.dsa.service.command;
 
 public enum CommandEnum {
+
   LOGIN {
     {
       this.command = new LoginCommand();
@@ -11,14 +12,14 @@ public enum CommandEnum {
       this.command = new LogoutCommand();
     }
   },
-  MAINPAGE{
+  MAIN_PAGE {
     {
       this.command = new MainPageCommand();
     }
   },
-  REDIRECT{
+  REDIRECT {
     {
-      this.command= new RedirectCommand();
+      this.command = new RedirectCommand();
     }
   },
   WRONG_COMMAND {
@@ -32,4 +33,5 @@ public enum CommandEnum {
   public IActionCommand getCommand() {
     return command;
   }
+
 }

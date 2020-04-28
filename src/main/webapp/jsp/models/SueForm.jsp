@@ -8,7 +8,7 @@
 
 <h1>Sue Management</h1>
 <h2>
-    <button type="button" onclick="sendGetRequest('api?command=mainPage')">
+    <button type="button" onclick="sendGetRequest('api?command=main_Page')">
         Back to main page
     </button>
 </h2>
@@ -94,7 +94,7 @@
             <td colspan="2" align="center">
                 <button
                         type="button"
-                        onclick="createOrUpdateEntity('sueForm','api/sues',()=>sendGetRequest('api?command=mainPage'))">
+                        onclick="createOrUpdateEntity('sueForm','api/sues',()=>sendGetRequest('api?command=main_Page'))">
                     Save
                 </button>
             </td>

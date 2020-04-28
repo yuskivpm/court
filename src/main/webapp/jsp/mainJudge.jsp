@@ -11,12 +11,7 @@ ${curUser.name}, hello!
 <br/>
 
 <h1>Sues</h1>
-<%--> 1) ТАБЛИЦЯ Таблиця заявлених позовів (не відкрито провадження) Позов.СудІД==він.СудІД--%>
-<%--// - по заявленому позову (для свого суду)--%>
-<%---- відкрити проваження--%>
-<%----- створюється НП за позовом, куди переносяться усі дані з позову--%>
-<%----- позов видаляється--%>
-<%----- заповнюється Судовий розгляд з датою "відкриття провадження"--%>
+
 <table>
     <thead>
     <tr>
@@ -41,16 +36,13 @@ ${curUser.name}, hello!
             </td>
             <td>${sue.claimText}</td>
             <td>
-                    <%--                    todo: accept sue for judge --%>
                 <button
                         type="button"
-<%--                        onclick="sendGetRequest('api/lawsuits?sueId=${sue.id}',()=>sendGetRequest('api?command=mainPage'))"--%>
                         onclick="fetchThis({
-                                        url:'api/lawsuits',
-                                        method:'POST',
-                                        body:'id=${sue.id}&judgeId=${curUser.id}&startDate=<%= MyEntity.dateToStr(new Date())%>'
-                                    },
-                                    data=>{crudInformationCallback(data,()=>sendGetRequest('api?command=mainPage'))}
+                                url:'api/lawsuits',
+                                method:'POST',
+                                body:'id=${sue.id}&judgeId=${curUser.id}&startDate=<%= MyEntity.dateToStr(new Date())%>'
+                                }, data=>{crudInformationCallback(data,()=>sendGetRequest('api?command=main_Page'))}
                                 )"
                 >
                     Accept
@@ -63,34 +55,18 @@ ${curUser.name}, hello!
 
 <hr/>
 
-
-<%--&lt;%&ndash; TODO ТАБЛИЦЯ таблиця НП у провадженні--%>
-<%--ownLawsuits              !!!!!!!!!!!!!!!!!!!!!!!--%>
-<%--asDefendantLawsuits         !!!!!!!!!!!!!!!!!--%>
-
-<%--&ndash;%&gt;--%>
-<%--&lt;%&ndash;>- ТАБЛИЦЯ таблиця НП у провадженні (НП.Дата вступу рішення в силу == НУЛЛ) І (він==НП.ВідповідачІД або він==НП.ПозивачІД)&ndash;%&gt;--%>
-<%--&lt;%&ndash;-- якщо НП.СудІД - пустий (тобто не очікує на розписування судді)&ndash;%&gt;--%>
-<%--&lt;%&ndash;--- якщо РішенняІД - пусте&ndash;%&gt;--%>
-<%--&lt;%&ndash;---- може змінити або Позицію щодо позову (якщо позивач - Позовні вимоги); якщо відповідач - Заперечення відповідача)&ndash;%&gt;--%>
-<%--&lt;%&ndash;--- якщо РішенняІД - не пусте&ndash;%&gt;--%>
-<%--&lt;%&ndash;---- Ініціювати Оскарження&ndash;%&gt;--%>
-<%--&lt;%&ndash;----- зміст скарги (позивача/відповідача)&ndash;%&gt;--%>
-<%--&lt;%&ndash;----- Дата оскарження (позивачем/відповідачем) встановлюється автоматично&ndash;%&gt;--%>
-<%--&lt;%&ndash;>=== посилання на сторінку з таблицею перегляду Публічних рішень&ndash;%&gt;--%>
-
 <h1>Lawsuits</h1>
 <table>
     <thead>
     <tr>
         <th>id</th>
         <th>sueDate</th>
-<%--        <th>Court</th>--%>
+        <%--        <th>Court</th>--%>
         <th>suitor</th>
         <th>claimText</th>
         <th>defendant</th>
         <th>defendantText</th>
-<%--        <th>judge</th>--%>
+        <%--        <th>judge</th>--%>
         <th>startDate</th>
         <th>verdictDate</th>
         <th>verdictText</th>
@@ -105,12 +81,12 @@ ${curUser.name}, hello!
             <td>
                 <fmt:formatDate pattern="dd.MM.yyyy" value="${lawsuit.sueDate}"/>
             </td>
-<%--            <td>${lawsuit.court.courtName}</td>--%>
+                <%--            <td>${lawsuit.court.courtName}</td>--%>
             <td>${lawsuit.suitor.name}</td>
             <td>${lawsuit.claimText}</td>
             <td>${lawsuit.defendant.name}</td>
             <td>${lawsuit.defendantText}</td>
-<%--            <td>${lawsuit.judge.name}</td>--%>
+                <%--            <td>${lawsuit.judge.name}</td>--%>
             <td>
                 <fmt:formatDate pattern="dd.MM.yyyy" value="${lawsuit.startDate}"/>
             </td>
@@ -137,7 +113,7 @@ ${curUser.name}, hello!
 
                     <%--                    <button--%>
                     <%--                            type="button"--%>
-                    <%--                            onclick="deleteEntity('api/courts', ${court.id},()=>sendGetRequest('api?command=mainPage'))"--%>
+                    <%--                            onclick="deleteEntity('api/courts', ${court.id},()=>sendGetRequest('api?command=main_Page'))"--%>
                     <%--                    >--%>
                     <%--                        Delete--%>
                     <%--                    </button>--%>
@@ -150,12 +126,3 @@ ${curUser.name}, hello!
 <hr/>
 
 <jsp:directive.include file="mainFooter.jsp"/>
-
-
-<%--Сторінка Судді--%>
-
-<%--> 5) ТАБЛИЦЯ НП (які потребують відкриття) - по НП, де  судІД==свій суд (передане до цього суду і не розписане нікому)--%>
-<%----- КНОПКА відкрити проваження--%>
-<%------ перенести поточні дані в Судовий розгляд архів--%>
-<%------ якщо є дані про оскарження - перенести їх в зміст позовних вимог/заперечення до позову, найменшу з дат - в дату заявлення--%>
-<%------ очистити поточний розгляд і встановити дату відкриття--%>

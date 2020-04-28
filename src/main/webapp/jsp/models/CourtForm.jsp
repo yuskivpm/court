@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <h1>Court Management</h1>
 <h2>
-    <button type="button" onclick="sendGetRequest('api?command=mainPage')">
+    <button type="button" onclick="sendGetRequest('api?command=main_Page')">
         Back to main page
     </button>
 </h2>
@@ -66,7 +66,7 @@
             <td colspan="2" align="center">
                 <button
                         type="button"
-                        onclick="createOrUpdateEntity('courtForm','api/courts',()=>sendGetRequest('api?command=mainPage'))">
+                        onclick="createOrUpdateEntity('courtForm','api/courts',()=>sendGetRequest('api?command=main_Page'))">
                     Save
                 </button>
             </td>

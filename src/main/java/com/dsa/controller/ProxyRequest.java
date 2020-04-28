@@ -10,13 +10,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ProxyRequest {
-  private static final String DEFAULT_REQUEST_CHARSET="ISO-8859-1";
+
+  private static final String DEFAULT_REQUEST_CHARSET = "ISO-8859-1";
   private Map<String, String> params;
   private HttpServletRequest request;
 
   public ProxyRequest(@NotNull HttpServletRequest request, boolean readBuffer) {
     params = new HashMap<>();
-    if (readBuffer){
+    if (readBuffer) {
       String line = null;
       try {
         BufferedReader reader = request.getReader();
@@ -24,7 +25,7 @@ public class ProxyRequest {
         String[] arr;
         while ((line = reader.readLine()) != null) {
           subLines = line.split("&");
-          for(String subLine : subLines){
+          for (String subLine : subLines) {
             arr = subLine.split("=");
             if (arr.length == 1) {
               params.put(line, "");
@@ -44,9 +45,10 @@ public class ProxyRequest {
     if (result == null || result.isEmpty()) {
       result = params.get(key);
     }
-    try{
-      result=new String(result.getBytes(DEFAULT_REQUEST_CHARSET),"UTF-8");
-    }catch(Exception e){}
+    try {
+      result = new String(result.getBytes(DEFAULT_REQUEST_CHARSET), "UTF-8");
+    } catch (Exception e) {
+    }
     return result == null ? "" : result;
   }
 
@@ -58,19 +60,20 @@ public class ProxyRequest {
     return request.getSession();
   }
 
-  public String getPathInfo(){
+  public String getPathInfo() {
     return request.getPathInfo();
   }
 
-  public String getQueryString(){
+  public String getQueryString() {
     return request.getQueryString();
   }
 
-  public HttpServletRequest getRequest(){
+  public HttpServletRequest getRequest() {
     return request;
   }
 
-  public String getMethod(){
+  public String getMethod() {
     return request.getMethod().toUpperCase();
   }
+
 }

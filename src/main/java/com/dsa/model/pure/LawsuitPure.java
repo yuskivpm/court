@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.Objects;
 
 public class LawsuitPure extends MyEntity {
+
+  private static final String ENTITY_NAME = "Lawsuit";
   // sue data
   private Date sueDate;
   private long courtId;
@@ -18,8 +20,8 @@ public class LawsuitPure extends MyEntity {
   private String verdictText;
   private Date executionDate;
 
-  public LawsuitPure(){
-    entityName="Lawsuit";
+  public LawsuitPure() {
+    entityName = ENTITY_NAME;
   }
 
   public LawsuitPure(
@@ -37,7 +39,7 @@ public class LawsuitPure extends MyEntity {
       Date executionDate
   ) {
     super(id);
-    entityName="Lawsuit";
+    entityName = ENTITY_NAME;
     this.sueDate = sueDate;
     this.courtId = courtId;
     this.suitorId = suitorId;
@@ -156,20 +158,21 @@ public class LawsuitPure extends MyEntity {
         getExecutionDate());
   }
 
-    @Override
-  public String toString(){
-    return "{"+super.toString()+", "
-        +"\"sueDate\":\""+sueDate+"\", "
-        +"\"courtId\":\""+courtId+"\", "
-        +"\"suitorId\":\""+suitorId+"\", "
-        +"\"claimText\":\""+claimText+"\", "
-        +"\"defendantId\":\""+defendantId+"\", "
-        +"\"defendantText\":\""+defendantText+"\", "
-        +"\"judgeId\":\""+judgeId+"\", "
-        +"\"startDate\":\""+startDate+"\", "
-        +"\"verdictDate\":\""+verdictDate+"\", "
-        +"\"verdictText\":\""+verdictText+"\", "
-        +"\"executionDate\":\""+executionDate+"\""
-        +"}";
+  @Override
+  public String toString() {
+    return "{" + super.toString() + ", "
+        + "\"sueDate\":\"" + sueDate + "\", "
+        + "\"courtId\":\"" + courtId + "\", "
+        + "\"suitorId\":\"" + suitorId + "\", "
+        + "\"claimText\":\"" + claimText + "\", "
+        + "\"defendantId\":\"" + defendantId + "\", "
+        + "\"defendantText\":\"" + defendantText + "\", "
+        + "\"judgeId\":\"" + judgeId + "\", "
+        + "\"startDate\":\"" + startDate + "\", "
+        + "\"verdictDate\":\"" + verdictDate + "\", "
+        + "\"verdictText\":\"" + verdictText + "\", "
+        + "\"executionDate\":\"" + executionDate + "\""
+        + "}";
   }
+
 }

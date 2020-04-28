@@ -15,45 +15,46 @@ import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
 
 public class LoginCommand implements IActionCommand {
+
   private static final Logger log = Logger.getLogger(LoginCommand.class);
   private static final String PARAM_NAME_LOGIN = "login";
   private static final String PARAM_NAME_PASSWORD = "password";
   private static final String USER_SESSION_ID = "user_id";
 
   @Override
-  public String execute(ProxyRequest request){
+  public String execute(@NotNull ProxyRequest request) {
     String page = null;
     String login = request.getParameter(PARAM_NAME_LOGIN);
     String password = request.getParameter(PARAM_NAME_PASSWORD);
-    User user=LoginLogic.checkLogin(login, password);
-    if (user!=null){
-      LoginCommand.startUserSession(request,user);
+    User user = LoginLogic.checkLogin(login, password);
+    if (user != null) {
+      LoginCommand.startUserSession(request, user);
       request.setAttribute("curUser", user);
-      return new MainPageCommand().execute(request,user);
-    }else{
+      return new MainPageCommand().execute(request, user);
+    } else {
       request.setAttribute("errorFailLoginPassMessage", MessageManager.getProperty("message.loginError"));
       page = ConfigManager.getProperty("path.page.login");
     }
     return page;
   }
 
-  private static void startUserSession(@NotNull ProxyRequest request, @NotNull User user){
-    HttpSession session=request.getSession();
+  private static void startUserSession(@NotNull ProxyRequest request, @NotNull User user) {
+    HttpSession session = request.getSession();
     session.setAttribute(USER_SESSION_ID, user.getId());
   }
 
-  public static String getUserSessionId(@NotNull ProxyRequest request){
-    HttpSession session=request.getSession();
-    Object UserSessionId=session.getAttribute(USER_SESSION_ID);
-    return UserSessionId==null?"":UserSessionId.toString();
+  public static String getUserSessionId(@NotNull ProxyRequest request) {
+    HttpSession session = request.getSession();
+    Object UserSessionId = session.getAttribute(USER_SESSION_ID);
+    return UserSessionId == null ? "" : UserSessionId.toString();
   }
 
-  public static User getSessionUser(ProxyRequest request){
-    User user=null;
-    try(UserDao userDao= new UserDao()){
-      user=userDao.loadAllSubEntities(userDao.readEntity("id",LoginCommand.getUserSessionId(request)));
-    }catch(DbPoolException | SQLException e){
-      log.error("Fail get user.readEntity in getSessionUser: "+e);
+  public static User getSessionUser(ProxyRequest request) {
+    User user = null;
+    try (UserDao userDao = new UserDao()) {
+      user = userDao.loadAllSubEntities(userDao.readEntity("id", LoginCommand.getUserSessionId(request)));
+    } catch (DbPoolException | SQLException e) {
+      log.error("Fail get user.readEntity in getSessionUser: " + e);
     }
     return user;
   }

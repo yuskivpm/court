@@ -1,23 +1,23 @@
 package com.dsa.model;
 
 public enum Role {
-    ADMIN,
+  ADMIN,
 // edit main tables
 // // regions
 // // courts
 
-    JUDGE,
+  JUDGE,
 // see new Sue
 // // initiate Lawsuit
 // see own Lawsuits
 // // make Verdict (accept / decline)
 
-    ATTORNEY,
+  ATTORNEY,
 // initiate new Sue
 // see own Lawsuits and its Verdicts
 // see all public Verdicts
 
-    GUEST
+  GUEST
 // see any public Verdicts
 
 }

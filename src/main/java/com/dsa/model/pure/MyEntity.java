@@ -1,33 +1,40 @@
 package com.dsa.model.pure;
 
-import java.io.Serializable;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.Date;
 
-public abstract class MyEntity implements Serializable, Cloneable{
-  public static String dateFormat="dd.MM.yyyy";
-  protected String entityName="MyEntity";
+public abstract class MyEntity implements Serializable, Cloneable {
+
+  public static String dateFormat = "dd.MM.yyyy";
+  protected String entityName = "MyEntity";
   private long id;
 
-  public MyEntity(){}
-
-  public MyEntity(long id){
-    this.id=id;
+  @Contract(pure = true)
+  public MyEntity() {
   }
 
-  public long getId(){
+  @Contract(pure = true)
+  public MyEntity(long id) {
+    this.id = id;
+  }
+
+  public long getId() {
     return id;
   }
 
-  public void setId(long id){
-    this.id=id;
+  public void setId(long id) {
+    this.id = id;
   }
 
   @Override
   public boolean equals(Object obj) {
-    return (null!=obj) && (getClass()==obj.getClass()) && ((this==obj) || (this.id ==((MyEntity)obj).id));
+    return (null != obj) && (getClass() == obj.getClass()) && ((this == obj) || (this.id == ((MyEntity) obj).id));
   }
 
   @Override
@@ -36,23 +43,28 @@ public abstract class MyEntity implements Serializable, Cloneable{
   }
 
   @Override
-  public String toString(){
-    return "\"entity\":\""+entityName+"\", \"id\":\""+id+"\"";
+  public String toString() {
+    return "\"entity\":\"" + entityName + "\", \"id\":\"" + id + "\"";
   }
 
-  public static long getIdIfNotNull(MyEntity entity, long defaultValue){
-    return entity==null?defaultValue:entity.getId();
+  @Contract("null, _ -> param2")
+  public static long getIdIfNotNull(MyEntity entity, long defaultValue) {
+    return entity == null ? defaultValue : entity.getId();
   }
 
-  public static SimpleDateFormat getDateFormatter(String dateFormat){
-    return new SimpleDateFormat(dateFormat == null? MyEntity.dateFormat: dateFormat);
-  };
+  @NotNull
+  @Contract("_ -> new")
+  public static SimpleDateFormat getDateFormatter(String dateFormat) {
+    return new SimpleDateFormat(dateFormat == null ? MyEntity.dateFormat : dateFormat);
+  }
 
-  public static String dateToStr(Date date){
+  @NotNull
+  public static String dateToStr(Date date) {
     return getDateFormatter(null).format(date);
   }
 
-  public static Date strToDate(String dateAsString) throws ParseException{
+  public static Date strToDate(String dateAsString) throws ParseException {
     return getDateFormatter(null).parse(dateAsString);
   }
+
 }

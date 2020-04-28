@@ -19,9 +19,9 @@ import java.io.IOException;
  * Servlet filter for entry
  * Verifies that the user has been authenticated,
  * otherwise redirect ршь to the login page
- *
+ * <p>
  * accept all URL patterns
- *
+ * <p>
  * Login page - LOGIN_PAGE
  * Login request - CHECK_LOGIN_REQUEST
  * login process page - LOGIN_PROCESS_PAGE
@@ -31,28 +31,31 @@ import java.io.IOException;
     urlPatterns = "/*",
     dispatcherTypes = {DispatcherType.REQUEST}
 )
-public class ControllerFilter implements Filter{
+public class ControllerFilter implements Filter {
+
   private static final String LOGIN_PAGE;
 
-  static{
-    LOGIN_PAGE=ConfigManager.getProperty("path.page.login");
+  static {
+    LOGIN_PAGE = ConfigManager.getProperty("path.page.login");
   }
 
   @Override
-  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException{
-    HttpServletRequest req=(HttpServletRequest)request;
-    ProxyRequest proxyRequest = new ProxyRequest((HttpServletRequest) request,false);
+  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+    HttpServletRequest req = (HttpServletRequest) request;
+    ProxyRequest proxyRequest = new ProxyRequest((HttpServletRequest) request, false);
     String path = req.getRequestURI();
-    if (!path.equals(LOGIN_PAGE) && ActionFactory.getCommandEnum(proxyRequest)!=CommandEnum.LOGIN) {
+    if (!path.equals(LOGIN_PAGE) && ActionFactory.getCommandEnum(proxyRequest) != CommandEnum.LOGIN) {
       // all requests except "/jsp/login.jsp" check for prior login
       String UserSession = LoginCommand.getUserSessionId(proxyRequest);
       if (UserSession.isEmpty()) {
-        // user wasn't authorized - redirect to "/jsp/login.jsp"
-        req.getRequestDispatcher(LOGIN_PAGE).forward(request,response);
+        // unauthorized user - redirect to "/jsp/login.jsp"
+        req.getRequestDispatcher(LOGIN_PAGE).forward(request, response);
         return;
       }
     }
+    // save current user for jsp with redirected forms
     request.setAttribute("curUser", LoginCommand.getSessionUser(proxyRequest));
-    chain.doFilter(request,response);
+    chain.doFilter(request, response);
   }
+
 }

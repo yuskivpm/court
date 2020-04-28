@@ -5,12 +5,13 @@ import com.dsa.model.pure.LawsuitPure;
 import java.util.Date;
 
 public class Lawsuit extends LawsuitPure {
+
   private User suitor;
   private User defendant;
   private Court court;
   private User judge;
 
-  public Lawsuit(){
+  public Lawsuit() {
     super();
   }
 
@@ -30,20 +31,20 @@ public class Lawsuit extends LawsuitPure {
   ) {
     super(id,
         sueDate,
-        getIdIfNotNull(court,0),
-        getIdIfNotNull(suitor,0),
+        getIdIfNotNull(court, 0),
+        getIdIfNotNull(suitor, 0),
         claimText,
-        getIdIfNotNull(defendant,0),
+        getIdIfNotNull(defendant, 0),
         defendantText,
-        getIdIfNotNull(judge,0),
+        getIdIfNotNull(judge, 0),
         startDate,
         verdictDate,
         verdictText,
         executionDate);
-    this.court=court;
-    this.suitor=suitor;
-    this.defendant=defendant;
-    this.judge=judge;
+    this.court = court;
+    this.suitor = suitor;
+    this.defendant = defendant;
+    this.judge = judge;
   }
 
   public User getSuitor() {
@@ -79,23 +80,23 @@ public class Lawsuit extends LawsuitPure {
   }
 
   @Override
-  public long getSuitorId(){
-    return getIdIfNotNull(suitor,super.getSuitorId());
+  public long getSuitorId() {
+    return getIdIfNotNull(suitor, super.getSuitorId());
   }
 
   @Override
-  public long getDefendantId(){
-    return getIdIfNotNull(defendant,super.getDefendantId());
+  public long getDefendantId() {
+    return getIdIfNotNull(defendant, super.getDefendantId());
   }
 
   @Override
-  public long getCourtId(){
-    return getIdIfNotNull(court,super.getCourtId());
+  public long getCourtId() {
+    return getIdIfNotNull(court, super.getCourtId());
   }
 
   @Override
-  public long getJudgeId(){
-    return getIdIfNotNull(judge,super.getJudgeId());
+  public long getJudgeId() {
+    return getIdIfNotNull(judge, super.getJudgeId());
   }
 
 }
