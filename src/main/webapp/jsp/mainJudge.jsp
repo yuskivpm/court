@@ -1,6 +1,6 @@
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page import="com.dsa.model.pure.MyEntity" %>
 <%@ page import="java.util.Date" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <jsp:directive.include file="mainHeader.jsp"/>
 
 <h3>Welcome judge</h3>
@@ -98,25 +98,32 @@ ${curUser.name}, hello!
                 <fmt:formatDate pattern="dd.MM.yyyy" value="${lawsuit.executionDate}"/>
             </td>
             <td>
-                UNREADY!!!!
-                    <%--                    TODO judge ТАБЛИЦЯ НП у мене на розгляді--%>
-                    <%--> 2) ТАБЛИЦЯ НП у мене на розгляді. по Свої судових розглядах, якщо рішення немає (НП.СуддяІд==він І НП.РішенняІД - пусте)--%>
-                    <%---- КНОПКА - Ухвалити рішення--%>
-                    <%----- ФОРМА--%>
-                    <%------ СЕЛЕКТ задовільнити/відхилити/(якщо інстанція !=1) - скерувати за підслідністю - в НП за позовом встановити СудІД!!!--%>
-                    <%------ (якщо інстанція ==3) автоматично заповнити дату набрання чинності (заборонити будь-яке оскарження)--%>
-                    <%--3) - по Свої судових розглядах, якщо рішення є і є оскарження Позивача/відповідача--%>
-                    <%---- КНОПКА "передати в апеляцію"--%>
-                    <%----- встановити новий СудІД (імітація передачі за підслідінстю)--%>
-                    <%--4) - по НП, де є рішення суду (крім за підслідністю)--%>
-                    <%---- заповнити дату набрання чинності (заборонити будь-яке оскарження)--%>
-
-                    <%--                    <button--%>
-                    <%--                            type="button"--%>
-                    <%--                            onclick="deleteEntity('api/courts', ${court.id},()=>sendGetRequest('api?command=main_Page'))"--%>
-                    <%--                    >--%>
-                    <%--                        Delete--%>
-                    <%--                    </button>--%>
+                <c:if test="${lawsuit.executionDate == null}">
+                    <c:if test="${lawsuit.verdictDate == null}">
+                        <button
+                                type="button"
+                                onclick="sendGetRequest('api/lawsuits?id=${lawsuit.id}&redirect=1&page=/jsp/models/LawsuitForm.jsp')"
+                        >
+                            Verdict
+                        </button>
+                    </c:if>
+                    <c:if test="${lawsuit.verdictDate != null}">
+                        <button
+                                type="button"
+                                onclick="fetchThis({
+                                        url:'api/lawsuits',
+                                        method:'POST',
+                                        body:'id=${lawsuit.id}&executionDate='+dateToStr(new Date())
+                                        }, data=>{crudInformationCallback(data,()=>sendGetRequest('api?command=main_Page'))}
+                                        )"
+                        >
+                            Start execution
+                        </button>
+                    </c:if>
+                </c:if>
+                <c:if test="${lawsuit.executionDate != null}">
+                    Archived
+                </c:if>
             </td>
         </tr>
     </c:forEach>

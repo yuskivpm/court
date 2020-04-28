@@ -1,6 +1,14 @@
     </div>
 
     <script>
+        function zeroLeading(num){
+            return num<10?'0'+num:num;
+        }
+
+        function dateToStr(date){
+            return zeroLeading(date.getDate())+'.'+zeroLeading(1+date.getMonth())+'.'+date.getFullYear();
+        }
+
         function deleteEntity(url, entityId, callback) {
             fetchThis({url, method: 'DELETE', body: 'id=' + entityId}, data => {
                 crudInformationCallback(data, callback)

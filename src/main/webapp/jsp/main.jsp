@@ -1,8 +1,11 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+
 <html>
+
 <head>
     <title>Main</title>
 </head>
+
 <body>
     <h3>Welcome</h3>
     <hr />
@@ -15,4 +18,5 @@
     <br />
     <a href="api?command=Logout">Log out wia get</a>
 </body>
+
 </html>
