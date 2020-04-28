@@ -55,13 +55,14 @@ public class UserDao extends AbstractEntityDao<User> {
 
   @Override
   protected int setAllPreparedValues(PreparedStatement preparedStatement, User user, boolean isAddOperation) throws SQLException{
-      preparedStatement.setString(1, user.getLogin());
-      preparedStatement.setString(2, user.getPassword());
-      preparedStatement.setString(3, user.getRole().toString());
-      preparedStatement.setString(4, user.getName());
-      setPreparedValueOrNull(preparedStatement,5,user.getCourtId());
-      preparedStatement.setBoolean(6, user.getIsActive());
-    return 7; // next index for preparedStatement.set_()
+    int index=0;
+      preparedStatement.setString(++index, user.getLogin());
+      preparedStatement.setString(++index, user.getPassword());
+      preparedStatement.setString(++index, user.getRole().toString());
+      preparedStatement.setString(++index, user.getName());
+      setPreparedValueOrNull(preparedStatement,++index,user.getCourtId());
+      preparedStatement.setBoolean(++index, user.getIsActive());
+    return ++index; // next index for preparedStatement.set_()
   };
 
   @Override

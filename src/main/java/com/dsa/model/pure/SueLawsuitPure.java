@@ -1,0 +1,175 @@
+package com.dsa.model.pure;
+
+import java.util.Date;
+import java.util.Objects;
+
+public class SueLawsuitPure extends MyEntity {
+  // sue data
+  private Date sueDate;
+  private long courtId;
+  private long suitorId;
+  private String claimText;
+  private long defendantId;
+  // stage data
+  private String defendantText;
+  private long judgeId;
+  private Date startDate;
+  private Date verdictDate;
+  private String verdictText;
+  private Date executionDate;
+
+  public SueLawsuitPure(){
+    entityName="Lawsuit";
+  }
+
+  public SueLawsuitPure(
+      long id,
+      Date sueDate,
+      long courtId,
+      long suitorId,
+      String claimText,
+      long defendantId,
+      String defendantText,
+      long judgeId,
+      Date startDate,
+      Date verdictDate,
+      String verdictText,
+      Date executionDate
+  ) {
+    super(id);
+    entityName="Lawsuit";
+    this.sueDate = sueDate;
+    this.courtId = courtId;
+    this.suitorId = suitorId;
+    this.claimText = claimText;
+    this.defendantId = defendantId;
+    this.defendantText = defendantText;
+    this.judgeId = judgeId;
+    this.startDate = startDate;
+    this.verdictDate = verdictDate;
+    this.verdictText = verdictText;
+    this.executionDate = executionDate;
+  }
+
+  public Date getSueDate() {
+    return sueDate;
+  }
+
+  public void setSueDate(Date sueDate) {
+    this.sueDate = sueDate;
+  }
+
+  public long getCourtId() {
+    return courtId;
+  }
+
+  public void setCourtId(long courtId) {
+    this.courtId = courtId;
+  }
+
+  public long getSuitorId() {
+    return suitorId;
+  }
+
+  public void setSuitorId(long suitorId) {
+    this.suitorId = suitorId;
+  }
+
+  public String getClaimText() {
+    return claimText;
+  }
+
+  public void setClaimText(String claimText) {
+    this.claimText = claimText;
+  }
+
+  public long getDefendantId() {
+    return defendantId;
+  }
+
+  public void setDefendantId(long defendantId) {
+    this.defendantId = defendantId;
+  }
+
+  public String getDefendantText() {
+    return defendantText;
+  }
+
+  public void setDefendantText(String defendantText) {
+    this.defendantText = defendantText;
+  }
+
+  public long getJudgeId() {
+    return judgeId;
+  }
+
+  public void setJudgeId(long judgeId) {
+    this.judgeId = judgeId;
+  }
+
+  public Date getStartDate() {
+    return startDate;
+  }
+
+  public void setStartDate(Date startDate) {
+    this.startDate = startDate;
+  }
+
+  public Date getVerdictDate() {
+    return verdictDate;
+  }
+
+  public void setVerdictDate(Date verdictDate) {
+    this.verdictDate = verdictDate;
+  }
+
+  public String getVerdictText() {
+    return verdictText;
+  }
+
+  public void setVerdictText(String verdictText) {
+    this.verdictText = verdictText;
+  }
+
+  public Date getExecutionDate() {
+    return executionDate;
+  }
+
+  public void setExecutionDate(Date executionDate) {
+    this.executionDate = executionDate;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(
+        super.hashCode(),
+        getSueDate(),
+        getCourtId(),
+        getSuitorId(),
+        getClaimText(),
+        getDefendantId(),
+        getDefendantText(),
+        getJudgeId(),
+        getStartDate(),
+        getVerdictDate(),
+        getVerdictText(),
+        getExecutionDate());
+  }
+
+    @Override
+  public String toString(){
+    return "{"+super.toString()+", "
+        +"\"sueDate\":\""+sueDate+"\", "
+        +"\"courtId\":\""+courtId+"\", "
+        +"\"suitorId\":\""+suitorId+"\", "
+        +"\"claimText\":\""+claimText+"\", "
+        +"\"defendantId\":\""+defendantId+"\", "
+        +"\"defendantText\":\""+defendantText+"\", "
+        +"\"judgeId\":\""+judgeId+"\", "
+        +"\"startDate\":\""+startDate+"\", "
+        +"\"verdictDate\":\""+verdictDate+"\", "
+        +"\"verdictText\":\""+verdictText+"\", "
+        +"\"executionDate\":\""+executionDate+"\""
+        +"}";
+  }
+}

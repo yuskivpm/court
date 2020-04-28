@@ -48,10 +48,11 @@ public class CourtDao extends AbstractEntityDao<Court> {
 
   @Override
   protected int setAllPreparedValues(PreparedStatement preparedStatement, Court court, boolean isAddOperation) throws SQLException{
-    preparedStatement.setString(1, court.getCourtName());
-    preparedStatement.setString(2, court.getCourtInstance().toString());
-    setPreparedValueOrNull(preparedStatement,3,court.getMainCourtId());
-    return 4; // next index for preparedStatement.set_()
+    int index=0;
+    preparedStatement.setString(++index, court.getCourtName());
+    preparedStatement.setString(++index, court.getCourtInstance().toString());
+    setPreparedValueOrNull(preparedStatement,++index,court.getMainCourtId());
+    return ++index; // next index for preparedStatement.set_()
   };
 
   @Override

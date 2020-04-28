@@ -1,21 +1,20 @@
 package com.dsa.service.crud;
 
 import com.dsa.controller.ProxyRequest;
-import com.dsa.dao.entity.SueDao;
+import com.dsa.dao.entity.SueLawsuitDao;
 import com.dsa.dao.services.DbPoolException;
 import com.dsa.model.Role;
-import com.dsa.model.Sue;
+import com.dsa.model.SueLawsuit;
 import com.dsa.model.User;
+import com.dsa.model.pure.MyEntity;
 import com.dsa.service.command.LoginCommand;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
-public class SueCrud extends AbstractCrud<Sue, SueDao>{
+public class SueCrud extends AbstractCrud<SueLawsuit, SueLawsuitDao>{
   public static final String path="/sues";
 
   public SueCrud(){
@@ -33,22 +32,21 @@ public class SueCrud extends AbstractCrud<Sue, SueDao>{
   }
 
   @Override
-  protected Sue createEntityFromParameters(@NotNull ProxyRequest request, long id){
-    Sue sue=null;
+  protected SueLawsuit createEntityFromParameters(@NotNull ProxyRequest request, long id){
+    SueLawsuit sue=null;
     try{
       long suitorId= Long.parseLong(request.getParameter("suitorId"));
       long defendantId= Long.parseLong(request.getParameter("defendantId"));
       long courtId= Long.parseLong(request.getParameter("courtId"));
-      SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy", Locale.ENGLISH);
       Date sueDate = null;
       try {
-        sueDate = formatter.parse(request.getParameter("sueDate"));
+        sueDate = MyEntity.strToDate(request.getParameter("sueDate"));
       }catch(ParseException e){
         sueDate=new Date();
       }
       String claimText= request.getParameter("claimText");
       if(claimText!=null && !claimText.isEmpty()&& courtId>0 && defendantId>0 && suitorId>0 && defendantId != suitorId){
-        sue=new Sue(id, null, null, null, sueDate, claimText);
+        sue=new SueLawsuit(id, sueDate, null, null, claimText, null, "", null, null,null,"",null);
         sue.setSuitorId(suitorId);
         sue.setDefendantId(defendantId);
         sue.setCourtId(courtId);
@@ -58,8 +56,8 @@ public class SueCrud extends AbstractCrud<Sue, SueDao>{
   }
 
   @Override
-  protected SueDao createEntityDao() throws SQLException, DbPoolException {
-    return new SueDao();
+  protected SueLawsuitDao createEntityDao() throws SQLException, DbPoolException {
+    return new SueLawsuitDao();
   }
 
 }

@@ -152,7 +152,7 @@ public abstract class AbstractEntityDao <E extends MyEntity> implements AutoClos
     }
   }
 
-  public static void createTable(Connection connection, String sql, Logger log) {
+  public static void createTable(@NotNull Connection connection, String sql, Logger log) {
     Statement st = null;
     try {
       st = connection.createStatement();
@@ -184,10 +184,16 @@ public abstract class AbstractEntityDao <E extends MyEntity> implements AutoClos
     return sqlDate != null?new java.util.Date(sqlDate.getTime()):null;
   }
 
+  @Contract("!null -> new; null -> null")
   public static java.sql.Date dateToSqlDate(java.util.Date date) {
     return date != null?new java.sql.Date(date.getTime()):null;
   }
 
+  @NotNull
+  @Contract(pure = true)
+  private String getWhereParamAsString(String param){
+    return param == null ? " is null" : "='"+param+"'";
+  }
 
   protected String prepareSqlRequestByMap(String[] whereArray) throws SQLException{
     if(whereArray==null || whereArray.length==0){
@@ -199,7 +205,7 @@ public abstract class AbstractEntityDao <E extends MyEntity> implements AutoClos
     }
     String selectString = String.format(SQL_SELECT_BY_MAP,TABLE_NAME);
     for(int i=0; i<whereArray.length;){
-      selectString+=" "+whereArray[i++]+"='"+whereArray[i++]+"'"+(i<whereArray.length?" and":"");
+      selectString+=" "+whereArray[i++]+getWhereParamAsString(whereArray[i++])+(i<whereArray.length?" and":"");
     }
     return selectString;
   }

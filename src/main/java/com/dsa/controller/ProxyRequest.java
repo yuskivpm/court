@@ -20,13 +20,17 @@ public class ProxyRequest {
       String line = null;
       try {
         BufferedReader reader = request.getReader();
+        String[] subLines;
         String[] arr;
         while ((line = reader.readLine()) != null) {
-          arr = line.split("=");
-          if (arr.length == 1) {
-            params.put(line, "");
-          } else if (arr.length >= 1) {
-            params.put(arr[0], arr[1]);
+          subLines = line.split("&");
+          for(String subLine : subLines){
+            arr = subLine.split("=");
+            if (arr.length == 1) {
+              params.put(line, "");
+            } else if (arr.length >= 1) {
+              params.put(arr[0], arr[1]);
+            }
           }
         }
       } catch (IOException e) {

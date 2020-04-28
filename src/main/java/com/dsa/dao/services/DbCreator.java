@@ -42,22 +42,11 @@ public final class DbCreator {
       st=con.createStatement();
       CourtDao courtDao=new CourtDao(con);
       UserDao userDao=new UserDao(con);
-      SueDao sueDao=new SueDao(con);
+      SueLawsuitDao sueLawsuitDao=new SueLawsuitDao(con);
 
       CourtDao.sqlExecute(st,CourtDao.SQL_CREATE_TABLE,false,log);
       UserDao.sqlExecute(st,UserDao.SQL_CREATE_TABLE,false,log);
-      SueDao.sqlExecute(st,SueDao.SQL_CREATE_TABLE,false,log);
-      VerdictDao.sqlExecute(st,VerdictDao.SQL_CREATE_TABLE,false,log);
-      LawsuitDao.sqlExecute(st,LawsuitDao.SQL_CREATE_TABLE,false,log);
-      StageDao.sqlExecute(st,StageDao.SQL_CREATE_TABLE,false,log);
-
-      // Verdicts table add foreign key
-      stage="VERDICT table - add foreign key";
-      sqlExecute(st,"ALTER TABLE VERDICT "+
-          "ADD CONSTRAINT FK_TempVERDICT "+
-          "FOREIGN KEY (LAWSUIT_ID) "+
-          "REFERENCES LAWSUIT(ID)"
-          ,stage,false);
+      SueLawsuitDao.sqlExecute(st,SueLawsuitDao.SQL_CREATE_TABLE,false,log);
 
       // Court table add values
       Court supremeCourt=new Court(1,"Supreme court", CourtInstance.CASSATION, null);
@@ -70,16 +59,14 @@ public final class DbCreator {
       userDao.createEntity(new User(1,"admin", "admin", Role.ADMIN,"admin name",null,true));
       userDao.createEntity(new User(2,"supreme1", "supreme1", Role.JUDGE,"Supreme name",supremeCourt,true));
       userDao.createEntity(new User(3,"appeal1", "appeal1", Role.JUDGE,"Appeal name",appealCourt,true));
-      User localJudge = new User(4,"local1", "local1", Role.JUDGE,"Local name",localCourt,true);
+      User localJudge = new User(4,"localJudge1", "localJudge1", Role.JUDGE,"Local name",localCourt,true);
       User attorney1 = new User(5,"attorney1", "attorney1", Role.ATTORNEY,"Attorney1 name",null,true);
       User attorney2 = new User(6,"attorney2", "attorney2", Role.ATTORNEY,"Attorney2",null,true);
       userDao.createEntity(localJudge);
       userDao.createEntity(attorney1);
       userDao.createEntity(attorney2);
-//
-      sueDao.createEntity(new Sue(1,attorney1,attorney2,localCourt,new Date(), "First claim to att2"));
-      sueDao.createEntity(new Sue(2,attorney1,attorney2,localCourt,new Date(), "Second claim to att2"));
-      sueDao.createEntity(new Sue(3,attorney2,attorney2,localCourt,new Date(), "First claim to att1"));
+
+      sueLawsuitDao.createEntity(new SueLawsuit(1,new Date(),localCourt,attorney1,"claimText",attorney2,"",null,null,null,"",null));
 
     }catch(SQLException e){
       log.error("Exception in DbCreator.recreateTables: "+e);

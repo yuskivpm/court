@@ -2,8 +2,7 @@ package com.dsa.service.command;
 
 import com.dsa.controller.ProxyRequest;
 import com.dsa.dao.entity.CourtDao;
-import com.dsa.dao.entity.LawsuitDao;
-import com.dsa.dao.entity.SueDao;
+import com.dsa.dao.entity.SueLawsuitDao;
 import com.dsa.dao.entity.UserDao;
 import com.dsa.dao.services.DbPoolException;
 import com.dsa.model.*;
@@ -40,53 +39,39 @@ public class MainPageCommand implements IActionCommand {
     switch(currentUser.getRole().toString()){
 
       case "JUDGE":
-        if(currentUser.getCourt().getCourtInstance()== CourtInstance.LOCAL){
-          // for local courts - get list of sues in court
-          try(SueDao sueDao=new SueDao()){
-            List<Sue> sues=sueDao.readAllForCourtId(currentUser.getCourtId());
-            for(Sue sue: sues){
-              sueDao.loadAllSubEntities(sue);
-            }
-            request.setAttribute("sues",sues);
-          }catch(SQLException | DbPoolException e){
-            log.error("Fail get Sues list in MainPageCommand for "+currentUser.getRole()+": "+e);
-          }
-        }
-        try(LawsuitDao lawsuitDao=new LawsuitDao()){
-          List<Lawsuit> lawsuits=lawsuitDao.readAllForJudgeId(currentUser.getId());
-          for(Lawsuit lawsuit: lawsuits){
+        try(SueLawsuitDao lawsuitDao=new SueLawsuitDao()){
+          List<SueLawsuit> lawsuits=lawsuitDao.readAllForJudgeId(currentUser.getId());
+          for(SueLawsuit lawsuit: lawsuits){
             lawsuitDao.loadAllSubEntities(lawsuit);
           }
           request.setAttribute("lawsuits",lawsuits);
+          if(currentUser.getCourt().getCourtInstance() == CourtInstance.LOCAL){
+            // for local courts - get list of unaccepted sues
+            lawsuits=lawsuitDao.readAllUnacceptedForCourtId(currentUser.getCourtId());
+            for(SueLawsuit lawsuit: lawsuits){
+              lawsuitDao.loadAllSubEntities(lawsuit);
+            }
+              request.setAttribute("sues",lawsuits);
+          }
         }catch(SQLException | DbPoolException e){
           log.error("Fail get Lawsuits list in MainPageCommand for "+currentUser.getRole()+": "+e);
         }
         break;
 
       case "ATTORNEY":
-        // list of own sues
-        try(SueDao sueDao=new SueDao()){
-          List<Sue> sues=sueDao.readAllBySuitorId(currentUser.getId());
-          for(Sue sue: sues){
-            sueDao.loadAllSubEntities(sue);
-          }
-          request.setAttribute("sues",sues);
-        }catch(SQLException | DbPoolException e){
-          log.error("Fail get Sues list in MainPageCommand for "+currentUser.getRole()+": "+e);
-        }
-        // list of lawsuits for suitor role
-        try(LawsuitDao lawsuitDao=new LawsuitDao()){
-          List<Lawsuit> lawsuits=lawsuitDao.readAllBySuitorId(currentUser.getId());
-          for(Lawsuit lawsuit: lawsuits){
+        try(SueLawsuitDao lawsuitDao=new SueLawsuitDao()){
+          // list of own sues
+          List<SueLawsuit> lawsuits=lawsuitDao.readAllBySuitorId(currentUser.getId());
+          for(SueLawsuit lawsuit: lawsuits){
             lawsuitDao.loadAllSubEntities(lawsuit);
           }
           request.setAttribute("ownLawsuits",lawsuits);
           // list of lawsuits for defendant role
           lawsuits=lawsuitDao.readAllByDefendantId(currentUser.getId());
-          for(Lawsuit lawsuit: lawsuits){
-            lawsuitDao.loadAllSubEntities(lawsuit);
-          }
+          for(SueLawsuit lawsuit: lawsuits){
+            lawsuitDao.loadAllSubEntities(lawsuit);          }
           request.setAttribute("asDefendantLawsuits",lawsuits);
+
         }catch(SQLException | DbPoolException e){
           log.error("Fail get Lawsuits list in MainPageCommand for "+currentUser.getRole()+": "+e);
         }

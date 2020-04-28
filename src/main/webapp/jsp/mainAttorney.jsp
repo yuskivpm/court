@@ -17,43 +17,43 @@
         <thead>
         <tr>
             <th>id</th>
-            <th>suitor</th>
-            <th>defendant</th>
-            <th>court</th>
             <th>sueDate</th>
+            <th>court</th>
+            <th>defendant</th>
             <th>claimText</th>
             <th>edit</th>
             <th>Delete</th>
         </tr>
         </thead>
         <tbody id="sues">
-        <c:forEach var="sue" items="${sues}">
-            <tr>
-                <td>${sue.id}</td>
-                <td>${sue.suitor.name}</td>
-                <td>${sue.defendant.name}</td>
-                <td>${sue.court.courtName}</td>
-                <td>
-                    <fmt:formatDate pattern = "dd.MM.yyyy" value = "${sue.sueDate}" />
-                </td>
-                <td>${sue.claimText}</td>
-                <td>
-                    <button
-                            type="button"
-                            onclick="sendGetRequest('api/sues?id=${sue.id}&redirect=1&page=/jsp/models/SueForm.jsp')"
-                    >
-                        Edit
-                    </button>
-                </td>
-                <td>
-                    <button
-                            type="button"
-                            onclick="deleteEntity('api/sues', ${sue.id},()=>sendGetRequest('api?command=mainPage'))"
-                    >
-                        Revoke
-                    </button>
-                </td>
-            </tr>
+        <c:forEach var="sue" items="${ownLawsuits}">
+            <c:if test="${sue.judge == null}">
+                <tr>
+                    <td>${sue.id}</td>
+                    <td>
+                        <fmt:formatDate pattern = "dd.MM.yyyy" value = "${sue.sueDate}" />
+                    </td>
+                    <td>${sue.court.courtName}</td>
+                    <td>${sue.defendant.name}</td>
+                    <td>${sue.claimText}</td>
+                    <td>
+                        <button
+                                type="button"
+                                onclick="sendGetRequest('api/sues?id=${sue.id}&redirect=1&page=/jsp/models/SueForm.jsp')"
+                        >
+                            Edit
+                        </button>
+                    </td>
+                    <td>
+                        <button
+                                type="button"
+                                onclick="deleteEntity('api/sues', ${sue.id},()=>sendGetRequest('api?command=mainPage'))"
+                        >
+                            Revoke
+                        </button>
+                    </td>
+                </tr>
+            </c:if>
         </c:forEach>
         </tbody>
     </table>
@@ -65,78 +65,68 @@
         <thead>
         <tr>
             <th>id</th>
-<%--            <th>suitor</th>--%>
-            <th>defendant</th>
-            <th>jurisdictionCourt</th>
-            <th>judge</th>
             <th>sueDate</th>
-            <th>startDate</th>
+            <th>Court</th>
+<%--            <th>suitor</th>--%>
             <th>claimText</th>
+            <th>defendant</th>
             <th>defendantText</th>
-            <th>verdict</th>
-            <th>suitorAppealDate</th>
-            <th>suitorAppealText</th>
-            <th>defendantAppealDate</th>
-            <th>defendantAppealText</th>
+            <th>judge</th>
+            <th>startDate</th>
+            <th>verdictDate</th>
+            <th>verdictText</th>
             <th>executionDate</th>
             <th>actions</th>
         </tr>
         </thead>
         <tbody id="suitorsLawsuits">
         <c:forEach var="lawsuit" items="${ownLawsuits}">
-            <tr>
-                <td>${lawsuit.id}</td>
-<%--                <td>${lawsuit.suitor.name}</td>--%>
-                <td>${lawsuit.defendant.name}</td>
-                <td>${lawsuit.jurisdictionCourt.courtName}</td>
-                <td>${lawsuit.judge.name}</td>
-                <td>
-                    <fmt:formatDate pattern = "dd.MM.yyyy" value = "${lawsuit.sueDate}" />
-                </td>
-                <td>
-                    <fmt:formatDate pattern = "dd.MM.yyyy" value = "${lawsuit.startDate}" />
-                </td>
-                <td>${lawsuit.claimText}</td>
-                <td>${lawsuit.defendantText}</td>
-                <td>
-                    <fmt:formatDate pattern = "dd.MM.yyyy" value = "${lawsuit.verdict.effectiveDate}" />
-                        ${lawsuit.verdict.verdictResult}
-                        ${lawsuit.verdict.verdictText}
-                </td>
-                <td>
-                    <fmt:formatDate pattern = "dd.MM.yyyy" value = "${lawsuit.verdict.suitorAppealDate}" />
-                </td>
-                <td>${lawsuit.suitorAppealText}</td>
-                <td>
-                    <fmt:formatDate pattern = "dd.MM.yyyy" value = "${lawsuit.verdict.defendantAppealDate}" />
-                </td>
-                <td>${lawsuit.defendantAppealText}</td>
-                <td>
-                    <fmt:formatDate pattern = "dd.MM.yyyy" value = "${lawsuit.verdict.executionDate}" />
-                </td>
-                <td>
-                    <c:if test="${lawsuit.executionDate != null}">
-                        archived
-                    </c:if>
-                    <c:if test="${lawsuit.executionDate == null}">
-                        UNREADY!!!!
-                        <%-- TODO ATTORNEY  ТАБЛИЦЯ таблиця НП у провадженні--%>
-                        --- якщо РішенняІД - пусте
-                        ---- може змінити або Позицію щодо позову (якщо позивач - Позовні вимоги); якщо відповідач - Заперечення відповідача)
-                        --- якщо РішенняІД - не пусте
-                        ---- Ініціювати Оскарження
-                        ----- зміст скарги (позивача/відповідача)
-                        ----- Дата оскарження (позивачем/відповідачем) встановлюється автоматично
+            <c:if test="${lawsuit.judge != null}">
+                <tr>
+                    <td>${lawsuit.id}</td>
+                    <td>
+                        <fmt:formatDate pattern = "dd.MM.yyyy" value = "${lawsuit.sueDate}" />
+                    </td>
+                    <td>${lawsuit.court.courtName}</td>
+                        <%-- <td>${lawsuit.suitor.name}</td>--%>
+                    <td>${lawsuit.claimText}</td>
+                    <td>${lawsuit.defendant.name}</td>
+                    <td>${lawsuit.defendantText}</td>
+                    <td>${lawsuit.judge.name}</td>
+                    <td>
+                        <fmt:formatDate pattern = "dd.MM.yyyy" value = "${lawsuit.startDate}" />
+                    </td>
+                    <td>
+                        <fmt:formatDate pattern = "dd.MM.yyyy" value = "${lawsuit.verdictDate}" />
+                    </td>
+                    <td>${lawsuit.verdictText}</td>
+                    <td>
+                        <fmt:formatDate pattern = "dd.MM.yyyy" value = "${lawsuit.executionDate}" />
+                    </td>
+                    <td>
+                        <c:if test="${lawsuit.executionDate != null}">
+                            archived
+                        </c:if>
+                        <c:if test="${lawsuit.executionDate == null}">
+                            UNREADY!!!!
+                            <%-- TODO ATTORNEY  ТАБЛИЦЯ таблиця НП у провадженні--%>
+<%--                            --- якщо РішенняІД - пусте--%>
+<%--                            ---- може змінити або Позицію щодо позову (якщо позивач - Позовні вимоги); якщо відповідач - Заперечення відповідача)--%>
+<%--                            --- якщо РішенняІД - не пусте--%>
+<%--                            ---- Ініціювати Оскарження--%>
+<%--                            ----- зміст скарги (позивача/відповідача)--%>
+<%--                            ----- Дата оскарження (позивачем/відповідачем) встановлюється автоматично--%>
 
-                        <%--                    <button--%>
-                        <%--                            type="button"--%>
-                        <%--                            onclick="deleteEntity('api/courts', ${court.id},()=>sendGetRequest('api?command=mainPage'))"--%>
-                        <%--                    >--%>
-                        <%--                        Delete--%>
-                        <%--                    </button>--%>
-                    </c:if>
-                </td>
-            </tr>
+                            <%--                    <button--%>
+                            <%--                            type="button"--%>
+                            <%--                            onclick="deleteEntity('api/courts', ${court.id},()=>sendGetRequest('api?command=mainPage'))"--%>
+                            <%--                    >--%>
+                            <%--                        Delete--%>
+                            <%--                    </button>--%>
+                        </c:if>
+                    </td>
+                </tr>
+            </c:if>
         </c:forEach>
         </tbody>
     </table>
@@ -148,19 +138,16 @@
     <thead>
     <tr>
         <th>id</th>
-        <th>suitor</th>
-<%--        <th>defendant</th>--%>
-        <th>jurisdictionCourt</th>
-        <th>judge</th>
         <th>sueDate</th>
-        <th>startDate</th>
+        <th>Court</th>
+        <th>suitor</th>
         <th>claimText</th>
+<%--        <th>defendant</th>--%>
         <th>defendantText</th>
-        <th>verdict</th>
-        <th>suitorAppealDate</th>
-        <th>suitorAppealText</th>
-        <th>defendantAppealDate</th>
-        <th>defendantAppealText</th>
+        <th>judge</th>
+        <th>startDate</th>
+        <th>verdictDate</th>
+        <th>verdictText</th>
         <th>executionDate</th>
         <th>actions</th>
     </tr>
@@ -169,54 +156,46 @@
     <c:forEach var="lawsuit" items="${asDefendantLawsuits}">
         <tr>
             <td>${lawsuit.id}</td>
-            <td>${lawsuit.suitor.name}</td>
-<%--            <td>${lawsuit.defendant.name}</td>--%>
-            <td>${lawsuit.jurisdictionCourt.courtName}</td>
-            <td>${lawsuit.judge.name}</td>
             <td>
                 <fmt:formatDate pattern = "dd.MM.yyyy" value = "${lawsuit.sueDate}" />
             </td>
+            <td>${lawsuit.court.courtName}</td>
+            <td>${lawsuit.suitor.name}</td>
+            <td>${lawsuit.claimText}</td>
+<%--            <td>${lawsuit.defendant.name}</td>--%>
+            <td>${lawsuit.defendantText}</td>
+            <td>${lawsuit.judge.name}</td>
             <td>
                 <fmt:formatDate pattern = "dd.MM.yyyy" value = "${lawsuit.startDate}" />
             </td>
-            <td>${lawsuit.claimText}</td>
-            <td>${lawsuit.defendantText}</td>
             <td>
-                <fmt:formatDate pattern = "dd.MM.yyyy" value = "${lawsuit.verdict.effectiveDate}" />
-                    ${lawsuit.verdict.verdictResult}
-                    ${lawsuit.verdict.verdictText}
+                <fmt:formatDate pattern = "dd.MM.yyyy" value = "${lawsuit.verdictDate}" />
+            </td>
+            <td>${lawsuit.verdictText}</td>
+            <td>
+                <fmt:formatDate pattern = "dd.MM.yyyy" value = "${lawsuit.executionDate}" />
             </td>
             <td>
-                <fmt:formatDate pattern = "dd.MM.yyyy" value = "${lawsuit.verdict.suitorAppealDate}" />
-            </td>
-            <td>${lawsuit.suitorAppealText}</td>
-            <td>
-                <fmt:formatDate pattern = "dd.MM.yyyy" value = "${lawsuit.verdict.defendantAppealDate}" />
-            </td>
-            <td>${lawsuit.defendantAppealText}</td>
-            <td>
-                <fmt:formatDate pattern = "dd.MM.yyyy" value = "${lawsuit.verdict.executionDate}" />
-            </td>
-            <td>
-                UNREADY!!!!
+                <c:if test="${lawsuit.executionDate != null}">
+                    archived
+                </c:if>
+                <c:if test="${lawsuit.executionDate == null}">
+                    UNREADY!!!!
+                    <%-- TODO ATTORNEY  ТАБЛИЦЯ таблиця НП у провадженні--%>
+<%--                    --- якщо РішенняІД - пусте--%>
+<%--                    ---- може змінити або Позицію щодо позову (якщо позивач - Позовні вимоги); якщо відповідач - Заперечення відповідача)--%>
+<%--                    --- якщо РішенняІД - не пусте--%>
+<%--                    ---- Ініціювати Оскарження--%>
+<%--                    ----- зміст скарги (позивача/відповідача)--%>
+<%--                    ----- Дата оскарження (позивачем/відповідачем) встановлюється автоматично--%>
 
-
-                    <%-- TODO ATTORNEY ТАБЛИЦЯ таблиця НП у провадженні--%>
-                    <%-->- ТАБЛИЦЯ таблиця НП у провадженні (НП.Дата вступу рішення в силу == НУЛЛ) І (він==НП.ВідповідачІД або він==НП.ПозивачІД)--%>
-                    <%---- якщо НП.СудІД - пустий (тобто не очікує на розписування судді)--%>
-                    <%----- якщо РішенняІД - пусте--%>
-                    <%------ може змінити або Позицію щодо позову (якщо позивач - Позовні вимоги); якщо відповідач - Заперечення відповідача)--%>
-                    <%----- якщо РішенняІД - не пусте--%>
-                    <%------ Ініціювати Оскарження--%>
-                    <%------- зміст скарги (позивача/відповідача)--%>
-                    <%------- Дата оскарження (позивачем/відповідачем) встановлюється автоматично--%>
-
-            <%--                    <button--%>
+                    <%--                    <button--%>
                     <%--                            type="button"--%>
                     <%--                            onclick="deleteEntity('api/courts', ${court.id},()=>sendGetRequest('api?command=mainPage'))"--%>
                     <%--                    >--%>
                     <%--                        Delete--%>
                     <%--                    </button>--%>
+                </c:if>
             </td>
         </tr>
     </c:forEach>

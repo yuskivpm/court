@@ -1,3 +1,5 @@
+<%@ page import="com.dsa.model.pure.MyEntity" %>
+<%@ page import="java.util.Date" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <jsp:directive.include file="mainHeader.jsp"/>
 
@@ -42,15 +44,14 @@ ${curUser.name}, hello!
                     <%--                    todo: accept sue for judge --%>
                 <button
                         type="button"
-                        onclick="fetchThis({url:'api/lawsuits', method:'PUT', body:'sueId=${sue.id}'},
-                                data=>{
-                                    crudInformationCallback(data,
-                                        ()=>deleteEntity('api/sues',${sue.id},
-                                            ()=>sendGetRequest('api?command=mainPage')
-                                        )
-                                    )
-                                })"
-                    <%--sendGetRequest('api/lawsuits?sueId=${sue.id}',()=>sendGetRequest('api?command=mainPage'))--%>
+<%--                        onclick="sendGetRequest('api/lawsuits?sueId=${sue.id}',()=>sendGetRequest('api?command=mainPage'))"--%>
+                        onclick="fetchThis({
+                                        url:'api/lawsuits',
+                                        method:'PUT',
+                                        body:'id=${sue.id}&judgeId=${curUser.id}&startDate=<%= MyEntity.dateToStr(new Date())%>'
+                                    },
+                                    data=>{crudInformationCallback(data,()=>sendGetRequest('api?command=mainPage'))}
+                                )"
                 >
                     Accept
                 </button>
@@ -83,19 +84,16 @@ ${curUser.name}, hello!
     <thead>
     <tr>
         <th>id</th>
-        <th>suitor</th>
-        <th>defendant</th>
-        <th>jurisdictionCourt</th>
-        <th>judge</th>
         <th>sueDate</th>
-        <th>startDate</th>
+<%--        <th>Court</th>--%>
+        <th>suitor</th>
         <th>claimText</th>
+        <th>defendant</th>
         <th>defendantText</th>
-        <th>verdict</th>
-        <th>suitorAppealDate</th>
-        <th>suitorAppealText</th>
-        <th>defendantAppealDate</th>
-        <th>defendantAppealText</th>
+<%--        <th>judge</th>--%>
+        <th>startDate</th>
+        <th>verdictDate</th>
+        <th>verdictText</th>
         <th>executionDate</th>
         <th>actions</th>
     </tr>
@@ -104,33 +102,24 @@ ${curUser.name}, hello!
     <c:forEach var="lawsuit" items="${lawsuits}">
         <tr>
             <td>${lawsuit.id}</td>
-            <td>${lawsuit.suitor.name}</td>
-            <td>${lawsuit.defendant.name}</td>
-            <td>${lawsuit.jurisdictionCourt.courtName}</td>
-            <td>${lawsuit.judge.name}</td>
             <td>
                 <fmt:formatDate pattern="dd.MM.yyyy" value="${lawsuit.sueDate}"/>
             </td>
+<%--            <td>${lawsuit.court.courtName}</td>--%>
+            <td>${lawsuit.suitor.name}</td>
+            <td>${lawsuit.claimText}</td>
+            <td>${lawsuit.defendant.name}</td>
+            <td>${lawsuit.defendantText}</td>
+<%--            <td>${lawsuit.judge.name}</td>--%>
             <td>
                 <fmt:formatDate pattern="dd.MM.yyyy" value="${lawsuit.startDate}"/>
             </td>
-            <td>${lawsuit.claimText}</td>
-            <td>${lawsuit.defendantText}</td>
             <td>
-                <fmt:formatDate pattern="dd.MM.yyyy" value="${lawsuit.verdict.effectiveDate}"/>
-                    ${lawsuit.verdict.verdictResult}
-                    ${lawsuit.verdict.verdictText}
+                <fmt:formatDate pattern="dd.MM.yyyy" value="${lawsuit.verdictDate}"/>
             </td>
+            <td>${lawsuit.verdictText}</td>
             <td>
-                <fmt:formatDate pattern="dd.MM.yyyy" value="${lawsuit.verdict.suitorAppealDate}"/>
-            </td>
-            <td>${lawsuit.suitorAppealText}</td>
-            <td>
-                <fmt:formatDate pattern="dd.MM.yyyy" value="${lawsuit.verdict.defendantAppealDate}"/>
-            </td>
-            <td>${lawsuit.defendantAppealText}</td>
-            <td>
-                <fmt:formatDate pattern="dd.MM.yyyy" value="${lawsuit.verdict.executionDate}"/>
+                <fmt:formatDate pattern="dd.MM.yyyy" value="${lawsuit.executionDate}"/>
             </td>
             <td>
                 UNREADY!!!!
