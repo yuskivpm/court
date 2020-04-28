@@ -1,9 +1,9 @@
 package com.dsa.service.crud;
 
 import com.dsa.controller.ProxyRequest;
-import com.dsa.dao.entity.SueLawsuitDao;
+import com.dsa.dao.entity.LawsuitDao;
 import com.dsa.dao.services.DbPoolException;
-import com.dsa.model.SueLawsuit;
+import com.dsa.model.Lawsuit;
 import com.dsa.model.Role;
 import com.dsa.model.User;
 import com.dsa.model.pure.MyEntity;
@@ -14,16 +14,16 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.text.ParseException;
 
-public class SueLawsuitCrud extends AbstractCrud<SueLawsuit, SueLawsuitDao>{
+public class LawsuitCrud extends AbstractCrud<Lawsuit, LawsuitDao>{
   public static final String path="/lawsuits";
   private User judge;
 
-  public SueLawsuitCrud(){
+  public LawsuitCrud(){
     super(path);
   }
 
-  public static SueLawsuitCrud newInstance(){
-    return new SueLawsuitCrud();
+  public static LawsuitCrud newInstance(){
+    return new LawsuitCrud();
   }
 
   @Override
@@ -45,11 +45,11 @@ public class SueLawsuitCrud extends AbstractCrud<SueLawsuit, SueLawsuitDao>{
   }
 
   @Override
-  protected SueLawsuit createEntityFromParameters(@NotNull ProxyRequest request, long id){
-    SueLawsuit lawsuit=null;
+  protected Lawsuit createEntityFromParameters(@NotNull ProxyRequest request, long id){
+    Lawsuit lawsuit=null;
     try{
-      try(SueLawsuitDao sueLawsuitDao = new SueLawsuitDao()){
-        lawsuit = sueLawsuitDao.readEntity(id);
+      try(LawsuitDao lawsuitDao = new LawsuitDao()){
+        lawsuit = lawsuitDao.readEntity(id);
       };
       lawsuit.setClaimText(getNotNull(request.getParameter("claimText"),lawsuit.getClaimText()));
       lawsuit.setDefendantText(getNotNull(request.getParameter("defendantText"),lawsuit.getDefendantText()));
@@ -63,8 +63,8 @@ public class SueLawsuitCrud extends AbstractCrud<SueLawsuit, SueLawsuitDao>{
   }
 
   @Override
-  protected SueLawsuitDao createEntityDao() throws SQLException, DbPoolException {
-    return new SueLawsuitDao();
+  protected LawsuitDao createEntityDao() throws SQLException, DbPoolException {
+    return new LawsuitDao();
   }
 
 }

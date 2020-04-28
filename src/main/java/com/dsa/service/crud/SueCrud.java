@@ -1,10 +1,10 @@
 package com.dsa.service.crud;
 
 import com.dsa.controller.ProxyRequest;
-import com.dsa.dao.entity.SueLawsuitDao;
+import com.dsa.dao.entity.LawsuitDao;
 import com.dsa.dao.services.DbPoolException;
 import com.dsa.model.Role;
-import com.dsa.model.SueLawsuit;
+import com.dsa.model.Lawsuit;
 import com.dsa.model.User;
 import com.dsa.model.pure.MyEntity;
 import com.dsa.service.command.LoginCommand;
@@ -14,7 +14,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.Date;
 
-public class SueCrud extends AbstractCrud<SueLawsuit, SueLawsuitDao>{
+public class SueCrud extends AbstractCrud<Lawsuit, LawsuitDao>{
   public static final String path="/sues";
 
   public SueCrud(){
@@ -32,8 +32,8 @@ public class SueCrud extends AbstractCrud<SueLawsuit, SueLawsuitDao>{
   }
 
   @Override
-  protected SueLawsuit createEntityFromParameters(@NotNull ProxyRequest request, long id){
-    SueLawsuit sue=null;
+  protected Lawsuit createEntityFromParameters(@NotNull ProxyRequest request, long id){
+    Lawsuit sue=null;
     try{
       long suitorId= Long.parseLong(request.getParameter("suitorId"));
       long defendantId= Long.parseLong(request.getParameter("defendantId"));
@@ -46,7 +46,7 @@ public class SueCrud extends AbstractCrud<SueLawsuit, SueLawsuitDao>{
       }
       String claimText= request.getParameter("claimText");
       if(claimText!=null && !claimText.isEmpty()&& courtId>0 && defendantId>0 && suitorId>0 && defendantId != suitorId){
-        sue=new SueLawsuit(id, sueDate, null, null, claimText, null, "", null, null,null,"",null);
+        sue=new Lawsuit(id, sueDate, null, null, claimText, null, "", null, null,null,"",null);
         sue.setSuitorId(suitorId);
         sue.setDefendantId(defendantId);
         sue.setCourtId(courtId);
@@ -56,8 +56,8 @@ public class SueCrud extends AbstractCrud<SueLawsuit, SueLawsuitDao>{
   }
 
   @Override
-  protected SueLawsuitDao createEntityDao() throws SQLException, DbPoolException {
-    return new SueLawsuitDao();
+  protected LawsuitDao createEntityDao() throws SQLException, DbPoolException {
+    return new LawsuitDao();
   }
 
 }

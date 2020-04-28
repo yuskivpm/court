@@ -3,7 +3,7 @@ package com.dsa.model.pure;
 import java.util.Date;
 import java.util.Objects;
 
-public class SueLawsuitPure extends MyEntity {
+public class LawsuitPure extends MyEntity {
   // sue data
   private Date sueDate;
   private long courtId;
@@ -18,11 +18,11 @@ public class SueLawsuitPure extends MyEntity {
   private String verdictText;
   private Date executionDate;
 
-  public SueLawsuitPure(){
+  public LawsuitPure(){
     entityName="Lawsuit";
   }
 
-  public SueLawsuitPure(
+  public LawsuitPure(
       long id,
       Date sueDate,
       long courtId,

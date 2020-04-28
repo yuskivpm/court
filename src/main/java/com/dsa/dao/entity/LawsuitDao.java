@@ -1,16 +1,15 @@
 package com.dsa.dao.entity;
 
 import com.dsa.dao.services.DbPoolException;
-import com.dsa.model.SueLawsuit;
+import com.dsa.model.Lawsuit;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Connection;
-import java.util.Date;
 import java.util.List;
 
-public class SueLawsuitDao  extends AbstractEntityDao<SueLawsuit> {
+public class LawsuitDao extends AbstractEntityDao<Lawsuit> {
   private static final String LAWSUIT_TABLE_NAME="LAWSUIT";
   private static final String SQL_INSERT="INSERT INTO "+LAWSUIT_TABLE_NAME+
       " (SUE_DATE, COURT_ID, SUITOR_ID, CLAIM_TEXT, DEFENDANT_ID, DEFENDANT_TEXT, JUDGE_ID, START_DATE, VERDICT_DATE," +
@@ -41,37 +40,37 @@ public class SueLawsuitDao  extends AbstractEntityDao<SueLawsuit> {
       "FOREIGN KEY (JUDGE_ID) REFERENCES USER(ID) "+
       ")";
 
-  public SueLawsuitDao() throws SQLException, DbPoolException {
+  public LawsuitDao() throws SQLException, DbPoolException {
     super(LAWSUIT_TABLE_NAME, SQL_INSERT, SQL_UPDATE);
   }
 
-  public SueLawsuitDao(Connection connection){
+  public LawsuitDao(Connection connection){
     super(connection,LAWSUIT_TABLE_NAME, SQL_INSERT, SQL_UPDATE);
   }
 
-  public List<SueLawsuit> readAllBySuitorId(long suitorId) throws SQLException{
+  public List<Lawsuit> readAllBySuitorId(long suitorId) throws SQLException{
     String[] where={"SUITOR_ID", Long.toString(suitorId)};
     return readAll(where);
   }
 
-  public List<SueLawsuit> readAllByDefendantId(long defendantId) throws SQLException{
+  public List<Lawsuit> readAllByDefendantId(long defendantId) throws SQLException{
     String[] where={"DEFENDANT_ID", Long.toString(defendantId)};
     return readAll(where);
   }
 
-  public List<SueLawsuit> readAllUnacceptedForCourtId(long courtId) throws SQLException{
+  public List<Lawsuit> readAllUnacceptedForCourtId(long courtId) throws SQLException{
     String[] where={"COURT_ID", Long.toString(courtId), "JUDGE_ID", null};
     return readAll(where);
   }
 
-  public List<SueLawsuit> readAllForJudgeId(long judgeId) throws SQLException{
+  public List<Lawsuit> readAllForJudgeId(long judgeId) throws SQLException{
     String[] where={"JUDGE_ID", Long.toString(judgeId)};
     return readAll(where);
   }
 
   @Override
-  protected SueLawsuit recordToEntity(ResultSet resultSet){
-    SueLawsuit lawsuit= new SueLawsuit();
+  protected Lawsuit recordToEntity(ResultSet resultSet){
+    Lawsuit lawsuit= new Lawsuit();
     try{
       lawsuit.setId(resultSet.getLong("ID"));
       lawsuit.setSueDate(sqlDateToDate(resultSet.getDate("SUE_DATE")));
@@ -93,7 +92,7 @@ public class SueLawsuitDao  extends AbstractEntityDao<SueLawsuit> {
   }
 
   @Override
-  protected int setAllPreparedValues(PreparedStatement preparedStatement, SueLawsuit lawsuit, boolean isAddOperation) throws SQLException{
+  protected int setAllPreparedValues(PreparedStatement preparedStatement, Lawsuit lawsuit, boolean isAddOperation) throws SQLException{
     int index=0;
     preparedStatement.setDate(++index, dateToSqlDate(lawsuit.getSueDate()));
     setPreparedValueOrNull(preparedStatement,++index, lawsuit.getCourtId());
@@ -110,7 +109,7 @@ public class SueLawsuitDao  extends AbstractEntityDao<SueLawsuit> {
   };
 
   @Override
-  public SueLawsuit loadAllSubEntities(SueLawsuit lawsuit) throws SQLException {
+  public Lawsuit loadAllSubEntities(Lawsuit lawsuit) throws SQLException {
     if (lawsuit!=null) {
       if (lawsuit.getSuitor()==null && lawsuit.getSuitorId()>0) {
         lawsuit.setSuitor(new UserDao(connection).readEntity(lawsuit.getSuitorId()));

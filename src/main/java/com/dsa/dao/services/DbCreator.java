@@ -42,11 +42,11 @@ public final class DbCreator {
       st=con.createStatement();
       CourtDao courtDao=new CourtDao(con);
       UserDao userDao=new UserDao(con);
-      SueLawsuitDao sueLawsuitDao=new SueLawsuitDao(con);
+      LawsuitDao lawsuitDao =new LawsuitDao(con);
 
       CourtDao.sqlExecute(st,CourtDao.SQL_CREATE_TABLE,false,log);
       UserDao.sqlExecute(st,UserDao.SQL_CREATE_TABLE,false,log);
-      SueLawsuitDao.sqlExecute(st,SueLawsuitDao.SQL_CREATE_TABLE,false,log);
+      LawsuitDao.sqlExecute(st, LawsuitDao.SQL_CREATE_TABLE,false,log);
 
       // Court table add values
       Court supremeCourt=new Court(1,"Supreme court", CourtInstance.CASSATION, null);
@@ -66,7 +66,7 @@ public final class DbCreator {
       userDao.createEntity(attorney1);
       userDao.createEntity(attorney2);
 
-      sueLawsuitDao.createEntity(new SueLawsuit(1,new Date(),localCourt,attorney1,"claimText",attorney2,"",null,null,null,"",null));
+      lawsuitDao.createEntity(new Lawsuit(1,new Date(),localCourt,attorney1,"claimText",attorney2,"",null,null,null,"",null));
 
     }catch(SQLException e){
       log.error("Exception in DbCreator.recreateTables: "+e);

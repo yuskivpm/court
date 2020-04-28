@@ -2,7 +2,7 @@ package com.dsa.service.command;
 
 import com.dsa.controller.ProxyRequest;
 import com.dsa.dao.entity.CourtDao;
-import com.dsa.dao.entity.SueLawsuitDao;
+import com.dsa.dao.entity.LawsuitDao;
 import com.dsa.dao.entity.UserDao;
 import com.dsa.dao.services.DbPoolException;
 import com.dsa.model.*;
@@ -39,16 +39,16 @@ public class MainPageCommand implements IActionCommand {
     switch(currentUser.getRole().toString()){
 
       case "JUDGE":
-        try(SueLawsuitDao lawsuitDao=new SueLawsuitDao()){
-          List<SueLawsuit> lawsuits=lawsuitDao.readAllForJudgeId(currentUser.getId());
-          for(SueLawsuit lawsuit: lawsuits){
+        try(LawsuitDao lawsuitDao=new LawsuitDao()){
+          List<Lawsuit> lawsuits=lawsuitDao.readAllForJudgeId(currentUser.getId());
+          for(Lawsuit lawsuit: lawsuits){
             lawsuitDao.loadAllSubEntities(lawsuit);
           }
           request.setAttribute("lawsuits",lawsuits);
           if(currentUser.getCourt().getCourtInstance() == CourtInstance.LOCAL){
             // for local courts - get list of unaccepted sues
             lawsuits=lawsuitDao.readAllUnacceptedForCourtId(currentUser.getCourtId());
-            for(SueLawsuit lawsuit: lawsuits){
+            for(Lawsuit lawsuit: lawsuits){
               lawsuitDao.loadAllSubEntities(lawsuit);
             }
               request.setAttribute("sues",lawsuits);
@@ -59,16 +59,16 @@ public class MainPageCommand implements IActionCommand {
         break;
 
       case "ATTORNEY":
-        try(SueLawsuitDao lawsuitDao=new SueLawsuitDao()){
+        try(LawsuitDao lawsuitDao=new LawsuitDao()){
           // list of own sues
-          List<SueLawsuit> lawsuits=lawsuitDao.readAllBySuitorId(currentUser.getId());
-          for(SueLawsuit lawsuit: lawsuits){
+          List<Lawsuit> lawsuits=lawsuitDao.readAllBySuitorId(currentUser.getId());
+          for(Lawsuit lawsuit: lawsuits){
             lawsuitDao.loadAllSubEntities(lawsuit);
           }
           request.setAttribute("ownLawsuits",lawsuits);
           // list of lawsuits for defendant role
           lawsuits=lawsuitDao.readAllByDefendantId(currentUser.getId());
-          for(SueLawsuit lawsuit: lawsuits){
+          for(Lawsuit lawsuit: lawsuits){
             lawsuitDao.loadAllSubEntities(lawsuit);          }
           request.setAttribute("asDefendantLawsuits",lawsuits);
 

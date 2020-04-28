@@ -1,7 +1,7 @@
 <jsp:directive.page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"/>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="com.dsa.model.Role" %>
-<%@ page import="com.dsa.model.SueLawsuit" %>
+<%@ page import="com.dsa.model.Lawsuit" %>
 <%@ page import="com.dsa.model.CourtInstance" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="com.dsa.model.pure.MyEntity" %>
@@ -76,7 +76,7 @@
             <td>
                 <input type="text" name="sueDate" size="45" required readonly
                     <c:if test="${editEntity != null}">
-                        value='<%= MyEntity.dateToStr(((SueLawsuit)request.getAttribute("editEntity")).getSueDate()) %>'
+                        value='<%= MyEntity.dateToStr(((Lawsuit)request.getAttribute("editEntity")).getSueDate()) %>'
                     </c:if>
                     <c:if test="${editEntity == null}">
                         value='<%= MyEntity.dateToStr(new Date())%>'

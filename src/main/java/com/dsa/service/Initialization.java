@@ -9,7 +9,7 @@ public class Initialization {
     CrudExecutor.register(UserCrud.path, new UserCrud());
     CrudExecutor.register(CourtCrud.path, new CourtCrud());
     CrudExecutor.register(SueCrud.path, new SueCrud());
-    CrudExecutor.register(SueLawsuitCrud.path, new SueLawsuitCrud());
+    CrudExecutor.register(LawsuitCrud.path, new LawsuitCrud());
 //    todo: add ALL CrudExecutor's files here
   }
 }

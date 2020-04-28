@@ -1,20 +1,20 @@
 package com.dsa.model;
 
-import com.dsa.model.pure.SueLawsuitPure;
+import com.dsa.model.pure.LawsuitPure;
 
 import java.util.Date;
 
-public class SueLawsuit extends SueLawsuitPure {
+public class Lawsuit extends LawsuitPure {
   private User suitor;
   private User defendant;
   private Court court;
   private User judge;
 
-  public SueLawsuit(){
+  public Lawsuit(){
     super();
   }
 
-  public SueLawsuit(
+  public Lawsuit(
       long id,
       Date sueDate,
       Court court,
