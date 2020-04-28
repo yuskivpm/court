@@ -18,10 +18,6 @@ public class CourtCrud extends AbstractCrud<Court, CourtDao>{
     super(path);
   }
 
-  public static CourtCrud newInstance(){
-    return new CourtCrud();
-  }
-
   @Override
   protected boolean checkAuthority(ProxyRequest request){
     User user= LoginCommand.getSessionUser(request);

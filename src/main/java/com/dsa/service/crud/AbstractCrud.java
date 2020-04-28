@@ -10,6 +10,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
@@ -22,12 +24,8 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
     this.path=path;
   }
 
-  public static AbstractCrud newInstance(){
-    return null;
-  }
-
   public CrudResult execute(ProxyRequest request, HttpServletResponse response){
-    if(checkAuthority(request)){// only ADMIN can execute it
+    if(checkAuthority(request)){
       CrudEnum ce=CrudExecutor.getCrudOperation(request,getPath());
       switch (ce) {
         case CREATE:
@@ -76,6 +74,18 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
         out.print("{\"error\":\"Exception in createOrUpdateEntity(): "+e+"\"}");
       }
     }
+  }
+
+  protected static String getNotNull(String tryValue, String defaultValue){
+    return tryValue.isEmpty() ? defaultValue : tryValue;
+  }
+
+  protected static long getNotNull(String tryValue, long defaultValue){
+    return tryValue.isEmpty() ? defaultValue : Long.parseLong(tryValue);
+  }
+
+  protected static Date getNotNull(String tryValue, Date defaultValue) throws ParseException {
+    return tryValue.isEmpty() ? defaultValue : MyEntity.strToDate(tryValue);
   }
 
   private void deleteEntity(ProxyRequest request, HttpServletResponse response) {

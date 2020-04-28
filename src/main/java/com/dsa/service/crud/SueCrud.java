@@ -21,38 +21,51 @@ public class SueCrud extends AbstractCrud<Lawsuit, LawsuitDao>{
     super(path);
   }
 
-  public static SueCrud newInstance(){
-    return new SueCrud();
+  protected SueCrud(String path){
+    super(path);
   }
 
   @Override
   protected boolean checkAuthority(ProxyRequest request){
     User user= LoginCommand.getSessionUser(request);
-    return user!=null && (user.getRole()== Role.ATTORNEY || user.getRole()== Role.JUDGE);
+    return user!=null && (user.getRole()== Role.ATTORNEY);
   }
 
   @Override
   protected Lawsuit createEntityFromParameters(@NotNull ProxyRequest request, long id){
-    Lawsuit sue=null;
+    Lawsuit lawsuit=null;
     try{
-      long suitorId= Long.parseLong(request.getParameter("suitorId"));
-      long defendantId= Long.parseLong(request.getParameter("defendantId"));
-      long courtId= Long.parseLong(request.getParameter("courtId"));
-      Date sueDate = null;
-      try {
-        sueDate = MyEntity.strToDate(request.getParameter("sueDate"));
-      }catch(ParseException e){
-        sueDate=new Date();
-      }
-      String claimText= request.getParameter("claimText");
-      if(claimText!=null && !claimText.isEmpty()&& courtId>0 && defendantId>0 && suitorId>0 && defendantId != suitorId){
-        sue=new Lawsuit(id, sueDate, null, null, claimText, null, "", null, null,null,"",null);
-        sue.setSuitorId(suitorId);
-        sue.setDefendantId(defendantId);
-        sue.setCourtId(courtId);
+      if(id==0){
+        long suitorId= Long.parseLong(request.getParameter("suitorId"));
+        long defendantId= Long.parseLong(request.getParameter("defendantId"));
+        long courtId= Long.parseLong(request.getParameter("courtId"));
+        Date sueDate = null;
+        try {
+          sueDate = MyEntity.strToDate(request.getParameter("sueDate"));
+        }catch(ParseException e){
+          sueDate=new Date();
+        }
+        String claimText= request.getParameter("claimText");
+        if(claimText!=null && !claimText.isEmpty()&& courtId>0 && defendantId>0 && suitorId>0 && defendantId != suitorId){
+          lawsuit=new Lawsuit(id, sueDate, null, null, claimText, null, "", null, null,null,"",null);
+          lawsuit.setSuitorId(suitorId);
+          lawsuit.setDefendantId(defendantId);
+          lawsuit.setCourtId(courtId);
+        }
+      }else{
+          try(LawsuitDao lawsuitDao = new LawsuitDao()){
+            lawsuit = lawsuitDao.readEntity(id);
+          };
+        lawsuit.setClaimText(getNotNull(request.getParameter("claimText"),lawsuit.getClaimText()));
+        lawsuit.setDefendantText(getNotNull(request.getParameter("defendantText"),lawsuit.getDefendantText()));
+        lawsuit.setVerdictText(getNotNull(request.getParameter("verdictText"),lawsuit.getVerdictText()));
+        lawsuit.setJudgeId(getNotNull(request.getParameter("judgeId"),lawsuit.getJudgeId()));
+        lawsuit.setStartDate(getNotNull(request.getParameter("startDate"),lawsuit.getStartDate()));
+        lawsuit.setVerdictDate(getNotNull(request.getParameter("verdictDate"),lawsuit.getVerdictDate()));
+        lawsuit.setExecutionDate(getNotNull(request.getParameter("executionDate"),lawsuit.getExecutionDate()));
       }
     }catch(Exception e){}
-    return sue;
+    return lawsuit;
   }
 
   @Override

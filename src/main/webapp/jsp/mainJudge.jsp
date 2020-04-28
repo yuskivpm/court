@@ -47,7 +47,7 @@ ${curUser.name}, hello!
 <%--                        onclick="sendGetRequest('api/lawsuits?sueId=${sue.id}',()=>sendGetRequest('api?command=mainPage'))"--%>
                         onclick="fetchThis({
                                         url:'api/lawsuits',
-                                        method:'PUT',
+                                        method:'POST',
                                         body:'id=${sue.id}&judgeId=${curUser.id}&startDate=<%= MyEntity.dateToStr(new Date())%>'
                                     },
                                     data=>{crudInformationCallback(data,()=>sendGetRequest('api?command=mainPage'))}

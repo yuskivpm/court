@@ -108,21 +108,16 @@
                             archived
                         </c:if>
                         <c:if test="${lawsuit.executionDate == null}">
-                            UNREADY!!!!
-                            <%-- TODO ATTORNEY  ТАБЛИЦЯ таблиця НП у провадженні--%>
-<%--                            --- якщо РішенняІД - пусте--%>
-<%--                            ---- може змінити або Позицію щодо позову (якщо позивач - Позовні вимоги); якщо відповідач - Заперечення відповідача)--%>
-<%--                            --- якщо РішенняІД - не пусте--%>
-<%--                            ---- Ініціювати Оскарження--%>
-<%--                            ----- зміст скарги (позивача/відповідача)--%>
-<%--                            ----- Дата оскарження (позивачем/відповідачем) встановлюється автоматично--%>
-
-                            <%--                    <button--%>
-                            <%--                            type="button"--%>
-                            <%--                            onclick="deleteEntity('api/courts', ${court.id},()=>sendGetRequest('api?command=mainPage'))"--%>
-                            <%--                    >--%>
-                            <%--                        Delete--%>
-                            <%--                    </button>--%>
+                            <c:if test="${lawsuit.verdictDate == null}">
+                                <button type="button" onclick="changePositionText('claimText','${lawsuit.claimText}',${lawsuit.id})">Change position</button>
+                            </c:if>
+                            <c:if test="${lawsuit.verdictDate != null}">
+                                <%-- TODO ATTORNEY  ТАБЛИЦЯ таблиця НП у провадженні--%>
+                                <%--                            --- якщо РішенняІД - не пусте--%>
+                                <%--                            ---- Ініціювати Оскарження--%>
+                                <%--                            ----- зміст скарги (позивача/відповідача)--%>
+                                <%--                            ----- Дата оскарження (позивачем/відповідачем) встановлюється автоматично--%>
+                            </c:if>
                         </c:if>
                     </td>
                 </tr>
@@ -180,21 +175,18 @@
                     archived
                 </c:if>
                 <c:if test="${lawsuit.executionDate == null}">
-                    UNREADY!!!!
-                    <%-- TODO ATTORNEY  ТАБЛИЦЯ таблиця НП у провадженні--%>
-<%--                    --- якщо РішенняІД - пусте--%>
-<%--                    ---- може змінити або Позицію щодо позову (якщо позивач - Позовні вимоги); якщо відповідач - Заперечення відповідача)--%>
-<%--                    --- якщо РішенняІД - не пусте--%>
-<%--                    ---- Ініціювати Оскарження--%>
-<%--                    ----- зміст скарги (позивача/відповідача)--%>
-<%--                    ----- Дата оскарження (позивачем/відповідачем) встановлюється автоматично--%>
-
-                    <%--                    <button--%>
-                    <%--                            type="button"--%>
-                    <%--                            onclick="deleteEntity('api/courts', ${court.id},()=>sendGetRequest('api?command=mainPage'))"--%>
-                    <%--                    >--%>
-                    <%--                        Delete--%>
-                    <%--                    </button>--%>
+                    <c:if test="${lawsuit.verdictDate == null}">
+                        <button type="button" onclick="changePositionText('defendantText','${lawsuit.defendantText}',${lawsuit.id})">Change position</button>
+                    </c:if>
+                    <c:if test="${lawsuit.verdictDate != null}">
+                        <%-- TODO ATTORNEY  ТАБЛИЦЯ таблиця НП у провадженні--%>
+                        <%--                    --- якщо РішенняІД - пусте--%>
+                        <%--                    ---- може змінити або Позицію щодо позову (якщо позивач - Позовні вимоги); якщо відповідач - Заперечення відповідача)--%>
+                        <%--                    --- якщо РішенняІД - не пусте--%>
+                        <%--                    ---- Ініціювати Оскарження--%>
+                        <%--                    ----- зміст скарги (позивача/відповідача)--%>
+                        <%--                    ----- Дата оскарження (позивачем/відповідачем) встановлюється автоматично--%>
+                    </c:if>
                 </c:if>
             </td>
         </tr>
@@ -203,5 +195,19 @@
 </table>
 
 <hr/>
+<script>
+    function changePositionText(fieldName,oldPosition, lawSuitId){
+        const newPosition = prompt("Enter new position", oldPosition);
+        if (newPosition !== oldPosition){
+            fetchThis({
+                    url:'api/sues',
+                    method:'POST',
+                    body:'id='+lawSuitId+'&'+fieldName+'='+newPosition
+                },
+                data=>{crudInformationCallback(data,()=>sendGetRequest('api?command=mainPage'))}
+            )
+        }
+    }
+</script>
 
 <jsp:directive.include file="mainFooter.jsp"/>

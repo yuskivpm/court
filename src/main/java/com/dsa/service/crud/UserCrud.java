@@ -18,10 +18,6 @@ public class UserCrud extends AbstractCrud<User, UserDao>{
     super(path);
   }
 
-  public static UserCrud newInstance(){
-    return new UserCrud();
-  }
-
   @Override
   protected boolean checkAuthority(ProxyRequest request){
     User user= LoginCommand.getSessionUser(request);
