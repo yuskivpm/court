@@ -46,6 +46,27 @@ public abstract class AbstractEntityDao<E extends MyEntity> implements AutoClose
     return result;
   }
 
+//  public boolean committedStatements(@NotNull List<Predicate<PreparedStatement>> callbacks) {
+//    boolean result = false;
+//    try (PreparedStatement st = connection.prepareStatement(SQL_INSERT)) {
+//      connection.setAutoCommit(false);
+//      Iterator<Predicate<PreparedStatement>> iterator = callbacks.iterator();
+//      while (iterator.hasNext() && iterator.next().test(st));
+//      connection.commit();
+//    } catch (SQLException e) {
+//      log.error("SQLException in EntityDao.createEntity(" + entity + "): " + e);
+//      try{
+//        connection.rollback();
+//      }catch(SQLException e){
+//        log.error("SQLException while calling rollback in EntityDao.createEntity(" + entity + "): " + e);
+//      }
+//    }finally{
+//      try{
+//       connection.setAutoCommit(true);
+//      }catch
+//    }return result;
+//  }
+
   public List<E> readAll() throws SQLException {
     return readAll(null);
   }
@@ -136,7 +157,7 @@ public abstract class AbstractEntityDao<E extends MyEntity> implements AutoClose
 
   protected abstract E recordToEntity(ResultSet resultSet);
 
-  protected abstract E loadAllSubEntities(E entity) throws SQLException;
+  public abstract E loadAllSubEntities(E entity) throws SQLException;
 
   public static void createTable(@NotNull Connection connection, String sql, Logger log) {
     Statement st = null;
@@ -210,6 +231,28 @@ public abstract class AbstractEntityDao<E extends MyEntity> implements AutoClose
   public void close() throws SQLException {
     if (connection != null) {
       connection.close();
+    }
+  }
+
+  public boolean startCommit() throws SQLException{
+    if (connection != null) {
+      connection.setAutoCommit(false);
+      return true;
+    }
+    return false;
+  }
+
+  public boolean endCommit() throws SQLException {
+    if (connection != null) {
+      connection.commit();
+      return true;
+    }
+    return false;
+  }
+
+  public void rollback() throws SQLException {
+    if (connection != null) {
+      connection.rollback();
     }
   }
 

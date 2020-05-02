@@ -33,7 +33,7 @@
             <c:set var="attorney" scope="page" value="<%=Role.ATTORNEY%>"/>
             <th>Defendant: ${attorney}</th>
             <td>
-                <select name="defendantId"/>
+                <select name="defendantId">
                     <c:set var="users" scope="page" value="<%=new com.dsa.dao.entity.UserDao()%>"/>
                     <c:forEach var="aUser" items="${users.readAll()}">
                         <c:if test="${aUser.id != curUser.id && aUser.role == attorney }">
@@ -54,7 +54,7 @@
             <th>Court:</th>
             <td>
                 <c:set var="localCourt" scope="page" value="<%=CourtInstance.LOCAL%>"/>
-                <select name="courtId"/>
+                <select name="courtId">
                     <c:set var="courts" scope="page" value="<%=new com.dsa.dao.entity.CourtDao()%>"/>
                     <c:forEach var="court" items="${courts.readAll()}">
                         <c:if test="${court.courtInstance == localCourt}">

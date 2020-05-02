@@ -49,7 +49,7 @@ public class SueCrud extends AbstractCrud<Lawsuit, LawsuitDao> {
         }
         String claimText = request.getParameter("claimText");
         if (claimText != null && !claimText.isEmpty() && courtId > 0 && defendantId > 0 && suitorId > 0 && defendantId != suitorId) {
-          lawsuit = new Lawsuit(id, sueDate, null, null, claimText, null, "", null, null, null, "", null);
+          lawsuit = new Lawsuit(id, sueDate, null, null, claimText, null, "", null, null, null, null, null, null);
           lawsuit.setSuitorId(suitorId);
           lawsuit.setDefendantId(defendantId);
           lawsuit.setCourtId(courtId);
@@ -64,6 +64,7 @@ public class SueCrud extends AbstractCrud<Lawsuit, LawsuitDao> {
         lawsuit.setJudgeId(getNotNull(request.getParameter("judgeId"), lawsuit.getJudgeId()));
         lawsuit.setStartDate(getNotNull(request.getParameter("startDate"), lawsuit.getStartDate()));
         lawsuit.setVerdictDate(getNotNull(request.getParameter("verdictDate"), lawsuit.getVerdictDate()));
+        lawsuit.setAppealStatus(getNotNull(request.getParameter("appealStatus"), lawsuit.getAppealStatus()));
         lawsuit.setExecutionDate(getNotNull(request.getParameter("executionDate"), lawsuit.getExecutionDate()));
       }
     } catch (Exception e) {
@@ -74,6 +75,13 @@ public class SueCrud extends AbstractCrud<Lawsuit, LawsuitDao> {
   @Override
   protected LawsuitDao createEntityDao() throws SQLException, DbPoolException {
     return new LawsuitDao();
+  }
+
+  @Override
+  protected void committedAction(@NotNull LawsuitDao lawsuitDao, @NotNull ProxyRequest request) throws SQLException {
+    Lawsuit lawsuit = lawsuitDao.readEntity(Long.parseLong(request.getParameter("appealedLawsuitId")));
+    lawsuit.setAppealStatus("appealed");
+    lawsuitDao.updateEntity(lawsuit);
   }
 
 }

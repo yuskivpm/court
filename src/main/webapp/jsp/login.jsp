@@ -1,4 +1,5 @@
 <jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"/>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <html>
 
@@ -26,13 +27,30 @@
     <br/>
     ${nullPage}
 
+    <p>Fast login for lazy "Hackers")))</p>
+    <c:set var="users" scope="page" value="<%=new com.dsa.dao.entity.UserDao()%>"/>
     <table>
-        <tr><td>admin</td><td>admin</td></tr>
-        <tr><td>attorney1</td><td>attorney1</td></tr>
-        <tr><td>attorney2</td><td>attorney2</td></tr>
-        <tr><td>supreme1</td><td>supreme1</td></tr>
-        <tr><td>appeal1</td><td>appeal1</td></tr>
-        <tr><td>localJudge1</td><td>localJudge1</td></tr>
+        <tr>
+            <td>Login</td>
+            <td>Password</td>
+            <td>Action</td>
+        </tr>
+        <c:forEach var="user" items="${users.readAll()}">
+            <tr>
+                <form name="LoginForm"+${user.id} method="POST" action="api">
+                    <input type="hidden" name="command" value="Login"/>
+                    <td>
+                        <input type="text" name="login" value="${user.login}"/>
+                    </td>
+                    <td>
+                        <input type="text" name="password" value="${user.password}"/>
+                    </td>
+                    <td>
+                        <input type="submit" value="Log in"/>
+                    </td>
+                </form>
+            </tr>
+        </c:forEach>
     </table>
 </body>
 

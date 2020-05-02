@@ -45,14 +45,14 @@ public class MainPageCommand implements IActionCommand {
             lawsuitDao.loadAllSubEntities(lawsuit);
           }
           request.setAttribute("lawsuits", lawsuits);
-          if (currentUser.getCourt().getCourtInstance() == CourtInstance.LOCAL) {
+//          if (currentUser.getCourt().getCourtInstance() == CourtInstance.LOCAL) {
             // for local courts - get list of unaccepted sues
             lawsuits = lawsuitDao.readAllUnacceptedForCourtId(currentUser.getCourtId());
             for (Lawsuit lawsuit : lawsuits) {
               lawsuitDao.loadAllSubEntities(lawsuit);
             }
             request.setAttribute("sues", lawsuits);
-          }
+//          }
         } catch (SQLException | DbPoolException e) {
           log.error("Fail get Lawsuits list in MainPageCommand for " + currentUser.getRole() + ": " + e);
         }

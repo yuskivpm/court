@@ -1,3 +1,4 @@
+<%@ page import="com.dsa.model.CourtInstance" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <jsp:directive.include file="mainHeader.jsp"/>
 
@@ -60,6 +61,9 @@ ${curUser.name}, hello!
 
 <hr/>
 
+<c:set var="localCourt" scope="page" value="<%=CourtInstance.LOCAL%>"/>
+<c:set var="appealCourt" scope="page" value="<%=CourtInstance.APPEAL%>"/>
+
 <h1>Lawsuits as suitor</h1>
 <table>
     <thead>
@@ -75,6 +79,7 @@ ${curUser.name}, hello!
         <th>startDate</th>
         <th>verdictDate</th>
         <th>verdictText</th>
+        <th>appeal status</th>
         <th>executionDate</th>
         <th>actions</th>
     </tr>
@@ -100,14 +105,18 @@ ${curUser.name}, hello!
                     <fmt:formatDate pattern="dd.MM.yyyy" value="${lawsuit.verdictDate}"/>
                 </td>
                 <td>${lawsuit.verdictText}</td>
+                <td>${lawsuit.appealStatus}</td>
                 <td>
                     <fmt:formatDate pattern="dd.MM.yyyy" value="${lawsuit.executionDate}"/>
                 </td>
                 <td>
                     <c:if test="${lawsuit.executionDate != null}">
-                        archived
+                        Archived
                     </c:if>
-                    <c:if test="${lawsuit.executionDate == null}">
+                    <c:if test="${lawsuit.appealStatus != null}">
+                        Appealed
+                    </c:if>
+                    <c:if test="${lawsuit.executionDate == null && lawsuit.appealStatus == null}">
                         <c:if test="${lawsuit.verdictDate == null}">
                             <button type="button"
                                     onclick="changePositionText('claimText','${lawsuit.claimText}',${lawsuit.id})">
@@ -115,11 +124,11 @@ ${curUser.name}, hello!
                             </button>
                         </c:if>
                         <c:if test="${lawsuit.verdictDate != null}">
-                            <%-- TODO ATTORNEY  ТАБЛИЦЯ таблиця НП у провадженні--%>
-                            <%--                            --- якщо РішенняІД - не пусте--%>
-                            <%--                            ---- Ініціювати Оскарження--%>
-                            <%--                            ----- зміст скарги (позивача/відповідача)--%>
-                            <%--                            ----- Дата оскарження (позивачем/відповідачем) встановлюється автоматично--%>
+                            <c:if test="${lawsuit.court.courtInstance == localCourt || lawsuit.court.courtInstance == appealCourt}">
+                                <button type="button" onclick="sendGetRequest('api/sues?id=${lawsuit.id}&courtId=${lawsuit.court.mainCourtId}&redirect=1&page=/jsp/models/AppealForm.jsp')">
+                                    Appeal
+                                </button>
+                            </c:if>
                         </c:if>
                     </c:if>
                 </td>
@@ -146,6 +155,7 @@ ${curUser.name}, hello!
         <th>startDate</th>
         <th>verdictDate</th>
         <th>verdictText</th>
+        <th>Appeal status</th>
         <th>executionDate</th>
         <th>actions</th>
     </tr>
@@ -170,14 +180,18 @@ ${curUser.name}, hello!
                 <fmt:formatDate pattern="dd.MM.yyyy" value="${lawsuit.verdictDate}"/>
             </td>
             <td>${lawsuit.verdictText}</td>
+            <td>${lawsuit.appealStatus}</td>
             <td>
                 <fmt:formatDate pattern="dd.MM.yyyy" value="${lawsuit.executionDate}"/>
             </td>
             <td>
                 <c:if test="${lawsuit.executionDate != null}">
-                    archived
+                    Archived
                 </c:if>
-                <c:if test="${lawsuit.executionDate == null}">
+                <c:if test="${lawsuit.appealStatus != null}">
+                    Appealed
+                </c:if>
+                <c:if test="${lawsuit.executionDate == null && lawsuit.appealStatus == null}">
                     <c:if test="${lawsuit.verdictDate == null}">
                         <button type="button"
                                 onclick="changePositionText('defendantText','${lawsuit.defendantText}',${lawsuit.id})">
@@ -185,13 +199,9 @@ ${curUser.name}, hello!
                         </button>
                     </c:if>
                     <c:if test="${lawsuit.verdictDate != null}">
-                        <%-- TODO ATTORNEY  ТАБЛИЦЯ таблиця НП у провадженні--%>
-                        <%--                    --- якщо РішенняІД - пусте--%>
-                        <%--                    ---- може змінити або Позицію щодо позову (якщо позивач - Позовні вимоги); якщо відповідач - Заперечення відповідача)--%>
-                        <%--                    --- якщо РішенняІД - не пусте--%>
-                        <%--                    ---- Ініціювати Оскарження--%>
-                        <%--                    ----- зміст скарги (позивача/відповідача)--%>
-                        <%--                    ----- Дата оскарження (позивачем/відповідачем) встановлюється автоматично--%>
+                        <button type="button" onclick="sendGetRequest('api/sues?id=${lawsuit.id}&redirect=1&page=/jsp/models/AppealForm.jsp')">
+                            Appeal
+                        </button>
                     </c:if>
                 </c:if>
             </td>
@@ -205,7 +215,7 @@ ${curUser.name}, hello!
 <script>
     function changePositionText(fieldName, oldPosition, lawSuitId) {
         const newPosition = prompt("Enter new position", oldPosition);
-        if (newPosition !== oldPosition) {
+        if (newPosition && newPosition !== oldPosition) {
             fetchThis({
                     url: 'api/sues',
                     method: 'POST',

@@ -68,10 +68,10 @@ public final class DbCreator {
       userDao.createEntity(attorney1);
       userDao.createEntity(attorney2);
 
-      lawsuitDao.createEntity(new Lawsuit(1, new Date(), localCourt, attorney1, "1 claim 1 to 2", attorney2, "Not acceptable", localJudge, new Date(), null, "", null));
-      lawsuitDao.createEntity(new Lawsuit(2, new Date(), localCourt, attorney1, "2 claim 1 to 2", attorney2, "", null, null, null, "", null));
-      lawsuitDao.createEntity(new Lawsuit(3, new Date(), localCourt, attorney2, "1 claim 2 to 1", attorney1, "", localJudge, new Date(), null, "", null));
-      lawsuitDao.createEntity(new Lawsuit(4, new Date(), localCourt, attorney2, "2 claim 2 to 1", attorney1, "", null, null, null, "", null));
+      lawsuitDao.createEntity(new Lawsuit(1, new Date(), localCourt, attorney1, "1 claim 1 to 2", attorney2, "Not acceptable", localJudge, new Date(), new Date(), "Verdict text", null, null));
+      lawsuitDao.createEntity(new Lawsuit(2, new Date(), localCourt, attorney1, "2 claim 1 to 2", attorney2, "", null, null, null, null, null, null));
+      lawsuitDao.createEntity(new Lawsuit(3, new Date(), localCourt, attorney2, "1 claim 2 to 1", attorney1, "", localJudge, new Date(), null, null, null, null));
+      lawsuitDao.createEntity(new Lawsuit(4, new Date(), localCourt, attorney2, "2 claim 2 to 1", attorney1, "", null, null, null, null, null, null));
 
     } catch (SQLException e) {
       log.error("Exception in DbCreator.recreateTables: " + e);

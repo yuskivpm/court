@@ -27,6 +27,7 @@ public class Lawsuit extends LawsuitPure {
       Date startDate,
       Date verdictDate,
       String verdictText,
+      String appealStatus,
       Date executionDate
   ) {
     super(id,
@@ -40,6 +41,7 @@ public class Lawsuit extends LawsuitPure {
         startDate,
         verdictDate,
         verdictText,
+        appealStatus,
         executionDate);
     this.court = court;
     this.suitor = suitor;

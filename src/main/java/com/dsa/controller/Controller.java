@@ -1,6 +1,5 @@
 package com.dsa.controller;
 
-import com.dsa.service.Initialization;
 import com.dsa.service.ActionFactory;
 import com.dsa.service.command.IActionCommand;
 import com.dsa.service.command.RedirectCommand;
@@ -8,7 +7,7 @@ import com.dsa.service.crud.CrudExecutor;
 import com.dsa.service.resource.ConfigManager;
 import com.dsa.service.resource.MessageManager;
 
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -21,19 +20,13 @@ import java.io.IOException;
 //@WebServlet(name="MainServlet", displayName="Main servlet", urlPatterns={"/", "/index", "/controller"})
 public class Controller extends HttpServlet {
 
-  private static final Logger log = Logger.getLogger(Controller.class);
+//  private static final Logger log = Logger.getLogger(Controller.class);
   private static final String PATH_PAGE_INDEX;
   private static final String NULL_PAGE_MESSAGE;
 
   static {
     PATH_PAGE_INDEX = ConfigManager.getProperty("path.page.index");
     NULL_PAGE_MESSAGE = MessageManager.getProperty("message.nullPage");
-    // general initialization
-    try {
-      Initialization.initialize();
-    } catch (Exception e) {
-      log.error("Fail to initialize some classes in Controller: " + e);
-    }
   }
 
   @Override

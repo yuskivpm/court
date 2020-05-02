@@ -44,6 +44,10 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
           return CrudResult.EXECUTED;
         case PREPARE_UPDATE_FORM:
           return prepareEditForm(request, response);
+        case WRONG:
+          return wrongCommand(request, response);
+        case UNKNOWN:
+          return unknownCommand(request, response);
         default: //skip
       }
     }
@@ -52,6 +56,7 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
 
   private void createOrUpdateEntity(ProxyRequest request, HttpServletResponse response, boolean create) {
     PrintWriter out = null;
+    boolean needCommit = false;
     try {
       out = response.getWriter();
       long id = 0;
@@ -61,8 +66,23 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
       E entity = createEntityFromParameters(request, id);
       if (entity != null) {
         boolean result = false;
-        try (D EntityDao = createEntityDao()) {
-          result = create ? EntityDao.createEntity(entity) : EntityDao.updateEntity(entity);
+        try (D entityDao = createEntityDao()) {
+          try {
+            needCommit = !request.getParameter("commit").isEmpty();
+            if (needCommit) {
+              entityDao.startCommit();
+            }
+            result = create ? entityDao.createEntity(entity) : entityDao.updateEntity(entity);
+            if (needCommit) {
+              committedAction(entityDao, request);
+              entityDao.endCommit();
+            }
+          } catch (SQLException e) {
+            if (needCommit) {
+              entityDao.rollback();
+            }
+            throw e;
+          }
         }
         if (result) {
           out.print("{\"status\":\"ok\"}");
@@ -153,7 +173,7 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
   private CrudResult prepareEditForm(@NotNull ProxyRequest request, HttpServletResponse response) {
     String id = request.getParameter("id");
     try (D entityDao = createEntityDao()) {
-      MyEntity entity = entityDao.readEntity("ID", id);
+      MyEntity entity = entityDao.loadAllSubEntities(entityDao.readEntity("ID", id));
       if (entity != null) {
         request.setAttribute("editEntity", entity);
         return CrudResult.REDIRECT;
@@ -162,6 +182,14 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
     } catch (Exception e) {
       log.error("Fail get User in prepareEditForm for Entity.id(" + id + "): " + e);
     }
+    return CrudResult.FAILED;
+  }
+
+  protected CrudResult wrongCommand(ProxyRequest request, HttpServletResponse response) {
+    return CrudResult.FAILED;
+  }
+
+  protected CrudResult unknownCommand(ProxyRequest request, HttpServletResponse response) {
     return CrudResult.FAILED;
   }
 
@@ -176,5 +204,8 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
   protected abstract E createEntityFromParameters(ProxyRequest request, long id);
 
   protected abstract D createEntityDao() throws SQLException, DbPoolException;
+
+  protected void committedAction(D entityDao, ProxyRequest request) throws SQLException {
+  }
 
 }

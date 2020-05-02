@@ -18,6 +18,7 @@ public class LawsuitPure extends MyEntity {
   private Date startDate;
   private Date verdictDate;
   private String verdictText;
+  private String appealStatus;
   private Date executionDate;
 
   public LawsuitPure() {
@@ -36,6 +37,7 @@ public class LawsuitPure extends MyEntity {
       Date startDate,
       Date verdictDate,
       String verdictText,
+      String appealStatus,
       Date executionDate
   ) {
     super(id);
@@ -50,6 +52,7 @@ public class LawsuitPure extends MyEntity {
     this.startDate = startDate;
     this.verdictDate = verdictDate;
     this.verdictText = verdictText;
+    this.appealStatus = appealStatus;
     this.executionDate = executionDate;
   }
 
@@ -141,6 +144,14 @@ public class LawsuitPure extends MyEntity {
     this.executionDate = executionDate;
   }
 
+  public String getAppealStatus() {
+    return appealStatus;
+  }
+
+  public void setAppealStatus(String appealStatus) {
+    this.appealStatus = appealStatus;
+  }
+
   @Override
   public int hashCode() {
     return Objects.hash(
@@ -155,6 +166,7 @@ public class LawsuitPure extends MyEntity {
         getStartDate(),
         getVerdictDate(),
         getVerdictText(),
+        getAppealStatus(),
         getExecutionDate());
   }
 
@@ -171,6 +183,7 @@ public class LawsuitPure extends MyEntity {
         + "\"startDate\":\"" + startDate + "\", "
         + "\"verdictDate\":\"" + verdictDate + "\", "
         + "\"verdictText\":\"" + verdictText + "\", "
+        + "\"appealStatus\":\"" + appealStatus + "\", "
         + "\"executionDate\":\"" + executionDate + "\""
         + "}";
   }

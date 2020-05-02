@@ -1,6 +1,7 @@
 package com.dsa.controller;
 
 import com.dsa.service.ActionFactory;
+import com.dsa.service.Initialization;
 import com.dsa.service.command.CommandEnum;
 import com.dsa.service.command.LoginCommand;
 import com.dsa.service.resource.ConfigManager;
@@ -37,6 +38,13 @@ public class ControllerFilter implements Filter {
 
   static {
     LOGIN_PAGE = ConfigManager.getProperty("path.page.login");
+    // general initialization
+    try {
+      Initialization.initialize();
+    } catch (Exception e) {
+//        log.error("Fail to initialize some classes in Controller: " + e);
+
+    }
   }
 
   @Override
