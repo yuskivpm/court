@@ -1,13 +1,21 @@
 package com.dsa.service.command;
 
-import com.dsa.view.ProxyRequest;
+import com.dsa.controller.ControllerRequest;
+import com.dsa.controller.ControllerResponse;
+import com.dsa.controller.ResponseType;
 import com.dsa.service.resource.ConfigManager;
 
-public class EmptyCommand implements IActionCommand {
+import java.util.function.Function;
+
+public class EmptyCommand implements Function<ControllerRequest, ControllerResponse> {
 
   @Override
-  public String execute(ProxyRequest request) {
-    return ConfigManager.getProperty("path.page.login");
+  public ControllerResponse apply(ControllerRequest request) {
+    ControllerResponse controllerResponse = new ControllerResponse(
+        ResponseType.FORWARD,
+        ConfigManager.getProperty("path.page.login")
+    );
+    return controllerResponse;
   }
 
 }
