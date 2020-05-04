@@ -1,6 +1,6 @@
 package com.dsa.service;
 
-import com.dsa.controller.ProxyRequest;
+import com.dsa.view.ProxyRequest;
 import com.dsa.service.command.IActionCommand;
 import com.dsa.service.command.CommandEnum;
 import com.dsa.service.resource.MessageManager;

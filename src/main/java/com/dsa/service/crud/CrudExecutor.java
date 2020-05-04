@@ -1,6 +1,6 @@
 package com.dsa.service.crud;
 
-import com.dsa.controller.ProxyRequest;
+import com.dsa.view.ProxyRequest;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

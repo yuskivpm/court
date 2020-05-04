@@ -1,6 +1,6 @@
 package com.dsa.service.command;
 
-import com.dsa.controller.ProxyRequest;
+import com.dsa.view.ProxyRequest;
 import com.dsa.service.resource.ConfigManager;
 
 import org.jetbrains.annotations.NotNull;

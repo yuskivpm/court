@@ -1,4 +1,4 @@
-package com.dsa.controller;
+package com.dsa.view;
 
 import org.jetbrains.annotations.NotNull;
 

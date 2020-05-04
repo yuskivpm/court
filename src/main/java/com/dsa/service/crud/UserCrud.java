@@ -1,6 +1,6 @@
 package com.dsa.service.crud;
 
-import com.dsa.controller.ProxyRequest;
+import com.dsa.view.ProxyRequest;
 import com.dsa.dao.entity.UserDao;
 import com.dsa.dao.services.DbPoolException;
 import com.dsa.model.Role;

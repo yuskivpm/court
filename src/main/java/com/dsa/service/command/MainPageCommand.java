@@ -1,6 +1,6 @@
 package com.dsa.service.command;
 
-import com.dsa.controller.ProxyRequest;
+import com.dsa.view.ProxyRequest;
 import com.dsa.dao.entity.CourtDao;
 import com.dsa.dao.entity.LawsuitDao;
 import com.dsa.dao.entity.UserDao;

@@ -1,4 +1,4 @@
-package com.dsa.controller;
+package com.dsa.view;
 
 import com.dsa.service.ActionFactory;
 import com.dsa.service.command.IActionCommand;
@@ -18,9 +18,9 @@ import java.io.IOException;
 
 @WebServlet({"/api/*"})
 //@WebServlet(name="MainServlet", displayName="Main servlet", urlPatterns={"/", "/index", "/controller"})
-public class Controller extends HttpServlet {
+public class MainController extends HttpServlet {
 
-//  private static final Logger log = Logger.getLogger(Controller.class);
+//  private static final Logger log = Logger.getLogger(MainController.class);
   private static final String PATH_PAGE_INDEX;
   private static final String NULL_PAGE_MESSAGE;
 

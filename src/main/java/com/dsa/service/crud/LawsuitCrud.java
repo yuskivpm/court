@@ -1,6 +1,6 @@
 package com.dsa.service.crud;
 
-import com.dsa.controller.ProxyRequest;
+import com.dsa.view.ProxyRequest;
 import com.dsa.model.Role;
 import com.dsa.model.User;
 import com.dsa.service.command.LoginCommand;

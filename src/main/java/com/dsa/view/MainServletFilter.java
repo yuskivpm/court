@@ -1,4 +1,4 @@
-package com.dsa.controller;
+package com.dsa.view;
 
 import com.dsa.service.ActionFactory;
 import com.dsa.service.Initialization;
@@ -32,7 +32,7 @@ import java.io.IOException;
     urlPatterns = "/*",
     dispatcherTypes = {DispatcherType.REQUEST}
 )
-public class ControllerFilter implements Filter {
+public class MainServletFilter implements Filter {
 
   private static final String LOGIN_PAGE;
 
@@ -42,7 +42,7 @@ public class ControllerFilter implements Filter {
     try {
       Initialization.initialize();
     } catch (Exception e) {
-//        log.error("Fail to initialize some classes in Controller: " + e);
+//        log.error("Fail to initialize some classes in MainServletFilter: " + e);
 
     }
   }
