@@ -18,6 +18,7 @@ public class Controller {
   public static final String PATH_INFO = "pathInfo";
   public static final String QUERY_STRING = "queryString";
   public static final String COMMAND = "command";
+  public static final String CRUD_COMMAND = "crud";
   public static final String COMMIT_QUERY = "commit";
   public static final String COMMIT_SEPARATOR = "^";
   public static final String COMMIT_COMMAND_SEPARATOR = "~"; // ~ -> &
@@ -61,13 +62,16 @@ public class Controller {
               break;
             }
           }
+          if (controllerResponse.getResponseType() == ResponseType.FAIL){
+            throw new Exception("Fail execute");
+          }
         }
         connection.commit();
       }catch(Exception e) {
         connection.rollback();
         throw e;
       }
-    }catch(DbPoolException | SQLException e) {
+    }catch(Exception e) {
       controllerResponse.resetToDefault();
     }
     return controllerResponse;

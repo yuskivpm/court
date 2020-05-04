@@ -1,0 +1,217 @@
+package com.dsa.service.crud;
+
+import com.dsa.controller.ControllerRequest;
+import com.dsa.controller.ControllerResponse;
+import com.dsa.controller.ResponseType;
+import com.dsa.dao.entity.AbstractEntityDao;
+import com.dsa.dao.services.DbPoolException;
+import com.dsa.model.pure.MyEntity;
+
+import com.dsa.service.command.RedirectCommand;
+import org.apache.log4j.Logger;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
+import javax.servlet.http.HttpServletResponse;
+import java.text.ParseException;
+import java.sql.SQLException;
+import java.io.PrintWriter;
+import java.util.Date;
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityDao> implements Function<ControllerRequest, ControllerResponse> {
+  private static final Logger log = Logger.getLogger(AbstractCrud.class);
+  protected String path = "";
+
+  @Contract(pure = true)
+  public AbstractCrud(String path) {
+    this.path = path;
+  }
+
+  @Override
+  public ControllerResponse apply(@NotNull ControllerRequest request) {
+//    ControllerResponse controllerResponse = new ControllerResponse();
+    if (checkAuthority(request)) {
+      CrudEnum ce = CrudParser.getCrudOperation(request, getPath());
+      switch (ce) {
+        case CREATE:
+        case UPDATE:
+          return createOrUpdateEntity(request, ce == CrudEnum.CREATE);
+//          return CrudResult.EXECUTED;
+        case READ:
+        case READ_ALL:
+          return readEntity(request, ce == CrudEnum.READ_ALL);
+//          return CrudResult.EXECUTED;
+        case DELETE:
+          return deleteEntity(request);
+//          return CrudResult.EXECUTED;
+        case PREPARE_UPDATE_FORM:
+          return prepareEditForm(request);
+        case WRONG:
+          return wrongCommand(request);
+        case UNKNOWN:
+          return unknownCommand(request);
+        default: //skip
+      }
+    }
+    return new ControllerResponse(ResponseType.FAIL, "");
+  }
+
+  @NotNull
+  @Contract("_, _ -> new")
+  private ControllerResponse createOrUpdateEntity(ControllerRequest request, boolean create) {
+    String responseValue = "";
+    boolean needCommit = false;
+    try {
+      long id = 0;
+      if (!create) {
+        id = Long.parseLong(request.getParameter("id"));
+      }
+      E entity = createEntityFromParameters(request, id);
+      if (entity != null) {
+        boolean result = false;
+        try (D entityDao = createEntityDao()) {
+          try {
+            needCommit = !request.getParameter("commit").isEmpty();
+            if (needCommit) {
+              entityDao.startCommit();
+            }
+            result = create ? entityDao.createEntity(entity) : entityDao.updateEntity(entity);
+            if (needCommit) {
+              committedAction(entityDao, request);
+              entityDao.endCommit();
+            }
+          } catch (SQLException e) {
+            if (needCommit) {
+              entityDao.rollback();
+            }
+            throw e;
+          }
+        }
+        if (result) {
+          responseValue = "{\"status\":\"ok\"}";
+        } else {
+          responseValue = "{\"error\":\"db error\"}";
+        }
+      } else {
+        responseValue = "{\"error\":\"All fields are required\"}";
+      }
+    } catch (Exception e) {
+      responseValue = "{\"error\":\"Exception in createOrUpdateEntity(): " + e + "\"}";
+    }
+    return new ControllerResponse(ResponseType.PLAIN_TEXT, responseValue);
+  }
+
+  @Contract(pure = true)
+  protected static String getNotNull(@NotNull String tryValue, String defaultValue) {
+    return tryValue.isEmpty() ? defaultValue : tryValue;
+  }
+
+  protected static long getNotNull(@NotNull String tryValue, long defaultValue) {
+    return tryValue.isEmpty() ? defaultValue : Long.parseLong(tryValue);
+  }
+
+  protected static Date getNotNull(@NotNull String tryValue, Date defaultValue) throws ParseException {
+    return tryValue.isEmpty() ? defaultValue : MyEntity.strToDate(tryValue);
+  }
+
+  @NotNull
+  @Contract("_ -> new")
+  private ControllerResponse deleteEntity(ControllerRequest request) {
+    String responseValue = "";
+    try {
+      String id = request.getParameter("id");
+      boolean result = false;
+      try (D entityDao = createEntityDao()) {
+        result = entityDao.deleteEntity(id);
+      }
+      if (result) {
+        responseValue = "{\"status\":\"ok\"}";
+      } else {
+        responseValue = "{\"error\":\"db error\"}";
+      }
+    } catch (Exception e) {
+      responseValue = "{\"error\":\"Exception in deleteEntity(): " + e + "\"}";
+    }
+    return new ControllerResponse(ResponseType.PLAIN_TEXT, responseValue);
+  }
+
+  @NotNull
+  @Contract("_, _ -> new")
+  private ControllerResponse readEntity(ControllerRequest request, boolean readAll) {
+    String responseValue = "";
+    try {
+      long id = 0;
+      if (!readAll) {
+        id = Long.parseLong(request.getParameter("id"));
+      }
+      List<E> entities = null;
+      String responseText = "";
+      try (D entityDao = createEntityDao()) {
+        if (readAll) {
+          entities = entityDao.readAll();
+          responseText = "[" +
+              entities.stream()
+                  .map(E::toString)
+                  .collect(Collectors.joining(",")) +
+              "]";
+        } else {
+          responseText = entityDao.readEntity(id).toString();
+        }
+      }
+      if (!responseText.isEmpty()) {
+        responseValue = "{" +
+            "\"status\":\"ok\"," +
+            "\"data\":" + responseText + "}";
+      } else {
+        responseValue = "{\"error\":\"db error\"}";
+      }
+    } catch (Exception e) {
+      responseValue = "{\"error\":\"Exception in readEntity(): " + e + "\"}";
+    }
+    return new ControllerResponse(ResponseType.PLAIN_TEXT, responseValue);
+  }
+
+  @NotNull
+  private ControllerResponse prepareEditForm(@NotNull ControllerRequest request) {
+    ControllerResponse controllerResponse;
+    String id = request.getParameter("id");
+    try (D entityDao = createEntityDao()) {
+      MyEntity entity = entityDao.loadAllSubEntities(entityDao.readEntity("ID", id));
+      if (entity != null) {
+        controllerResponse = new RedirectCommand().apply(request);
+        controllerResponse.setAttribute("editEntity", entity);
+        return controllerResponse;
+      }
+    } catch (Exception e) {
+      log.error("Fail get User in prepareEditForm for Entity.id(" + id + "): " + e);
+    }
+    return new ControllerResponse(ResponseType.FAIL, "");
+  }
+
+  protected ControllerResponse wrongCommand(ControllerRequest request) {
+    return new ControllerResponse(ResponseType.FAIL, "");
+  }
+
+  protected ControllerResponse unknownCommand(ControllerRequest request) {
+    return new ControllerResponse(ResponseType.FAIL, "");
+  }
+
+  public String getPath() {
+    return path;
+  }
+
+  protected boolean checkAuthority(ControllerRequest request) {
+    return true;
+  }
+
+  protected abstract E createEntityFromParameters(ControllerRequest request, long id);
+
+  protected abstract D createEntityDao() throws SQLException, DbPoolException;
+
+  protected void committedAction(D entityDao, ControllerRequest request) throws SQLException {
+  }
+
+}

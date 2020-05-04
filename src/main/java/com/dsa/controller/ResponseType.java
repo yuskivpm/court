@@ -4,5 +4,6 @@ public enum ResponseType {
   FORWARD,
   REDIRECT,
   INVALIDATE,
-  PLAIN_TEXT
+  PLAIN_TEXT,
+  FAIL
 }
