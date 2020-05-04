@@ -11,6 +11,8 @@ import java.util.function.Function;
 
 public class RedirectCommand implements Function<ControllerRequest, ControllerResponse> {
 
+  public static final String path = "redirect";
+
   @Override
   public ControllerResponse apply(@NotNull ControllerRequest request) {
     String pageName = request.getParameter("page");
