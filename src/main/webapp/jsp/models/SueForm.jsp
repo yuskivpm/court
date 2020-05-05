@@ -1,10 +1,12 @@
 <jsp:directive.page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"/>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="java.util.Date" %>
-<%@ page import="com.dsa.model.Role" %>
-<%@ page import="com.dsa.model.Lawsuit" %>
-<%@ page import="com.dsa.model.CourtInstance" %>
-<%@ page import="com.dsa.model.pure.MyEntity" %>
+<%@ page import="com.dsa.domain.user.Role" %>
+<%@ page import="com.dsa.domain.lawsuit.Lawsuit" %>
+<%@ page import="com.dsa.domain.court.CourtInstance" %>
+<%@ page import="com.dsa.domain.MyEntity" %>
+<%@ page import="com.dsa.domain.court.CourtDao" %>
+<%@ page import="com.dsa.domain.user.UserDao" %>
 
 <h1>Sue Management</h1>
 <h2>
@@ -34,7 +36,7 @@
             <th>Defendant: ${attorney}</th>
             <td>
                 <select name="defendantId">
-                    <c:set var="users" scope="page" value="<%=new com.dsa.dao.entity.UserDao()%>"/>
+                    <c:set var="users" scope="page" value="<%=new UserDao()%>"/>
                     <c:forEach var="aUser" items="${users.readAll()}">
                         <c:if test="${aUser.id != curUser.id && aUser.role == attorney }">
                             <option
@@ -55,7 +57,7 @@
             <td>
                 <c:set var="localCourt" scope="page" value="<%=CourtInstance.LOCAL%>"/>
                 <select name="courtId">
-                    <c:set var="courts" scope="page" value="<%=new com.dsa.dao.entity.CourtDao()%>"/>
+                    <c:set var="courts" scope="page" value="<%=new CourtDao()%>"/>
                     <c:forEach var="court" items="${courts.readAll()}">
                         <c:if test="${court.courtInstance == localCourt}">
                             <option

@@ -1,4 +1,4 @@
-<%@ page import="com.dsa.model.CourtInstance" %>
+<%@ page import="com.dsa.domain.court.CourtInstance" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <jsp:directive.include file="mainHeader.jsp"/>
 
@@ -50,12 +50,35 @@ ${curUser.name}, hello!
                     </button>
                 </td>
                 <td>
-                    <button
-                            type="button"
-                            onclick="deleteEntity('api/sues', ${sue.id},()=>sendGetRequest('api?command=main_Page'))"
-                    >
-                        Revoke
-                    </button>
+<%--                    <button--%>
+<%--                            type="button"--%>
+<%--                            onclick="deleteEntity('api/sues', ${sue.id},()=>sendGetRequest('api?command=main_Page'))"--%>
+<%--                    >--%>
+<%--                        Revoke--%>
+<%--                    </button>--%>
+
+                    <c:if test="${lawsuit.court.courtInstance == localCourt}">
+                        <button
+                                type="button"
+                                onclick="deleteEntity('api/sues', ${sue.id},()=>sendGetRequest('api?command=main_Page'))"
+                        >
+                            Revoke
+                        </button>
+                    </c:if>
+                    <c:if test="${lawsuit.court.courtInstance == cassationCourt || lawsuit.court.courtInstance == appealCourt}">
+                        <button
+                                type="button"
+                                onclick="deleteEntity(
+                                    'api/sues',
+                                    ${sue.id},
+                                        ()=>sendGetRequest('api?command=main_Page')
+                                        <%--,--%>
+                                        <%--'&commit=command=/sues/~method=PUT~id=${editEntity.id}~appealStatus=Appealed'--%>
+                                        )"
+                        >
+                            Revoke
+                        </button>
+                    </c:if>
                 </td>
             </tr>
         </c:if>

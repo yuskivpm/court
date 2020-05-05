@@ -1,4 +1,4 @@
-package com.dsa.model.pure;
+package com.dsa.domain;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

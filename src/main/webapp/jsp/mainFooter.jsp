@@ -9,8 +9,8 @@
             return zeroLeading(date.getDate())+'.'+zeroLeading(1+date.getMonth())+'.'+date.getFullYear();
         }
 
-        function deleteEntity(url, entityId, callback) {
-            fetchThis({url, method: 'DELETE', body: 'id=' + entityId}, data => {
+        function deleteEntity(url, entityId, callback, additionalBody = '') {
+            fetchThis({url, method: 'DELETE', body: 'id=' + entityId + additionalBody}, data => {
                 crudInformationCallback(data, callback)
             });
         }

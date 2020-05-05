@@ -1,6 +1,6 @@
-package com.dsa.model.pure;
+package com.dsa.domain.user;
 
-import com.dsa.model.Role;
+import com.dsa.domain.MyEntity;
 
 import java.util.Objects;
 

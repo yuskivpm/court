@@ -1,5 +1,5 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ page import="com.dsa.model.pure.MyEntity" %>
+<%@ page import="com.dsa.domain.MyEntity" %>
 <%@ page import="java.util.Date" %>
 <jsp:directive.include file="mainHeader.jsp"/>
 

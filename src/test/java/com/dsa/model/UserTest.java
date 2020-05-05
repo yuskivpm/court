@@ -1,5 +1,7 @@
 package com.dsa.model;
 
+import com.dsa.domain.court.Court;
+import com.dsa.domain.user.User;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.platform.runner.JUnitPlatform;

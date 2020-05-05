@@ -1,6 +1,6 @@
-package com.dsa.model.pure;
+package com.dsa.domain.court;
 
-import com.dsa.model.CourtInstance;
+import com.dsa.domain.MyEntity;
 
 import java.util.Objects;
 

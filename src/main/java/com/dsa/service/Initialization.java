@@ -6,16 +6,16 @@ import com.dsa.service.command.LoginCommand;
 import com.dsa.service.command.LogoutCommand;
 import com.dsa.service.command.MainPageCommand;
 import com.dsa.service.command.RedirectCommand;
-import com.dsa.service.crud.CourtCrud;
-import com.dsa.service.crud.LawsuitCrud;
-import com.dsa.service.crud.SueCrud;
-import com.dsa.service.crud.UserCrud;
+import com.dsa.domain.court.CourtCrud;
+import com.dsa.domain.lawsuit.LawsuitCrud;
+import com.dsa.domain.lawsuit.SueCrud;
+import com.dsa.domain.user.UserCrud;
 //import com.dsa.service.crud.*;
 
 public class Initialization {
 
   public static void initialize() throws ClassNotFoundException {
-    Class.forName("com.dsa.dao.services.DbCreator");
+    Class.forName("com.dsa.dao.service.DbCreator");
     Controller.registerExecutor(MainPageCommand.path, new MainPageCommand());
     Controller.registerExecutor(LoginCommand.path, new LoginCommand());
     Controller.registerExecutor(LogoutCommand.path, new LogoutCommand());

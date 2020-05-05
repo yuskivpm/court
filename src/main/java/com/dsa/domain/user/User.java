@@ -1,6 +1,6 @@
-package com.dsa.model;
+package com.dsa.domain.user;
 
-import com.dsa.model.pure.UserPure;
+import com.dsa.domain.court.Court;
 
 public class User extends UserPure {
 

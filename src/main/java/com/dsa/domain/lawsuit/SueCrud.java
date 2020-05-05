@@ -1,15 +1,14 @@
-package com.dsa.service.crud;
+package com.dsa.domain.lawsuit;
 
 import com.dsa.controller.ControllerRequest;
 import com.dsa.controller.ControllerResponse;
-import com.dsa.dao.entity.LawsuitDao;
-import com.dsa.dao.services.DbPoolException;
-import com.dsa.model.Role;
-import com.dsa.model.Lawsuit;
-import com.dsa.model.User;
-import com.dsa.model.pure.MyEntity;
+import com.dsa.dao.service.DbPoolException;
+import com.dsa.domain.user.Role;
+import com.dsa.domain.user.User;
+import com.dsa.domain.MyEntity;
 import com.dsa.service.command.LoginCommand;
 
+import com.dsa.service.crud.AbstractCrud;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;

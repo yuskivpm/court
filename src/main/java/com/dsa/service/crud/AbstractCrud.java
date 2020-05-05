@@ -3,9 +3,9 @@ package com.dsa.service.crud;
 import com.dsa.controller.ControllerRequest;
 import com.dsa.controller.ControllerResponse;
 import com.dsa.controller.ResponseType;
-import com.dsa.dao.entity.AbstractEntityDao;
-import com.dsa.dao.services.DbPoolException;
-import com.dsa.model.pure.MyEntity;
+import com.dsa.dao.AbstractEntityDao;
+import com.dsa.dao.service.DbPoolException;
+import com.dsa.domain.MyEntity;
 
 import com.dsa.service.command.RedirectCommand;
 import org.apache.log4j.Logger;

@@ -1,3 +1,4 @@
+<%@ page import="com.dsa.domain.court.CourtDao" %>
 <jsp:directive.page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"/>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
@@ -44,7 +45,7 @@
                 <th>Role:</th>
                 <td>
                     <select name="role">
-                    <c:forEach var="role" items="<%=com.dsa.model.Role.values()%>">
+                    <c:forEach var="role" items="<%=com.dsa.domain.user.Role.values()%>">
                         <option
                                 value="${role}"
                                 <c:if test="${editEntity.role == role}">
@@ -61,7 +62,7 @@
                 <th>Court:</th>
                 <td>
                     <select name="courtId">
-                    <c:set var="courts" scope="page" value="<%=new com.dsa.dao.entity.CourtDao()%>"/>
+                    <c:set var="courts" scope="page" value="<%=new CourtDao()%>"/>
                     <c:forEach var="court" items="${courts.readAll()}">
                         <option
                                 value="${court.id}"

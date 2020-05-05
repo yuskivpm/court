@@ -1,7 +1,13 @@
-package com.dsa.dao.services;
+package com.dsa.dao.service;
 
-import com.dsa.dao.entity.*;
-import com.dsa.model.*;
+import com.dsa.domain.court.Court;
+import com.dsa.domain.court.CourtDao;
+import com.dsa.domain.court.CourtInstance;
+import com.dsa.domain.lawsuit.Lawsuit;
+import com.dsa.domain.lawsuit.LawsuitDao;
+import com.dsa.domain.user.Role;
+import com.dsa.domain.user.User;
+import com.dsa.domain.user.UserDao;
 
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.Contract;

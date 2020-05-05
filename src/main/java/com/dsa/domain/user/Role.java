@@ -1,4 +1,4 @@
-package com.dsa.model;
+package com.dsa.domain.user;
 
 public enum Role {
   ADMIN,

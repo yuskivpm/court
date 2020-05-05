@@ -1,8 +1,8 @@
-package com.dsa.dao.entity;
+package com.dsa.domain.user;
 
-import com.dsa.dao.services.DbPoolException;
-import com.dsa.model.Role;
-import com.dsa.model.User;
+import com.dsa.dao.AbstractEntityDao;
+import com.dsa.dao.service.DbPoolException;
+import com.dsa.domain.court.CourtDao;
 
 import org.jetbrains.annotations.NotNull;
 

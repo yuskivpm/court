@@ -1,17 +1,14 @@
 package com.dsa.controller;
 
-import com.dsa.dao.services.DbPool;
+import com.dsa.dao.service.DbPool;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
-import java.util.List;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.function.BiFunction;
 
 public class Controller {
-  //  private static final Logger log = Logger.getLogger(MainServlet.class);
   public static final String METHOD = "method";
   public static final String PATH_INFO = "pathInfo";
   public static final String QUERY_STRING = "queryString";

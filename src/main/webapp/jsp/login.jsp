@@ -1,3 +1,4 @@
+<%@ page import="com.dsa.domain.user.UserDao" %>
 <jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"/>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
@@ -28,7 +29,7 @@
     ${nullPage}
 
     <p>Fast login for lazy "Hackers")))</p>
-    <c:set var="users" scope="page" value="<%=new com.dsa.dao.entity.UserDao()%>"/>
+    <c:set var="users" scope="page" value="<%=new UserDao()%>"/>
     <table>
         <tr>
             <td>Login</td>

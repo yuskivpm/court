@@ -1,8 +1,8 @@
-package com.dsa.dao.entity;
+package com.dsa.dao;
 
-import com.dsa.dao.services.DbPool;
-import com.dsa.dao.services.DbPoolException;
-import com.dsa.model.pure.MyEntity;
+import com.dsa.dao.service.DbPool;
+import com.dsa.dao.service.DbPoolException;
+import com.dsa.domain.MyEntity;
 
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.Contract;

@@ -3,10 +3,10 @@ package com.dsa.service.command;
 import com.dsa.controller.ControllerRequest;
 import com.dsa.controller.ControllerResponse;
 import com.dsa.controller.ResponseType;
-import com.dsa.dao.entity.UserDao;
-import com.dsa.dao.services.DbPoolException;
-import com.dsa.model.User;
-import com.dsa.service.LoginLogic;
+import com.dsa.domain.user.UserDao;
+import com.dsa.dao.service.DbPoolException;
+import com.dsa.domain.user.User;
+import com.dsa.controller.LoginLogic;
 import com.dsa.service.resource.ConfigManager;
 import com.dsa.service.resource.MessageManager;
 

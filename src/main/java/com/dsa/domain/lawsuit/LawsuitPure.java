@@ -1,4 +1,6 @@
-package com.dsa.model.pure;
+package com.dsa.domain.lawsuit;
+
+import com.dsa.domain.MyEntity;
 
 import java.util.Date;
 import java.util.Objects;

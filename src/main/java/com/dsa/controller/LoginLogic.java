@@ -1,8 +1,8 @@
-package com.dsa.service;
+package com.dsa.controller;
 
-import com.dsa.model.User;
-import com.dsa.dao.entity.UserDao;
-import com.dsa.dao.services.DbPoolException;
+import com.dsa.domain.user.User;
+import com.dsa.domain.user.UserDao;
+import com.dsa.dao.service.DbPoolException;
 
 import org.apache.log4j.Logger;
 

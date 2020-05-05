@@ -1,6 +1,4 @@
-package com.dsa.model;
-
-import com.dsa.model.pure.CourtPure;
+package com.dsa.domain.court;
 
 public class Court extends CourtPure {
 

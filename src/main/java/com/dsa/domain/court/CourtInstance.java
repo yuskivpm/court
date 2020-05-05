@@ -1,4 +1,4 @@
-package com.dsa.model;
+package com.dsa.domain.court;
 
 import org.jetbrains.annotations.Contract;
 

@@ -1,4 +1,4 @@
-package com.dsa.view;
+package com.dsa.view.http;
 
 import com.dsa.controller.Controller;
 import com.dsa.controller.ControllerRequest;

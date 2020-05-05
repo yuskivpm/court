@@ -1,8 +1,8 @@
 <jsp:directive.page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"/>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="java.util.Date" %>
-<%@ page import="com.dsa.model.Lawsuit" %>
-<%@ page import="com.dsa.model.pure.MyEntity" %>
+<%@ page import="com.dsa.domain.lawsuit.Lawsuit" %>
+<%@ page import="com.dsa.domain.MyEntity" %>
 
 <h1>Appeal Management</h1>
 <h2>

@@ -1,13 +1,11 @@
-package com.dsa.service.crud;
+package com.dsa.domain.user;
 
 import com.dsa.controller.ControllerRequest;
 import com.dsa.controller.ControllerResponse;
-import com.dsa.dao.entity.UserDao;
-import com.dsa.dao.services.DbPoolException;
-import com.dsa.model.Role;
-import com.dsa.model.User;
+import com.dsa.dao.service.DbPoolException;
 import com.dsa.service.command.LoginCommand;
 
+import com.dsa.service.crud.AbstractCrud;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;

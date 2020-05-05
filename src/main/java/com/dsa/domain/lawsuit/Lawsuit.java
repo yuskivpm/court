@@ -1,6 +1,8 @@
-package com.dsa.model;
+package com.dsa.domain.lawsuit;
 
-import com.dsa.model.pure.LawsuitPure;
+import com.dsa.domain.court.Court;
+import com.dsa.domain.user.User;
+import com.dsa.domain.lawsuit.LawsuitPure;
 
 import java.util.Date;
 
