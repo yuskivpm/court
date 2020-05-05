@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import java.sql.SQLException;
 
 public class CourtCrud extends AbstractCrud<Court, CourtDao> {
-  public static final String path = "/courts";
+  public static final String path = "/courts/";
 
   public CourtCrud() {
     super(path);

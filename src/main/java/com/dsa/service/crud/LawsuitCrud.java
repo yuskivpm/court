@@ -7,7 +7,7 @@ import com.dsa.model.User;
 import com.dsa.service.command.LoginCommand;
 
 public class LawsuitCrud extends SueCrud {
-  public static final String path = "/lawsuits";
+  public static final String path = "/lawsuits/";
   private User judge;
 
   public LawsuitCrud() {

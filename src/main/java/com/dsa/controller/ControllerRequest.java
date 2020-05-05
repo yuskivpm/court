@@ -54,4 +54,16 @@ public class ControllerRequest {
     sessionAttributes.put(key, value);
   }
 
+  public boolean loadNextCommitParameters(@NotNull String[] commit){
+    boolean result = false;
+    params.clear();
+    for (String commitCommand : commit){
+      if (!commitCommand.isEmpty()){
+        setParameter(commitCommand);
+        result = true;
+      }
+    }
+    return result;
+  }
+
 }

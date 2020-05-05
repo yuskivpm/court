@@ -15,7 +15,7 @@ public class HttpToControllerConverter {
 
   private static void getMainRequestCommonData(@NotNull HttpServletRequest request, @NotNull ControllerRequest controllerRequest){
     controllerRequest.setParameter(Controller.METHOD, request.getMethod());
-    controllerRequest.setParameter(Controller.PATH_INFO, request.getPathInfo());
+    controllerRequest.setParameter(Controller.PATH_INFO, request.getPathInfo() + "/");
     controllerRequest.setParameter(Controller.QUERY_STRING, request.getQueryString());
     Map<String, String[]> params = request.getParameterMap();
     params.forEach((name, values) -> {

@@ -3,7 +3,6 @@ package com.dsa.view;
 //import org.apache.log4j.Logger;
 
 import com.dsa.controller.Controller;
-import com.dsa.controller.ControllerRequest;
 import com.dsa.controller.ControllerResponse;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,13 +10,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.servlet.annotation.WebServlet;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Enumeration;
-import java.util.Map;
 
 @WebServlet({"/api/*"})
 //@WebServlet(name="MainServlet", displayName="Main servlet", urlPatterns={"/", "/index", "/controller"})
@@ -54,8 +48,7 @@ public class MainServlet extends HttpServlet {
         getServletContext().getRequestDispatcher(controllerResponse.getResponseValue()).forward(request, response);
         break;
       case PLAIN_TEXT:
-        PrintWriter out = response.getWriter();
-        out.print(controllerResponse.getResponseValue());
+        response.getWriter().print(controllerResponse.getResponseValue());
         break;
       case INVALIDATE:
         request.setAttribute("user", "");

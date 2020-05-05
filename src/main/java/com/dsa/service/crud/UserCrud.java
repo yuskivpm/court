@@ -14,7 +14,7 @@ import java.sql.SQLException;
 
 public class UserCrud extends AbstractCrud<User, UserDao> {
 
-  public static final String path = "/users";
+  public static final String path = "/users/";
 
   public UserCrud() {
     super(path);

@@ -18,7 +18,7 @@ import java.util.Date;
 
 public class SueCrud extends AbstractCrud<Lawsuit, LawsuitDao> {
 
-  public static final String path = "/sues";
+  public static final String path = "/sues/";
 
   public SueCrud() {
     super(path);
@@ -77,12 +77,5 @@ public class SueCrud extends AbstractCrud<Lawsuit, LawsuitDao> {
   protected LawsuitDao createEntityDao() throws SQLException, DbPoolException {
     return new LawsuitDao();
   }
-
-//  @Override
-//  protected void committedAction(@NotNull LawsuitDao lawsuitDao, @NotNull ControllerRequest request) throws SQLException {
-//    Lawsuit lawsuit = lawsuitDao.readEntity(Long.parseLong(request.getParameter("appealedLawsuitId")));
-//    lawsuit.setAppealStatus("appealed");
-//    lawsuitDao.updateEntity(lawsuit);
-//  }
 
 }

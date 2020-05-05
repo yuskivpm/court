@@ -30,21 +30,17 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
 
   @Override
   public ControllerResponse apply(@NotNull ControllerRequest request, ControllerResponse controllerResponse) {
-//    ControllerResponse controllerResponse = new ControllerResponse();
     if (checkAuthority(request, controllerResponse)) {
       CrudEnum ce = CrudParser.getCrudOperation(request, getPath());
       switch (ce) {
         case CREATE:
         case UPDATE:
           return createOrUpdateEntity(request, controllerResponse, ce == CrudEnum.CREATE);
-//          return CrudResult.EXECUTED;
         case READ:
         case READ_ALL:
           return readEntity(request, controllerResponse, ce == CrudEnum.READ_ALL);
-//          return CrudResult.EXECUTED;
         case DELETE:
           return deleteEntity(request, controllerResponse);
-//          return CrudResult.EXECUTED;
         case PREPARE_UPDATE_FORM:
           return prepareEditForm(request, controllerResponse);
         case WRONG:
@@ -59,10 +55,9 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
   }
 
   @NotNull
-  @Contract("_, _ -> new")
+  @Contract("_, _, _ -> param2")
   private ControllerResponse createOrUpdateEntity(ControllerRequest request, ControllerResponse controllerResponse, boolean create) {
     String responseValue = "";
-//    boolean needCommit = false;
     try {
       long id = 0;
       if (!create) {
@@ -70,24 +65,9 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
       }
       E entity = createEntityFromParameters(request, id);
       if (entity != null) {
-        boolean result = false;
+        boolean result;
         try (D entityDao = createEntityDao()) {
-//          try {
-//            needCommit = !request.getParameter("commit").isEmpty();
-//            if (needCommit) {
-//              entityDao.startCommit();
-//            }
             result = create ? entityDao.createEntity(entity) : entityDao.updateEntity(entity);
-//            if (needCommit) {
-//              committedAction(entityDao, request);
-//              entityDao.endCommit();
-//            }
-//          } catch (SQLException e) {
-//            if (needCommit) {
-//              entityDao.rollback();
-//            }
-//            throw e;
-//          }
         }
         if (result) {
           responseValue = "{\"status\":\"ok\"}";
@@ -119,12 +99,12 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
   }
 
   @NotNull
-  @Contract("_ -> new")
+  @Contract("_, _ -> param2")
   private ControllerResponse deleteEntity(ControllerRequest request, ControllerResponse controllerResponse) {
     String responseValue = "";
     try {
       String id = request.getParameter("id");
-      boolean result = false;
+      boolean result;
       try (D entityDao = createEntityDao()) {
         result = entityDao.deleteEntity(id);
       }
@@ -142,7 +122,7 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
   }
 
   @NotNull
-  @Contract("_, _ -> new")
+  @Contract("_, _, _ -> param2")
   private ControllerResponse readEntity(ControllerRequest request, ControllerResponse controllerResponse, boolean readAll) {
     String responseValue = "";
     try {
@@ -180,7 +160,7 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
   }
 
   @NotNull
-  private ControllerResponse prepareEditForm(@NotNull ControllerRequest request, ControllerResponse controllerResponse) {
+  private ControllerResponse prepareEditForm(@NotNull ControllerRequest request, @NotNull ControllerResponse controllerResponse) {
     String id = request.getParameter("id");
     try (D entityDao = createEntityDao()) {
       MyEntity entity = entityDao.loadAllSubEntities(entityDao.readEntity("ID", id));
@@ -196,12 +176,12 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
     return controllerResponse;
   }
 
-  protected ControllerResponse wrongCommand(ControllerRequest request, ControllerResponse controllerResponse) {
+  protected ControllerResponse wrongCommand(@NotNull ControllerRequest request, @NotNull ControllerResponse controllerResponse) {
     controllerResponse.setResponseType(ResponseType.FAIL);
     return controllerResponse;
   }
 
-  protected ControllerResponse unknownCommand(ControllerRequest request, ControllerResponse controllerResponse) {
+  protected ControllerResponse unknownCommand(@NotNull ControllerRequest request, @NotNull ControllerResponse controllerResponse) {
     controllerResponse.setResponseType(ResponseType.FAIL);
     return controllerResponse;
   }
@@ -217,8 +197,5 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
   protected abstract E createEntityFromParameters(ControllerRequest request, long id);
 
   protected abstract D createEntityDao() throws SQLException, DbPoolException;
-
-//  protected void committedAction(D entityDao, ControllerRequest request) throws SQLException {
-//  }
 
 }
