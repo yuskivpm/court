@@ -1,6 +1,7 @@
 package com.dsa.service.crud;
 
 import com.dsa.controller.ControllerRequest;
+import com.dsa.controller.ControllerResponse;
 import com.dsa.dao.entity.UserDao;
 import com.dsa.dao.services.DbPoolException;
 import com.dsa.model.Role;
@@ -20,7 +21,7 @@ public class UserCrud extends AbstractCrud<User, UserDao> {
   }
 
   @Override
-  protected boolean checkAuthority(ControllerRequest request) {
+  protected boolean checkAuthority(ControllerRequest request, ControllerResponse controllerResponse) {
     User user = LoginCommand.getSessionUser(request);
     return user != null && user.getRole() == Role.ADMIN;
   }

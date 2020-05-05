@@ -1,6 +1,7 @@
 package com.dsa.service.crud;
 
 import com.dsa.controller.ControllerRequest;
+import com.dsa.controller.ControllerResponse;
 import com.dsa.dao.entity.LawsuitDao;
 import com.dsa.dao.services.DbPoolException;
 import com.dsa.model.Role;
@@ -28,7 +29,7 @@ public class SueCrud extends AbstractCrud<Lawsuit, LawsuitDao> {
   }
 
   @Override
-  protected boolean checkAuthority(ControllerRequest request) {
+  protected boolean checkAuthority(ControllerRequest request, ControllerResponse controllerResponse) {
     User user = LoginCommand.getSessionUser(request);
     return user != null && (user.getRole() == Role.ATTORNEY);
   }
@@ -77,11 +78,11 @@ public class SueCrud extends AbstractCrud<Lawsuit, LawsuitDao> {
     return new LawsuitDao();
   }
 
-  @Override
-  protected void committedAction(@NotNull LawsuitDao lawsuitDao, @NotNull ControllerRequest request) throws SQLException {
-    Lawsuit lawsuit = lawsuitDao.readEntity(Long.parseLong(request.getParameter("appealedLawsuitId")));
-    lawsuit.setAppealStatus("appealed");
-    lawsuitDao.updateEntity(lawsuit);
-  }
+//  @Override
+//  protected void committedAction(@NotNull LawsuitDao lawsuitDao, @NotNull ControllerRequest request) throws SQLException {
+//    Lawsuit lawsuit = lawsuitDao.readEntity(Long.parseLong(request.getParameter("appealedLawsuitId")));
+//    lawsuit.setAppealStatus("appealed");
+//    lawsuitDao.updateEntity(lawsuit);
+//  }
 
 }

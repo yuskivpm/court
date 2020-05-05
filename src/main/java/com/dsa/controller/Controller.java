@@ -1,16 +1,14 @@
 package com.dsa.controller;
 
 import com.dsa.dao.services.DbPool;
-import com.dsa.dao.services.DbPoolException;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
 public class Controller {
 //  private static final Logger log = Logger.getLogger(MainServlet.class);
@@ -24,7 +22,7 @@ public class Controller {
   public static final String COMMIT_COMMAND_SEPARATOR = "~"; // ~ -> &
 //  commit= method=GET ~ id=1 ^ method=POST ~ id=2
 
-  private static final Map<String, Function<ControllerRequest, ControllerResponse>> executors = new HashMap<>();
+  private static final Map<String, BiFunction<ControllerRequest, ControllerResponse, ControllerResponse>> executors = new HashMap<>();
 
   @NotNull
   private static List<ControllerRequest> fillRequestList(@NotNull ControllerRequest mainRequest){
@@ -33,7 +31,7 @@ public class Controller {
     String commit = mainRequest.getParameter(COMMIT_QUERY);
     if (!commit.isEmpty()){
       for (String singleCommitCommands : commit.split(COMMIT_SEPARATOR)){
-        ControllerRequest nextRequest = new ControllerRequest();
+        ControllerRequest nextRequest = new ControllerRequest(mainRequest);
         requestList.add(nextRequest);
         for (String commitCommand : singleCommitCommands.split(COMMIT_COMMAND_SEPARATOR)){
           nextRequest.setParameter(commitCommand);
@@ -58,7 +56,7 @@ public class Controller {
           }
           for (String entityPath : executors.keySet()) {
             if (command.startsWith(entityPath)) {
-              controllerResponse = executors.get(entityPath).apply(request);
+              controllerResponse = executors.get(entityPath).apply(request, controllerResponse);
               break;
             }
           }
@@ -77,7 +75,7 @@ public class Controller {
     return controllerResponse;
   }
 
-  public static void registerExecutor(String path, Function<ControllerRequest, ControllerResponse> executor){
+  public static void registerExecutor(String path, BiFunction<ControllerRequest, ControllerResponse, ControllerResponse> executor){
     executors.put(path, executor);
   }
 }

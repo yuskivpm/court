@@ -14,9 +14,9 @@ import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
-public class LoginCommand implements Function<ControllerRequest, ControllerResponse> {
+public class LoginCommand implements BiFunction<ControllerRequest, ControllerResponse, ControllerResponse> {
 
   public static final String path = "login";
   private static final Logger log = Logger.getLogger(LoginCommand.class);
@@ -25,18 +25,16 @@ public class LoginCommand implements Function<ControllerRequest, ControllerRespo
   private static final String USER_SESSION_ID = "user_id";
 
   @Override
-  public ControllerResponse apply(@NotNull ControllerRequest request) {
+  public ControllerResponse apply(@NotNull ControllerRequest request, ControllerResponse controllerResponse) {
     String login = request.getParameter(PARAM_NAME_LOGIN);
     String password = request.getParameter(PARAM_NAME_PASSWORD);
     User user = LoginLogic.checkLogin(login, password);
-    ControllerResponse controllerResponse;
     if (user != null) {
-      controllerResponse = new MainPageCommand().apply(request, user);
+      controllerResponse = new MainPageCommand().apply(request, controllerResponse, user);
       LoginCommand.startUserSession(controllerResponse, user);
       controllerResponse.setAttribute("curUser", user);
       return controllerResponse;
     } else {
-      controllerResponse = new ControllerResponse();
       controllerResponse.setAttribute("errorFailLoginPassMessage", MessageManager.getProperty("message.loginError"));
       controllerResponse.setResponseValue(ConfigManager.getProperty("path.page.login"));
       controllerResponse.setResponseType(ResponseType.FORWARD);

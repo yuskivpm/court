@@ -2,6 +2,10 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <jsp:directive.include file="mainHeader.jsp"/>
 
+<c:set var="localCourt" scope="page" value="<%=CourtInstance.LOCAL%>"/>
+<c:set var="appealCourt" scope="page" value="<%=CourtInstance.APPEAL%>"/>
+<c:set var="cassationCourt" scope="page" value="<%=CourtInstance.CASSATION%>"/>
+
 <h3>Welcome attorney</h3>
 <hr/>
 ${curUser.name}, hello!
@@ -60,9 +64,6 @@ ${curUser.name}, hello!
 </table>
 
 <hr/>
-
-<c:set var="localCourt" scope="page" value="<%=CourtInstance.LOCAL%>"/>
-<c:set var="appealCourt" scope="page" value="<%=CourtInstance.APPEAL%>"/>
 
 <h1>Lawsuits as suitor</h1>
 <table>

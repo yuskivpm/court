@@ -7,14 +7,14 @@ import com.dsa.service.resource.ConfigManager;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
-public class RedirectCommand implements Function<ControllerRequest, ControllerResponse> {
+public class RedirectCommand implements BiFunction<ControllerRequest, ControllerResponse, ControllerResponse> {
 
   public static final String path = "redirect";
 
   @Override
-  public ControllerResponse apply(@NotNull ControllerRequest request) {
+  public ControllerResponse apply(@NotNull ControllerRequest request, @NotNull ControllerResponse controllerResponse) {
     String pageName = request.getParameter("page");
     String realPageName;
     try {
@@ -22,7 +22,9 @@ public class RedirectCommand implements Function<ControllerRequest, ControllerRe
     } catch (Exception e) {
       realPageName = pageName;
     }
-    return new ControllerResponse(ResponseType.FORWARD, realPageName);
+    controllerResponse.setResponseType(ResponseType.FORWARD);
+    controllerResponse.setResponseValue(realPageName);
+    return controllerResponse;
   }
 
 }

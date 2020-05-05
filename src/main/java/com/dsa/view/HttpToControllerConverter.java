@@ -46,7 +46,7 @@ public class HttpToControllerConverter {
       if (enumerator != null){
         while (enumerator.hasMoreElements()){
           String key = enumerator.nextElement();
-          controllerRequest.setSessionAttributes(key, session.getAttribute(key));
+          controllerRequest.setSessionAttribute(key, session.getAttribute(key));
         }
       }
     }

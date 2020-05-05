@@ -1,7 +1,6 @@
 <jsp:directive.page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"/>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="java.util.Date" %>
-<%@ page import="com.dsa.model.Role" %>
 <%@ page import="com.dsa.model.Lawsuit" %>
 <%@ page import="com.dsa.model.pure.MyEntity" %>
 
@@ -74,10 +73,16 @@
             <td colspan="2" align="center">
                 <button
                         type="button"
-                        onclick="createOrUpdateEntity('appealForm','api/sues?commit=1&appealedLawsuitId=${editEntity.id}',()=>sendGetRequest('api?command=main_Page'))"
+                        onclick="createOrUpdateEntity('appealForm','api/sues?commit=command=/sues~method=PUT~id=${editEntity.id}~appealStatus=Appealed',()=>sendGetRequest('api?command=main_Page'))"
                 >
                     Save
                 </button>
+<%--                <button--%>
+<%--                        type="button"--%>
+<%--                        onclick="createOrUpdateEntity('appealForm','api/sues?commit=1&appealedLawsuitId=${editEntity.id}',()=>sendGetRequest('api?command=main_Page'))"--%>
+<%--                >--%>
+<%--                    Save--%>
+<%--                </button>--%>
             </td>
         </tr>
     </table>

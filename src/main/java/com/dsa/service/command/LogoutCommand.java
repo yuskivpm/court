@@ -7,18 +7,17 @@ import com.dsa.service.resource.ConfigManager;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
-public class LogoutCommand implements Function<ControllerRequest, ControllerResponse> {
+public class LogoutCommand implements BiFunction<ControllerRequest, ControllerResponse, ControllerResponse> {
 
   public static final String path = "logout";
 
   @Override
-  public ControllerResponse apply(@NotNull ControllerRequest request) {
-//    ControllerResponse controllerResponse = ;
-//    request.setAttribute("user", "");
-//    request.getSession().invalidate();
-    return new ControllerResponse(ResponseType.INVALIDATE, ConfigManager.getProperty("path.page.index"));
+  public ControllerResponse apply(@NotNull ControllerRequest request, @NotNull ControllerResponse controllerResponse) {
+    controllerResponse.setResponseType(ResponseType.INVALIDATE);
+    controllerResponse.setResponseValue(ConfigManager.getProperty("path.page.index"));
+    return controllerResponse;
   }
 
 }

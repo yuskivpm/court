@@ -12,16 +12,14 @@ import org.apache.log4j.Logger;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
 import java.sql.SQLException;
-import java.io.PrintWriter;
 import java.util.Date;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
-public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityDao> implements Function<ControllerRequest, ControllerResponse> {
+public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityDao> implements BiFunction<ControllerRequest, ControllerResponse, ControllerResponse> {
   private static final Logger log = Logger.getLogger(AbstractCrud.class);
   protected String path = "";
 
@@ -31,39 +29,40 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
   }
 
   @Override
-  public ControllerResponse apply(@NotNull ControllerRequest request) {
+  public ControllerResponse apply(@NotNull ControllerRequest request, ControllerResponse controllerResponse) {
 //    ControllerResponse controllerResponse = new ControllerResponse();
-    if (checkAuthority(request)) {
+    if (checkAuthority(request, controllerResponse)) {
       CrudEnum ce = CrudParser.getCrudOperation(request, getPath());
       switch (ce) {
         case CREATE:
         case UPDATE:
-          return createOrUpdateEntity(request, ce == CrudEnum.CREATE);
+          return createOrUpdateEntity(request, controllerResponse, ce == CrudEnum.CREATE);
 //          return CrudResult.EXECUTED;
         case READ:
         case READ_ALL:
-          return readEntity(request, ce == CrudEnum.READ_ALL);
+          return readEntity(request, controllerResponse, ce == CrudEnum.READ_ALL);
 //          return CrudResult.EXECUTED;
         case DELETE:
-          return deleteEntity(request);
+          return deleteEntity(request, controllerResponse);
 //          return CrudResult.EXECUTED;
         case PREPARE_UPDATE_FORM:
-          return prepareEditForm(request);
+          return prepareEditForm(request, controllerResponse);
         case WRONG:
-          return wrongCommand(request);
+          return wrongCommand(request, controllerResponse);
         case UNKNOWN:
-          return unknownCommand(request);
+          return unknownCommand(request, controllerResponse);
         default: //skip
       }
     }
-    return new ControllerResponse(ResponseType.FAIL, "");
+    controllerResponse.setResponseType(ResponseType.FAIL);
+    return controllerResponse;
   }
 
   @NotNull
   @Contract("_, _ -> new")
-  private ControllerResponse createOrUpdateEntity(ControllerRequest request, boolean create) {
+  private ControllerResponse createOrUpdateEntity(ControllerRequest request, ControllerResponse controllerResponse, boolean create) {
     String responseValue = "";
-    boolean needCommit = false;
+//    boolean needCommit = false;
     try {
       long id = 0;
       if (!create) {
@@ -73,22 +72,22 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
       if (entity != null) {
         boolean result = false;
         try (D entityDao = createEntityDao()) {
-          try {
-            needCommit = !request.getParameter("commit").isEmpty();
-            if (needCommit) {
-              entityDao.startCommit();
-            }
+//          try {
+//            needCommit = !request.getParameter("commit").isEmpty();
+//            if (needCommit) {
+//              entityDao.startCommit();
+//            }
             result = create ? entityDao.createEntity(entity) : entityDao.updateEntity(entity);
-            if (needCommit) {
-              committedAction(entityDao, request);
-              entityDao.endCommit();
-            }
-          } catch (SQLException e) {
-            if (needCommit) {
-              entityDao.rollback();
-            }
-            throw e;
-          }
+//            if (needCommit) {
+//              committedAction(entityDao, request);
+//              entityDao.endCommit();
+//            }
+//          } catch (SQLException e) {
+//            if (needCommit) {
+//              entityDao.rollback();
+//            }
+//            throw e;
+//          }
         }
         if (result) {
           responseValue = "{\"status\":\"ok\"}";
@@ -101,7 +100,9 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
     } catch (Exception e) {
       responseValue = "{\"error\":\"Exception in createOrUpdateEntity(): " + e + "\"}";
     }
-    return new ControllerResponse(ResponseType.PLAIN_TEXT, responseValue);
+    controllerResponse.setResponseType(ResponseType.PLAIN_TEXT);
+    controllerResponse.setResponseValue(responseValue);
+    return controllerResponse;
   }
 
   @Contract(pure = true)
@@ -119,7 +120,7 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
 
   @NotNull
   @Contract("_ -> new")
-  private ControllerResponse deleteEntity(ControllerRequest request) {
+  private ControllerResponse deleteEntity(ControllerRequest request, ControllerResponse controllerResponse) {
     String responseValue = "";
     try {
       String id = request.getParameter("id");
@@ -135,12 +136,14 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
     } catch (Exception e) {
       responseValue = "{\"error\":\"Exception in deleteEntity(): " + e + "\"}";
     }
-    return new ControllerResponse(ResponseType.PLAIN_TEXT, responseValue);
+    controllerResponse.setResponseType(ResponseType.PLAIN_TEXT);
+    controllerResponse.setResponseValue(responseValue);
+    return controllerResponse;
   }
 
   @NotNull
   @Contract("_, _ -> new")
-  private ControllerResponse readEntity(ControllerRequest request, boolean readAll) {
+  private ControllerResponse readEntity(ControllerRequest request, ControllerResponse controllerResponse, boolean readAll) {
     String responseValue = "";
     try {
       long id = 0;
@@ -171,39 +174,43 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
     } catch (Exception e) {
       responseValue = "{\"error\":\"Exception in readEntity(): " + e + "\"}";
     }
-    return new ControllerResponse(ResponseType.PLAIN_TEXT, responseValue);
+    controllerResponse.setResponseType(ResponseType.PLAIN_TEXT);
+    controllerResponse.setResponseValue(responseValue);
+    return controllerResponse;
   }
 
   @NotNull
-  private ControllerResponse prepareEditForm(@NotNull ControllerRequest request) {
-    ControllerResponse controllerResponse;
+  private ControllerResponse prepareEditForm(@NotNull ControllerRequest request, ControllerResponse controllerResponse) {
     String id = request.getParameter("id");
     try (D entityDao = createEntityDao()) {
       MyEntity entity = entityDao.loadAllSubEntities(entityDao.readEntity("ID", id));
       if (entity != null) {
-        controllerResponse = new RedirectCommand().apply(request);
+        controllerResponse = new RedirectCommand().apply(request, controllerResponse);
         controllerResponse.setAttribute("editEntity", entity);
         return controllerResponse;
       }
     } catch (Exception e) {
       log.error("Fail get User in prepareEditForm for Entity.id(" + id + "): " + e);
     }
-    return new ControllerResponse(ResponseType.FAIL, "");
+    controllerResponse.setResponseType(ResponseType.FAIL);
+    return controllerResponse;
   }
 
-  protected ControllerResponse wrongCommand(ControllerRequest request) {
-    return new ControllerResponse(ResponseType.FAIL, "");
+  protected ControllerResponse wrongCommand(ControllerRequest request, ControllerResponse controllerResponse) {
+    controllerResponse.setResponseType(ResponseType.FAIL);
+    return controllerResponse;
   }
 
-  protected ControllerResponse unknownCommand(ControllerRequest request) {
-    return new ControllerResponse(ResponseType.FAIL, "");
+  protected ControllerResponse unknownCommand(ControllerRequest request, ControllerResponse controllerResponse) {
+    controllerResponse.setResponseType(ResponseType.FAIL);
+    return controllerResponse;
   }
 
   public String getPath() {
     return path;
   }
 
-  protected boolean checkAuthority(ControllerRequest request) {
+  protected boolean checkAuthority(ControllerRequest request, ControllerResponse controllerResponse) {
     return true;
   }
 
@@ -211,7 +218,7 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
 
   protected abstract D createEntityDao() throws SQLException, DbPoolException;
 
-  protected void committedAction(D entityDao, ControllerRequest request) throws SQLException {
-  }
+//  protected void committedAction(D entityDao, ControllerRequest request) throws SQLException {
+//  }
 
 }

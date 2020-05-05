@@ -1,5 +1,4 @@
 package com.dsa.service.command;
-// todo: REWRITE ALL!!!
 
 import com.dsa.controller.ControllerRequest;
 import com.dsa.controller.ControllerResponse;
@@ -16,24 +15,22 @@ import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
-public class MainPageCommand implements Function<ControllerRequest, ControllerResponse> {
+public class MainPageCommand implements BiFunction<ControllerRequest, ControllerResponse, ControllerResponse> {
 
   private static final Logger log = Logger.getLogger(MainPageCommand.class);
   public static final String path = "main_page";
 
   @Override
-  public ControllerResponse apply(@NotNull ControllerRequest request) {
+  public ControllerResponse apply(@NotNull ControllerRequest request, ControllerResponse controllerResponse) {
     User user = LoginCommand.getSessionUser(request);
-    return user == null ? new EmptyCommand().apply(request) : apply(request, user);
+    return user == null ? new EmptyCommand().apply(request, controllerResponse) : apply(request, controllerResponse, user);
   }
 
-  public ControllerResponse apply(@NotNull ControllerRequest request, User user) {
-    ControllerResponse controllerResponse = new ControllerResponse(
-        ResponseType.FORWARD,
-        MainPageCommand.getMainPageForUser(user)
-    );
+  public ControllerResponse apply(@NotNull ControllerRequest request, @NotNull ControllerResponse controllerResponse, User user) {
+    controllerResponse.setResponseType(ResponseType.FORWARD);
+    controllerResponse.setResponseValue(MainPageCommand.getMainPageForUser(user));
     MainPageCommand.initializeJsp(user, request, controllerResponse);
     return controllerResponse;
   }

@@ -10,6 +10,14 @@ public class ControllerRequest {
   private Map<String, String> params = new HashMap<>();
   private Map<String, Object> sessionAttributes = new HashMap<>();
 
+  public ControllerRequest(){
+    super();
+  }
+
+  public ControllerRequest(ControllerRequest controllerRequest){
+    cloneSession(controllerRequest);
+  }
+
   public String getParameter(String paramName){
     String value = params.get(paramName);
     return value == null ? "" : value;
@@ -34,11 +42,15 @@ public class ControllerRequest {
     }
   }
 
+  private void cloneSession(@NotNull ControllerRequest controllerRequest){
+    sessionAttributes.putAll(controllerRequest.sessionAttributes);
+  }
+
   public Object getSessionAttribute(String key){
     return sessionAttributes.get(key);
   }
 
-  public void setSessionAttributes(String key, Object value){
+  public void setSessionAttribute(String key, Object value){
     sessionAttributes.put(key, value);
   }
 

@@ -5,16 +5,14 @@ import com.dsa.controller.ControllerResponse;
 import com.dsa.controller.ResponseType;
 import com.dsa.service.resource.ConfigManager;
 
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
-public class EmptyCommand implements Function<ControllerRequest, ControllerResponse> {
+public class EmptyCommand implements BiFunction<ControllerRequest, ControllerResponse, ControllerResponse> {
 
   @Override
-  public ControllerResponse apply(ControllerRequest request) {
-    ControllerResponse controllerResponse = new ControllerResponse(
-        ResponseType.FORWARD,
-        ConfigManager.getProperty("path.page.login")
-    );
+  public ControllerResponse apply(ControllerRequest request, ControllerResponse controllerResponse) {
+    controllerResponse.setResponseType(ResponseType.FORWARD);
+    controllerResponse.setResponseValue(ConfigManager.getProperty("path.page.login"));
     return controllerResponse;
   }
 
