@@ -10,20 +10,20 @@ public class ControllerRequest {
   private Map<String, String> params = new HashMap<>();
   private Map<String, Object> sessionAttributes = new HashMap<>();
 
-  public ControllerRequest(){
+  public ControllerRequest() {
     super();
   }
 
-  public ControllerRequest(ControllerRequest controllerRequest){
+  public ControllerRequest(ControllerRequest controllerRequest) {
     cloneSession(controllerRequest);
   }
 
-  public String getParameter(String paramName){
+  public String getParameter(String paramName) {
     String value = params.get(paramName);
     return value == null ? "" : value;
   }
 
-  public void setParameter(String paramName, String paramValue){
+  public void setParameter(String paramName, String paramValue) {
     String value;
     try {
       value = new String(paramValue.getBytes(DEFAULT_REQUEST_CHARSET), "UTF-8");
@@ -33,7 +33,7 @@ public class ControllerRequest {
     params.put(paramName, value);
   }
 
-  public void setParameter(@NotNull String command){
+  public void setParameter(@NotNull String command) {
     String[] arr = command.split("=");
     if (arr.length == 1) {
       setParameter(command, "");
@@ -42,23 +42,23 @@ public class ControllerRequest {
     }
   }
 
-  private void cloneSession(@NotNull ControllerRequest controllerRequest){
+  private void cloneSession(@NotNull ControllerRequest controllerRequest) {
     sessionAttributes.putAll(controllerRequest.sessionAttributes);
   }
 
-  public Object getSessionAttribute(String key){
+  public Object getSessionAttribute(String key) {
     return sessionAttributes.get(key);
   }
 
-  public void setSessionAttribute(String key, Object value){
+  public void setSessionAttribute(String key, Object value) {
     sessionAttributes.put(key, value);
   }
 
-  public boolean loadNextCommitParameters(@NotNull String[] commit){
+  public boolean loadNextCommitParameters(@NotNull String[] commit) {
     boolean result = false;
     params.clear();
-    for (String commitCommand : commit){
-      if (!commitCommand.isEmpty()){
+    for (String commitCommand : commit) {
+      if (!commitCommand.isEmpty()) {
         setParameter(commitCommand);
         result = true;
       }

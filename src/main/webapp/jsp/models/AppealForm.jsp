@@ -13,6 +13,7 @@
 
 <form id="appealForm">
     <input type="text" name="suitorId" hidden value="${curUser.id}"/>
+    <input type="hidden" name="appealedLawsuitId" value="${editEntity.id}"/>
     <table border="1" cellpadding="5">
         <caption>
             <h2>
@@ -73,7 +74,9 @@
             <td colspan="2" align="center">
                 <button
                         type="button"
-                        onclick="createOrUpdateEntity('appealForm','api/sues?commit=command=/sues/~method=PUT~id=${editEntity.id}~appealStatus=Appealed',()=>sendGetRequest('api?command=main_Page'))"
+                        onclick="createOrUpdateEntity('appealForm','api/sues?'+
+                                'commit=command@/sues/~method@PUT~id@${editEntity.id}~appealStatus@Appealed',
+                                ()=>sendGetRequest('api?command=main_Page'))"
                 >
                     Save
                 </button>

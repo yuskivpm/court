@@ -1,5 +1,4 @@
 package com.dsa.service;
-// todo: REWRITE ALL!!!
 
 import com.dsa.controller.Controller;
 import com.dsa.service.command.LoginCommand;
@@ -10,7 +9,6 @@ import com.dsa.domain.court.CourtCrud;
 import com.dsa.domain.lawsuit.LawsuitCrud;
 import com.dsa.domain.lawsuit.SueCrud;
 import com.dsa.domain.user.UserCrud;
-//import com.dsa.service.crud.*;
 
 public class Initialization {
 
@@ -24,7 +22,6 @@ public class Initialization {
     Controller.registerExecutor(UserCrud.path, new UserCrud());
     Controller.registerExecutor(LawsuitCrud.path, new LawsuitCrud());
     Controller.registerExecutor(SueCrud.path, new SueCrud());
-//    todo: add ALL CrudExecutor's files here
   }
 
 }

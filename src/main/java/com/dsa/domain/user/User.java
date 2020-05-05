@@ -2,7 +2,7 @@ package com.dsa.domain.user;
 
 import com.dsa.domain.court.Court;
 
-public class User extends UserPure {
+public class User extends UserEntity {
 
   private Court court;
 

@@ -71,6 +71,7 @@ ${curUser.name}, hello!
         <th>verdictDate</th>
         <th>verdictText</th>
         <th>Appeal text</th>
+        <th>appealedLawsuitId</th>
         <th>executionDate</th>
         <th>actions</th>
     </tr>
@@ -96,6 +97,7 @@ ${curUser.name}, hello!
             </td>
             <td>${lawsuit.verdictText}</td>
             <td>${lawsuit.appealStatus}</td>
+            <td>${lawsuit.appealedLawsuitId}</td>
             <td>
                 <fmt:formatDate pattern="dd.MM.yyyy" value="${lawsuit.executionDate}"/>
             </td>
@@ -103,10 +105,10 @@ ${curUser.name}, hello!
                 <c:if test="${lawsuit.executionDate != null}">
                     Archived
                 </c:if>
-                <c:if test="${lawsuit.appealStatus != null}">
+                <c:if test="${lawsuit.appealStatus != null && lawsuit.appealStatus != ''}">
                     Appealed
                 </c:if>
-                <c:if test="${lawsuit.executionDate == null && lawsuit.appealStatus == null}">
+                <c:if test="${lawsuit.executionDate == null && (lawsuit.appealStatus == null || lawsuit.appealStatus == '')}">
                     <c:if test="${lawsuit.verdictDate == null}">
                         <button
                                 type="button"

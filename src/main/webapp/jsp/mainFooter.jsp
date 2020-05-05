@@ -1,72 +1,72 @@
-    </div>
+</div>
 
-    <script>
-        function zeroLeading(num){
-            return num<10?'0'+num:num;
+<script>
+    function zeroLeading(num) {
+        return num < 10 ? '0' + num : num;
+    }
+
+    function dateToStr(date) {
+        return zeroLeading(date.getDate()) + '.' + zeroLeading(1 + date.getMonth()) + '.' + date.getFullYear();
+    }
+
+    function deleteEntity(url, entityId, callback, additionalBody = '') {
+        fetchThis({url, method: 'DELETE', body: 'id=' + entityId + additionalBody}, data => {
+            crudInformationCallback(data, callback)
+        });
+    }
+
+    function createOrUpdateEntity(formId, url, callback) {
+        sendForm(formId, url, data => {
+            crudInformationCallback(data, callback)
+        });
+    }
+
+    function crudInformationCallback(data, callback) {
+        let response = {error: 'Bad server response'};
+        try {
+            response = JSON.parse(data);
+        } catch (e) {
         }
-
-        function dateToStr(date){
-            return zeroLeading(date.getDate())+'.'+zeroLeading(1+date.getMonth())+'.'+date.getFullYear();
-        }
-
-        function deleteEntity(url, entityId, callback, additionalBody = '') {
-            fetchThis({url, method: 'DELETE', body: 'id=' + entityId + additionalBody}, data => {
-                crudInformationCallback(data, callback)
-            });
-        }
-
-        function createOrUpdateEntity(formId, url, callback) {
-            sendForm(formId, url, data => {
-                crudInformationCallback(data, callback)
-            });
-        }
-
-        function crudInformationCallback(data, callback) {
-            let response = {error: 'Bad server response'};
-            try {
-                response = JSON.parse(data);
-            } catch (e) {
+        if (response.status === 'ok') {
+            if (typeof callback === 'function') {
+                callback();
             }
-            if (response.status === 'ok') {
-                if (typeof callback === 'function') {
-                    callback();
-                }
-            } else {
-                alert(response.error);
-            }
+        } else {
+            alert(response.error);
         }
+    }
 
-        function sendGetRequest(url, callback) {
-            fetchThis({url, method: 'GET'}, callback);
-        }
+    function sendGetRequest(url, callback) {
+        fetchThis({url, method: 'GET'}, callback);
+    }
 
-        function sendForm(formId, url = 'api', callback) {
-            let formData = new FormData(document.forms[formId]);
-            let formAsText = [];
-            for (const field of formData.entries()) {
-                formAsText.push(field[0] + '=' + field[1]);
-            }
-            fetchThis({url, body: formAsText.join('&')}, callback);
+    function sendForm(formId, url = 'api', callback) {
+        let formData = new FormData(document.forms[formId]);
+        let formAsText = [];
+        for (const field of formData.entries()) {
+            formAsText.push(field[0] + '=' + field[1]);
         }
+        fetchThis({url, body: formAsText.join('&')}, callback);
+    }
 
-        function fetchThis({url = 'api', method = 'POST', body = ''}, callback = updatePage) {
-            let request = method === 'GET' ? {url} : {
-                method,
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                body
-            };
-            fetch(url, request).then(response =>
-                response.text()
-            ).then(data => {
-                callback(data);
-            })
-        }
+    function fetchThis({url = 'api', method = 'POST', body = ''}, callback = updatePage) {
+        let request = method === 'GET' ? {url} : {
+            method,
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body
+        };
+        fetch(url, request).then(response =>
+            response.text()
+        ).then(data => {
+            callback(data);
+        })
+    }
 
-        function updatePage(data) {
-            let root = document.getElementById('root');
-            root.innerHTML = data;
-        }
-    </script>
+    function updatePage(data) {
+        let root = document.getElementById('root');
+        root.innerHTML = data;
+    }
+</script>
 
 </body>
 </html>

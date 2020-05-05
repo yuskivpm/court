@@ -41,6 +41,7 @@ public class SueCrud extends AbstractCrud<Lawsuit, LawsuitDao> {
         long suitorId = Long.parseLong(request.getParameter("suitorId"));
         long defendantId = Long.parseLong(request.getParameter("defendantId"));
         long courtId = Long.parseLong(request.getParameter("courtId"));
+        long appealedLawsuitId = Long.parseLong(request.getParameter("appealedLawsuitId"));
         Date sueDate = null;
         try {
           sueDate = MyEntity.strToDate(request.getParameter("sueDate"));
@@ -49,10 +50,12 @@ public class SueCrud extends AbstractCrud<Lawsuit, LawsuitDao> {
         }
         String claimText = request.getParameter("claimText");
         if (claimText != null && !claimText.isEmpty() && courtId > 0 && defendantId > 0 && suitorId > 0 && defendantId != suitorId) {
-          lawsuit = new Lawsuit(id, sueDate, null, null, claimText, null, "", null, null, null, null, null, null);
+          lawsuit = new Lawsuit(id, sueDate, null, null, claimText, null, "",
+              null, null, null, null, null, null, null);
           lawsuit.setSuitorId(suitorId);
           lawsuit.setDefendantId(defendantId);
           lawsuit.setCourtId(courtId);
+          lawsuit.setAppealedLawsuitId(appealedLawsuitId);
         }
       } else {
         try (LawsuitDao lawsuitDao = new LawsuitDao()) {
@@ -64,6 +67,7 @@ public class SueCrud extends AbstractCrud<Lawsuit, LawsuitDao> {
         lawsuit.setJudgeId(getNotNull(request.getParameter("judgeId"), lawsuit.getJudgeId()));
         lawsuit.setStartDate(getNotNull(request.getParameter("startDate"), lawsuit.getStartDate()));
         lawsuit.setVerdictDate(getNotNull(request.getParameter("verdictDate"), lawsuit.getVerdictDate()));
+        lawsuit.setAppealedLawsuitId(getNotNull(request.getParameter("appealedLawsuitId"), lawsuit.getAppealedLawsuitId()));
         lawsuit.setAppealStatus(getNotNull(request.getParameter("appealStatus"), lawsuit.getAppealStatus()));
         lawsuit.setExecutionDate(getNotNull(request.getParameter("executionDate"), lawsuit.getExecutionDate()));
       }

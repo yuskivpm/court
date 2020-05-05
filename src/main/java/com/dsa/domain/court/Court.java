@@ -1,6 +1,6 @@
 package com.dsa.domain.court;
 
-public class Court extends CourtPure {
+public class Court extends CourtEntity {
 
   private Court mainCourt;
 

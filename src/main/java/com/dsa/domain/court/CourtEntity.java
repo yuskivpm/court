@@ -4,18 +4,18 @@ import com.dsa.domain.MyEntity;
 
 import java.util.Objects;
 
-public class CourtPure extends MyEntity {
+public class CourtEntity extends MyEntity {
 
   private static final String ENTITY_NAME = "Court";
   private String courtName;
   private CourtInstance courtInstance;
   protected long mainCourtId;
 
-  public CourtPure() {
+  public CourtEntity() {
     entityName = ENTITY_NAME;
   }
 
-  public CourtPure(long id, String courtName, CourtInstance courtInstance, long mainCourtId) {
+  public CourtEntity(long id, String courtName, CourtInstance courtInstance, long mainCourtId) {
     super(id);
     entityName = ENTITY_NAME;
     this.courtName = courtName;

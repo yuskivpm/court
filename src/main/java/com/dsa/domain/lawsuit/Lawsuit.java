@@ -2,16 +2,16 @@ package com.dsa.domain.lawsuit;
 
 import com.dsa.domain.court.Court;
 import com.dsa.domain.user.User;
-import com.dsa.domain.lawsuit.LawsuitPure;
 
 import java.util.Date;
 
-public class Lawsuit extends LawsuitPure {
+public class Lawsuit extends LawsuitEntity {
 
   private User suitor;
   private User defendant;
   private Court court;
   private User judge;
+  private Lawsuit appealedLawsuit;
 
   public Lawsuit() {
     super();
@@ -29,6 +29,7 @@ public class Lawsuit extends LawsuitPure {
       Date startDate,
       Date verdictDate,
       String verdictText,
+      Lawsuit appealedLawsuit,
       String appealStatus,
       Date executionDate
   ) {
@@ -43,12 +44,14 @@ public class Lawsuit extends LawsuitPure {
         startDate,
         verdictDate,
         verdictText,
+        getIdIfNotNull(appealedLawsuit, 0),
         appealStatus,
         executionDate);
     this.court = court;
     this.suitor = suitor;
     this.defendant = defendant;
     this.judge = judge;
+    this.appealedLawsuit = appealedLawsuit;
   }
 
   public User getSuitor() {
@@ -83,6 +86,14 @@ public class Lawsuit extends LawsuitPure {
     this.judge = judge;
   }
 
+  public Lawsuit getAppealedLawsuit() {
+    return appealedLawsuit;
+  }
+
+  public void setAppealedLawsuit(Lawsuit appealedLawsuit) {
+    this.appealedLawsuit = appealedLawsuit;
+  }
+
   @Override
   public long getSuitorId() {
     return getIdIfNotNull(suitor, super.getSuitorId());
@@ -101,6 +112,11 @@ public class Lawsuit extends LawsuitPure {
   @Override
   public long getJudgeId() {
     return getIdIfNotNull(judge, super.getJudgeId());
+  }
+
+  @Override
+  public long getAppealedLawsuitId() {
+    return getIdIfNotNull(appealedLawsuit, super.getAppealedLawsuitId());
   }
 
 }

@@ -32,6 +32,7 @@ public abstract class MyEntity implements Serializable, Cloneable {
     this.id = id;
   }
 
+  @Contract(value = "null -> false", pure = true)
   @Override
   public boolean equals(Object obj) {
     return (null != obj) && (getClass() == obj.getClass()) && ((this == obj) || (this.id == ((MyEntity) obj).id));

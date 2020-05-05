@@ -50,14 +50,7 @@ ${curUser.name}, hello!
                     </button>
                 </td>
                 <td>
-<%--                    <button--%>
-<%--                            type="button"--%>
-<%--                            onclick="deleteEntity('api/sues', ${sue.id},()=>sendGetRequest('api?command=main_Page'))"--%>
-<%--                    >--%>
-<%--                        Revoke--%>
-<%--                    </button>--%>
-
-                    <c:if test="${lawsuit.court.courtInstance == localCourt}">
+                    <c:if test="${sue.court.courtInstance == localCourt}">
                         <button
                                 type="button"
                                 onclick="deleteEntity('api/sues', ${sue.id},()=>sendGetRequest('api?command=main_Page'))"
@@ -65,15 +58,14 @@ ${curUser.name}, hello!
                             Revoke
                         </button>
                     </c:if>
-                    <c:if test="${lawsuit.court.courtInstance == cassationCourt || lawsuit.court.courtInstance == appealCourt}">
+                    <c:if test="${sue.court.courtInstance == cassationCourt || sue.court.courtInstance == appealCourt}">
                         <button
                                 type="button"
                                 onclick="deleteEntity(
-                                    'api/sues',
+                                        'api/sues',
                                     ${sue.id},
-                                        ()=>sendGetRequest('api?command=main_Page')
-                                        <%--,--%>
-                                        <%--'&commit=command=/sues/~method=PUT~id=${editEntity.id}~appealStatus=Appealed'--%>
+                                        ()=>sendGetRequest('api?command=main_Page'),
+                                        '&commit=command@/sues/~method@PUT~id@${sue.appealedLawsuitId}~appealStatus@ '
                                         )"
                         >
                             Revoke
@@ -104,6 +96,7 @@ ${curUser.name}, hello!
         <th>verdictDate</th>
         <th>verdictText</th>
         <th>appeal status</th>
+        <th>appealedLawsuitId</th>
         <th>executionDate</th>
         <th>actions</th>
     </tr>
@@ -131,16 +124,21 @@ ${curUser.name}, hello!
                 <td>${lawsuit.verdictText}</td>
                 <td>${lawsuit.appealStatus}</td>
                 <td>
+                    <c:if test="${lawsuit.appealedLawsuitId != 0}">
+                        ${lawsuit.appealedLawsuitId}
+                    </c:if>
+                </td>
+                <td>
                     <fmt:formatDate pattern="dd.MM.yyyy" value="${lawsuit.executionDate}"/>
                 </td>
                 <td>
                     <c:if test="${lawsuit.executionDate != null}">
                         Archived
                     </c:if>
-                    <c:if test="${lawsuit.appealStatus != null}">
+                    <c:if test="${lawsuit.appealStatus != null && lawsuit.appealStatus != ''}">
                         Appealed
                     </c:if>
-                    <c:if test="${lawsuit.executionDate == null && lawsuit.appealStatus == null}">
+                    <c:if test="${lawsuit.executionDate == null && (lawsuit.appealStatus == null || lawsuit.appealStatus == '')}">
                         <c:if test="${lawsuit.verdictDate == null}">
                             <button type="button"
                                     onclick="changePositionText('claimText','${lawsuit.claimText}',${lawsuit.id})">
@@ -149,7 +147,9 @@ ${curUser.name}, hello!
                         </c:if>
                         <c:if test="${lawsuit.verdictDate != null}">
                             <c:if test="${lawsuit.court.courtInstance == localCourt || lawsuit.court.courtInstance == appealCourt}">
-                                <button type="button" onclick="sendGetRequest('api/sues?id=${lawsuit.id}&courtId=${lawsuit.court.mainCourtId}&redirect=1&page=/jsp/models/AppealForm.jsp')">
+                                <button type="button"
+                                        onclick="sendGetRequest('api/sues?id=${lawsuit.id}'+
+                                                '&redirect=1&page=/jsp/models/AppealForm.jsp')">
                                     Appeal
                                 </button>
                             </c:if>
@@ -180,6 +180,7 @@ ${curUser.name}, hello!
         <th>verdictDate</th>
         <th>verdictText</th>
         <th>Appeal status</th>
+        <th>appealedLawsuitId</th>
         <th>executionDate</th>
         <th>actions</th>
     </tr>
@@ -206,26 +207,37 @@ ${curUser.name}, hello!
             <td>${lawsuit.verdictText}</td>
             <td>${lawsuit.appealStatus}</td>
             <td>
+                <c:if test="${lawsuit.appealedLawsuitId != 0}">
+                    ${lawsuit.appealedLawsuitId}
+                </c:if>
+            </td>
+            <td>
                 <fmt:formatDate pattern="dd.MM.yyyy" value="${lawsuit.executionDate}"/>
             </td>
             <td>
                 <c:if test="${lawsuit.executionDate != null}">
                     Archived
                 </c:if>
-                <c:if test="${lawsuit.appealStatus != null}">
+                <c:if test="${lawsuit.appealStatus != null && lawsuit.appealStatus != ''}">
                     Appealed
                 </c:if>
-                <c:if test="${lawsuit.executionDate == null && lawsuit.appealStatus == null}">
+                <c:if test="${lawsuit.executionDate == null && (lawsuit.appealStatus == null || lawsuit.appealStatus == '')}">
                     <c:if test="${lawsuit.verdictDate == null}">
                         <button type="button"
-                                onclick="changePositionText('defendantText','${lawsuit.defendantText}',${lawsuit.id})">
+                                onclick="changePositionText('claimText','${lawsuit.claimText}',${lawsuit.id})">
                             Change position
                         </button>
                     </c:if>
                     <c:if test="${lawsuit.verdictDate != null}">
-                        <button type="button" onclick="sendGetRequest('api/sues?id=${lawsuit.id}&redirect=1&page=/jsp/models/AppealForm.jsp')">
-                            Appeal
-                        </button>
+                        <c:if test="${lawsuit.court.courtInstance == localCourt || lawsuit.court.courtInstance == appealCourt}">
+                            <button type="button"
+                                    onclick="sendGetRequest('api/sues?id=${lawsuit.id}'+
+                                            '&courtId=${lawsuit.court.mainCourtId}'+
+                                            '&appealedLawsuitId=${lawsuit.id}'+
+                                            '&redirect=1&page=/jsp/models/AppealForm.jsp')">
+                                Appeal
+                            </button>
+                        </c:if>
                     </c:if>
                 </c:if>
             </td>

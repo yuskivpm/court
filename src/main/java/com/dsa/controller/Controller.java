@@ -1,6 +1,7 @@
 package com.dsa.controller;
 
 import com.dsa.dao.service.DbPool;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
@@ -17,6 +18,7 @@ public class Controller {
   public static final String COMMIT_QUERY = "commit";
   public static final String COMMIT_SEPARATOR = "^"; // between different commits
   public static final String COMMIT_COMMAND_SEPARATOR = "~"; // ~ -> &
+  public static final String COMMIT_COMMAND_OPERAND = "@"; // ~ -> &
 //  commit= method=GET ~ id=1 ^ method=POST ~ id=2
 
   private static final Map<String, BiFunction<ControllerRequest, ControllerResponse, ControllerResponse>> executors = new HashMap<>();
@@ -25,7 +27,7 @@ public class Controller {
   public static ControllerResponse execute(@NotNull ControllerRequest mainRequest) {
     ControllerResponse controllerResponse = new ControllerResponse();
     controllerResponse.resetToDefault();
-    String[] commits = (mainRequest.getParameter(COMMIT_QUERY)).split(COMMIT_SEPARATOR, -1);
+    String[] commits = (mainRequest.getParameter(COMMIT_QUERY)).replace(COMMIT_COMMAND_OPERAND, "=").split(COMMIT_SEPARATOR, -1);
     try (Connection connection = DbPool.getConnection()) {
       connection.setAutoCommit(false);
       try {

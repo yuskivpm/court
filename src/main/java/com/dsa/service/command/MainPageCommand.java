@@ -41,6 +41,7 @@ public class MainPageCommand implements BiFunction<ControllerRequest, Controller
   public static String getMainPageForUser(User user) {
     return ConfigManager.getProperty("path.page.main" + (user == null ? "" : ("." + user.getRole())));
   }
+
   private static void initializeJspForAdmin(
       @NotNull User currentUser,
       @NotNull ControllerRequest controllerRequest,
@@ -96,7 +97,7 @@ public class MainPageCommand implements BiFunction<ControllerRequest, Controller
       @NotNull User currentUser,
       @NotNull ControllerRequest controllerRequest,
       @NotNull ControllerResponse controllerResponse
-  ){
+  ) {
     try (LawsuitDao lawsuitDao = new LawsuitDao()) {
       List<Lawsuit> lawsuits = lawsuitDao.readAllForJudgeId(currentUser.getId());
       for (Lawsuit lawsuit : lawsuits) {

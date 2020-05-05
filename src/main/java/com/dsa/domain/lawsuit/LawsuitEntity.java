@@ -5,7 +5,7 @@ import com.dsa.domain.MyEntity;
 import java.util.Date;
 import java.util.Objects;
 
-public class LawsuitPure extends MyEntity {
+public class LawsuitEntity extends MyEntity {
 
   private static final String ENTITY_NAME = "Lawsuit";
   // sue data
@@ -20,14 +20,15 @@ public class LawsuitPure extends MyEntity {
   private Date startDate;
   private Date verdictDate;
   private String verdictText;
+  private long appealedLawsuitId;
   private String appealStatus;
   private Date executionDate;
 
-  public LawsuitPure() {
+  public LawsuitEntity() {
     entityName = ENTITY_NAME;
   }
 
-  public LawsuitPure(
+  public LawsuitEntity(
       long id,
       Date sueDate,
       long courtId,
@@ -39,6 +40,7 @@ public class LawsuitPure extends MyEntity {
       Date startDate,
       Date verdictDate,
       String verdictText,
+      long appealedLawsuitId,
       String appealStatus,
       Date executionDate
   ) {
@@ -54,6 +56,7 @@ public class LawsuitPure extends MyEntity {
     this.startDate = startDate;
     this.verdictDate = verdictDate;
     this.verdictText = verdictText;
+    this.appealedLawsuitId = appealedLawsuitId;
     this.appealStatus = appealStatus;
     this.executionDate = executionDate;
   }
@@ -146,6 +149,14 @@ public class LawsuitPure extends MyEntity {
     this.executionDate = executionDate;
   }
 
+  public long getAppealedLawsuitId() {
+    return appealedLawsuitId;
+  }
+
+  public void setAppealedLawsuitId(long appealedLawsuitId) {
+    this.appealedLawsuitId = appealedLawsuitId;
+  }
+
   public String getAppealStatus() {
     return appealStatus;
   }
@@ -168,6 +179,7 @@ public class LawsuitPure extends MyEntity {
         getStartDate(),
         getVerdictDate(),
         getVerdictText(),
+        getAppealedLawsuitId(),
         getAppealStatus(),
         getExecutionDate());
   }
@@ -185,6 +197,7 @@ public class LawsuitPure extends MyEntity {
         + "\"startDate\":\"" + startDate + "\", "
         + "\"verdictDate\":\"" + verdictDate + "\", "
         + "\"verdictText\":\"" + verdictText + "\", "
+        + "\"AppealedLawsuitId\":\"" + appealedLawsuitId + "\", "
         + "\"appealStatus\":\"" + appealStatus + "\", "
         + "\"executionDate\":\"" + executionDate + "\""
         + "}";

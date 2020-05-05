@@ -6,8 +6,8 @@ import com.dsa.controller.ResponseType;
 import com.dsa.dao.AbstractEntityDao;
 import com.dsa.dao.service.DbPoolException;
 import com.dsa.domain.MyEntity;
-
 import com.dsa.service.command.RedirectCommand;
+
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +19,8 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
-public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityDao> implements BiFunction<ControllerRequest, ControllerResponse, ControllerResponse> {
+public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityDao>
+    implements BiFunction<ControllerRequest, ControllerResponse, ControllerResponse> {
   private static final Logger log = Logger.getLogger(AbstractCrud.class);
   protected String path = "";
 
@@ -56,7 +57,11 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
 
   @NotNull
   @Contract("_, _, _ -> param2")
-  private ControllerResponse createOrUpdateEntity(ControllerRequest request, ControllerResponse controllerResponse, boolean create) {
+  private ControllerResponse createOrUpdateEntity(
+      ControllerRequest request,
+      ControllerResponse controllerResponse,
+      boolean create
+  ) {
     String responseValue = "";
     try {
       long id = 0;
@@ -67,7 +72,7 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
       if (entity != null) {
         boolean result;
         try (D entityDao = createEntityDao()) {
-            result = create ? entityDao.createEntity(entity) : entityDao.updateEntity(entity);
+          result = create ? entityDao.createEntity(entity) : entityDao.updateEntity(entity);
         }
         if (result) {
           responseValue = "{\"status\":\"ok\"}";
@@ -87,7 +92,7 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
 
   @Contract(pure = true)
   protected static String getNotNull(@NotNull String tryValue, String defaultValue) {
-    return tryValue.isEmpty() ? defaultValue : tryValue;
+    return tryValue.isEmpty() ? defaultValue : tryValue.trim();
   }
 
   protected static long getNotNull(@NotNull String tryValue, long defaultValue) {
@@ -175,6 +180,7 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
     controllerResponse.setResponseType(ResponseType.FAIL);
     return controllerResponse;
   }
+
 
   protected ControllerResponse wrongCommand(@NotNull ControllerRequest request, @NotNull ControllerResponse controllerResponse) {
     controllerResponse.setResponseType(ResponseType.FAIL);

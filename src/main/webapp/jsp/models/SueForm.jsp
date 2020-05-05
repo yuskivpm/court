@@ -24,9 +24,11 @@
         <caption>
             <h2>
                 <c:if test="${editEntity != null}">
+                    <input type="hidden" name="appealedLawsuitId" value="${editEntity.appealedLawsuitId}"/>
                     Edit Sue
                 </c:if>
                 <c:if test="${editEntity == null}">
+                    <input type="hidden" name="appealedLawsuitId" value="0"/>
                     Add New Sue
                 </c:if>
             </h2>
@@ -74,24 +76,24 @@
             </td>
         </tr>
         <tr>
-        <th>Sue date:</th>
+            <th>Sue date:</th>
             <td>
                 <input type="text" name="sueDate" size="45" required readonly
-                    <c:if test="${editEntity != null}">
-                        value='<%= MyEntity.dateToStr(((Lawsuit)request.getAttribute("editEntity")).getSueDate()) %>'
-                    </c:if>
-                    <c:if test="${editEntity == null}">
-                        value='<%= MyEntity.dateToStr(new Date())%>'
-                    </c:if>
+                        <c:if test="${editEntity != null}">
+                            value='<%= MyEntity.dateToStr(((Lawsuit) request.getAttribute("editEntity")).getSueDate()) %>'
+                        </c:if>
+                        <c:if test="${editEntity == null}">
+                            value='<%= MyEntity.dateToStr(new Date())%>'
+                        </c:if>
                 />
             </td>
         </tr>
-        <th>Claim text:</th>
+        <tr>
+            <th>Claim text:</th>
             <td>
                 <input type="text" name="claimText" size="45" value="${editEntity.claimText}" required/>
             </td>
         </tr>
-
         <tr>
             <td colspan="2" align="center">
                 <button

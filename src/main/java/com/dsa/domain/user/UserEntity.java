@@ -4,7 +4,7 @@ import com.dsa.domain.MyEntity;
 
 import java.util.Objects;
 
-public class UserPure extends MyEntity {
+public class UserEntity extends MyEntity {
 
   private static final String ENTITY_NAME = "User";
   private String name;
@@ -14,11 +14,11 @@ public class UserPure extends MyEntity {
   long courtId;
   boolean isActive;
 
-  public UserPure() {
+  public UserEntity() {
     entityName = ENTITY_NAME;
   }
 
-  public UserPure(long id, String login, String password, Role role, String name, long courtId, boolean isActive) {
+  public UserEntity(long id, String login, String password, Role role, String name, long courtId, boolean isActive) {
     super(id);
     entityName = ENTITY_NAME;
     this.login = login;

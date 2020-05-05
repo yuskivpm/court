@@ -53,10 +53,13 @@ public class LoginCommand implements BiFunction<ControllerRequest, ControllerRes
 
   public static User getSessionUser(@NotNull ControllerRequest request) {
     User user = null;
-    try (UserDao userDao = new UserDao()) {
-      user = userDao.loadAllSubEntities(userDao.readEntity("id", LoginCommand.getUserSessionId(request)));
-    } catch (DbPoolException | SQLException e) {
-      log.error("Fail get user.readEntity in getSessionUser: " + e);
+    String userSessionId = LoginCommand.getUserSessionId(request);
+    if (!userSessionId.isEmpty()) {
+      try (UserDao userDao = new UserDao()) {
+        user = userDao.loadAllSubEntities(userDao.readEntity("id", userSessionId));
+      } catch (DbPoolException | SQLException e) {
+        log.error("Fail get user.readEntity in getSessionUser: " + e);
+      }
     }
     return user;
   }

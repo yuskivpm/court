@@ -2,6 +2,7 @@ package com.dsa.controller;
 
 import com.dsa.service.resource.ConfigManager;
 import com.dsa.service.resource.MessageManager;
+
 import org.jetbrains.annotations.Contract;
 
 import java.util.Map;
@@ -22,48 +23,48 @@ public class ControllerResponse {
   private Map<String, Object> attributes = new HashMap<>();
   private Map<String, Object> sessionAttributes = new HashMap<>();
 
-  public ControllerResponse(){
+  public ControllerResponse() {
   }
 
   @Contract(pure = true)
-  public ControllerResponse(ResponseType responseType, String responseValue){
+  public ControllerResponse(ResponseType responseType, String responseValue) {
     this.responseType = responseType;
     this.responseValue = responseValue;
   }
 
-  public ResponseType getResponseType(){
+  public ResponseType getResponseType() {
     return responseType;
   }
 
-  public void setResponseType(ResponseType responseType){
+  public void setResponseType(ResponseType responseType) {
     this.responseType = responseType;
   }
 
-  public String getResponseValue(){
+  public String getResponseValue() {
     return responseValue;
   }
 
-  public void setResponseValue(String responseValue){
+  public void setResponseValue(String responseValue) {
     this.responseValue = responseValue;
   }
 
-  public void setAttribute(String key, Object value){
+  public void setAttribute(String key, Object value) {
     attributes.put(key, value);
   }
 
-  public Map<String, Object> getAttributes(){
+  public Map<String, Object> getAttributes() {
     return attributes;
   }
 
-  public void setSessionAttribute(String key, Object value){
+  public void setSessionAttribute(String key, Object value) {
     sessionAttributes.put(key, value);
   }
 
-  public Map<String, Object> getSessionAttributes(){
+  public Map<String, Object> getSessionAttributes() {
     return sessionAttributes;
   }
 
-  public void resetToDefault(){
+  public void resetToDefault() {
     responseType = ResponseType.REDIRECT;
     responseValue = PATH_PAGE_INDEX;
     setAttribute("nullPage", NULL_PAGE_MESSAGE);

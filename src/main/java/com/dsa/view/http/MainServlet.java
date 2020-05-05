@@ -1,7 +1,5 @@
 package com.dsa.view.http;
 
-//import org.apache.log4j.Logger;
-
 import com.dsa.controller.Controller;
 import com.dsa.controller.ControllerResponse;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +12,6 @@ import javax.servlet.annotation.WebServlet;
 import java.io.IOException;
 
 @WebServlet({"/api/*"})
-//@WebServlet(name="MainServlet", displayName="Main servlet", urlPatterns={"/", "/index", "/controller"})
 public class MainServlet extends HttpServlet {
 
   @Override

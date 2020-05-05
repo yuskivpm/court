@@ -39,7 +39,7 @@ public class CourtDao extends AbstractEntityDao<Court> {
       court.setId(resultSet.getLong("ID"));
       court.setCourtName(resultSet.getString("COURT_NAME"));
       court.setCourtInstance(CourtInstance.valueOf(resultSet.getString("COURT_INSTANCE")));
-      court.setMainCourtId(resultSet.getLong("MAIN_COURT_ID")); //      court.setMainCourt(readEntity(resultSet.getLong("MAIN_COURT_ID")));
+      court.setMainCourtId(resultSet.getLong("MAIN_COURT_ID"));
       return court;
     } catch (SQLException e) {
       log.error("SQLException in CourtDao.recordToEntity: " + e);

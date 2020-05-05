@@ -36,7 +36,7 @@ import java.io.IOException;
 )
 public class MainServletFilter implements Filter {
 
-    private static final Logger log = Logger.getLogger(MainServletFilter.class);
+  private static final Logger log = Logger.getLogger(MainServletFilter.class);
   private static final String LOGIN_PAGE;
 
   static {
@@ -44,7 +44,7 @@ public class MainServletFilter implements Filter {
     try {
       Initialization.initialize();
     } catch (Exception e) {
-        log.error("Fail to initialize some classes in MainServletFilter: " + e);
+      log.error("Fail to initialize some classes in MainServletFilter: " + e);
     }
   }
 

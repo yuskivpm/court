@@ -56,28 +56,74 @@ public final class DbCreator {
       UserDao.sqlExecute(st, UserDao.SQL_CREATE_TABLE, false, log);
       LawsuitDao.sqlExecute(st, LawsuitDao.SQL_CREATE_TABLE, false, log);
 
+      int index = 0;
       // Court table add values
-      Court supremeCourt = new Court(1, "Supreme court", CourtInstance.CASSATION, null);
-      Court appealCourt = new Court(2, "Appeal court", CourtInstance.APPEAL, supremeCourt);
-      Court localCourt = new Court(3, "Local court", CourtInstance.LOCAL, appealCourt);
+      Court supremeCourt = new Court(++index, "Supreme Court of Ukraine", CourtInstance.CASSATION, null);
+      Court lvivAppealCourt = new Court(++index, "Lviv Oblast Court of Appeals", CourtInstance.APPEAL, supremeCourt);
+      Court lvivHalytskyiLocalCourt = new Court(++index, "Halytskyi District Court of Lviv City", CourtInstance.LOCAL, lvivAppealCourt);
+      Court lvivZaliznychnyiLocalCourt = new Court(++index, "Zaliznychnyi District Court of Lviv City", CourtInstance.LOCAL, lvivAppealCourt);
+      Court kyivAppealCourt = new Court(++index, "Kyiv Oblast Court of Appeals", CourtInstance.APPEAL, supremeCourt);
+      Court kyivSviatoshynCourt = new Court(++index, "Kyiv-Sviatoshyn Raion Court of Kyiv Oblast", CourtInstance.LOCAL, kyivAppealCourt);
+      Court kyivObukhivskyiCourt = new Court(++index, "Obukhivskyi Raion Court of Kyiv Oblast", CourtInstance.LOCAL, kyivAppealCourt);
+
       courtDao.createEntity(supremeCourt);
-      courtDao.createEntity(appealCourt);
-      courtDao.createEntity(localCourt);
+      courtDao.createEntity(lvivAppealCourt);
+      courtDao.createEntity(kyivAppealCourt);
+      courtDao.createEntity(lvivHalytskyiLocalCourt);
+      courtDao.createEntity(lvivZaliznychnyiLocalCourt);
+      courtDao.createEntity(kyivSviatoshynCourt);
+      courtDao.createEntity(kyivObukhivskyiCourt);
+
+      index = 0;
       // User table add value
-      userDao.createEntity(new User(1, "admin", "admin", Role.ADMIN, "admin name", null, true));
-      userDao.createEntity(new User(2, "supreme1", "supreme1", Role.JUDGE, "Supreme name", supremeCourt, true));
-      userDao.createEntity(new User(3, "appeal1", "appeal1", Role.JUDGE, "Appeal name", appealCourt, true));
-      User localJudge = new User(4, "localJudge1", "localJudge1", Role.JUDGE, "Local name", localCourt, true);
-      User attorney1 = new User(5, "attorney1", "attorney1", Role.ATTORNEY, "Attorney1 name", null, true);
-      User attorney2 = new User(6, "attorney2", "attorney2", Role.ATTORNEY, "Attorney2", null, true);
-      userDao.createEntity(localJudge);
+      userDao.createEntity(new User(++index, "admin", "admin", Role.ADMIN, "Smith", null, true));
+      userDao.createEntity(new User(++index, "supreme1", "supreme1", Role.JUDGE, "Bill", supremeCourt, true));
+      userDao.createEntity(new User(++index, "supreme2", "supreme2", Role.JUDGE, "Dron", supremeCourt, true));
+      userDao.createEntity(new User(++index, "LvivAppeal1", "appeal1", Role.JUDGE, "Cordon", lvivAppealCourt, true));
+      userDao.createEntity(new User(++index, "LvivAppeal2", "appeal2", Role.JUDGE, "Aaron", lvivAppealCourt, true));
+      userDao.createEntity(new User(++index, "KyivAppeal1", "appeal3", Role.JUDGE, "Alcorn", kyivAppealCourt, true));
+      userDao.createEntity(new User(++index, "KyivAppeal2", "appeal4", Role.JUDGE, "Avey", kyivAppealCourt, true));
+
+      User lvivHalytskyiLocalJudge1 = new User(++index, "lvivHalytskyiLocalJudge1", "localJudge1", Role.JUDGE, "Baines", lvivHalytskyiLocalCourt, true);
+      User lvivHalytskyiLocalJudge2 = new User(++index, "lvivHalytskyiLocalJudge2", "localJudge2", Role.JUDGE, "Bates", lvivHalytskyiLocalCourt, true);
+      User lvivZaliznychnyiLocalJudge1 = new User(++index, "lvivZaliznychnyiLocalJudge1", "localJudge3", Role.JUDGE, "Beere", lvivZaliznychnyiLocalCourt, true);
+      User lvivZaliznychnyiLocalJudge2 = new User(++index, "lvivZaliznychnyiLocalJudge2", "localJudge4", Role.JUDGE, "Bomer", lvivZaliznychnyiLocalCourt, true);
+      User kyivSviatoshynJudge1 = new User(++index, "kyivSviatoshynJudge1", "localJudge5", Role.JUDGE, "Burke", kyivSviatoshynCourt, true);
+      User kyivSviatoshynJudge2 = new User(++index, "kyivSviatoshynJudge2", "localJudge6", Role.JUDGE, "Cauley", kyivSviatoshynCourt, true);
+      User kyivObukhivskyiJudge1 = new User(++index, "kyivObukhivskyiJudge1", "localJudge7", Role.JUDGE, "Chorlton", kyivObukhivskyiCourt, true);
+      User kyivObukhivskyiJudge2 = new User(++index, "kyivObukhivskyiJudge2", "localJudge8", Role.JUDGE, "Dines", kyivObukhivskyiCourt, true);
+      userDao.createEntity(lvivHalytskyiLocalJudge1);
+      userDao.createEntity(lvivHalytskyiLocalJudge2);
+      userDao.createEntity(lvivZaliznychnyiLocalJudge1);
+      userDao.createEntity(lvivZaliznychnyiLocalJudge2);
+      userDao.createEntity(kyivSviatoshynJudge1);
+      userDao.createEntity(kyivSviatoshynJudge2);
+      userDao.createEntity(kyivObukhivskyiJudge1);
+      userDao.createEntity(kyivObukhivskyiJudge2);
+
+      User attorney1 = new User(++index, "attorney1", "attorney1", Role.ATTORNEY, "Arakka", null, true);
+      User attorney2 = new User(++index, "attorney2", "attorney2", Role.ATTORNEY, "Mirra", null, true);
       userDao.createEntity(attorney1);
       userDao.createEntity(attorney2);
+      userDao.createEntity(new User(++index, "attorney3", "attorney3", Role.ATTORNEY, "Eady", null, true));
+      userDao.createEntity(new User(++index, "attorney4", "attorney4", Role.ATTORNEY, "Fearon", null, true));
+      userDao.createEntity(new User(++index, "attorney5", "attorney5", Role.ATTORNEY, "Gannis", null, true));
+      userDao.createEntity(new User(++index, "attorney6", "attorney6", Role.ATTORNEY, "Isler", null, true));
+      userDao.createEntity(new User(++index, "attorney7", "attorney7", Role.ATTORNEY, "Lainson", null, true));
 
-      lawsuitDao.createEntity(new Lawsuit(1, new Date(), localCourt, attorney1, "1 claim 1 to 2", attorney2, "Not acceptable", localJudge, new Date(), new Date(), "Verdict text", null, null));
-      lawsuitDao.createEntity(new Lawsuit(2, new Date(), localCourt, attorney1, "2 claim 1 to 2", attorney2, "", null, null, null, null, null, null));
-      lawsuitDao.createEntity(new Lawsuit(3, new Date(), localCourt, attorney2, "1 claim 2 to 1", attorney1, "", localJudge, new Date(), null, null, null, null));
-      lawsuitDao.createEntity(new Lawsuit(4, new Date(), localCourt, attorney2, "2 claim 2 to 1", attorney1, "", null, null, null, null, null, null));
+      index = 0;
+      lawsuitDao.createEntity(new Lawsuit(++index, new Date(), lvivHalytskyiLocalCourt, attorney1,
+          "Dismissal", attorney2, "Not acceptable", lvivHalytskyiLocalJudge1, new Date(),
+          new Date(), "Verdict text", null, null, null));
+      lawsuitDao.createEntity(new Lawsuit(++index, new Date(), lvivZaliznychnyiLocalCourt, attorney1,
+          "Termination", attorney2, "", null, null,
+          null, null, null, null, null));
+      lawsuitDao.createEntity(new Lawsuit(++index, new Date(), lvivZaliznychnyiLocalCourt, attorney2,
+          "Liability", attorney1, "", lvivZaliznychnyiLocalJudge1, new Date(),
+          null, null, null, null, null));
+      lawsuitDao.createEntity(new Lawsuit(++index, new Date(), lvivHalytskyiLocalCourt, attorney2,
+          "Bankruptcy", attorney1, "", null, null,
+          null, null, null, null, null));
 
     } catch (SQLException e) {
       log.error("Exception in DbCreator.recreateTables: " + e);

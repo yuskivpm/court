@@ -18,12 +18,13 @@ public class LawsuitDao extends AbstractEntityDao<Lawsuit> {
   private static final String LAWSUIT_TABLE_NAME = "LAWSUIT";
   private static final String SQL_INSERT = "INSERT INTO " + LAWSUIT_TABLE_NAME +
       " (SUE_DATE, COURT_ID, SUITOR_ID, CLAIM_TEXT, DEFENDANT_ID, DEFENDANT_TEXT, JUDGE_ID, START_DATE, VERDICT_DATE," +
-      " VERDICT_TEXT, APPEAL_STATUS, EXECUTION_DATE) " +
-      "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+      " VERDICT_TEXT, APPEALED_LAWSUIT_ID, APPEAL_STATUS, EXECUTION_DATE) " +
+      "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
   private static final String SQL_UPDATE = "UPDATE " + LAWSUIT_TABLE_NAME +
       " SET SUE_DATE = ?, COURT_ID = ?, SUITOR_ID = ?, CLAIM_TEXT = ?, DEFENDANT_ID = ?, DEFENDANT_TEXT = ?," +
-      " JUDGE_ID = ?, START_DATE = ?, VERDICT_DATE = ?, VERDICT_TEXT = ?, APPEAL_STATUS = ?, EXECUTION_DATE = ?" +
+      " JUDGE_ID = ?, START_DATE = ?, VERDICT_DATE = ?, VERDICT_TEXT = ?, APPEALED_LAWSUIT_ID = ?," +
+      " APPEAL_STATUS = ?, EXECUTION_DATE = ?" +
       " WHERE ID = ?";
 
   public static final String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + LAWSUIT_TABLE_NAME + " (" +
@@ -38,12 +39,14 @@ public class LawsuitDao extends AbstractEntityDao<Lawsuit> {
       "START_DATE DATE DEFAULT NULL, " +
       "VERDICT_DATE DATE DEFAULT NULL, " +
       "VERDICT_TEXT VARCHAR(255) DEFAULT NULL, " +
+      "APPEALED_LAWSUIT_ID BIGINT DEFAULT NULL, " +
       "APPEAL_STATUS VARCHAR(255) DEFAULT NULL, " +
       "EXECUTION_DATE DATE DEFAULT NULL," +
       "FOREIGN KEY (SUITOR_ID) REFERENCES USER(ID), " +
       "FOREIGN KEY (DEFENDANT_ID) REFERENCES USER(ID), " +
       "FOREIGN KEY (COURT_ID) REFERENCES COURT(ID), " +
-      "FOREIGN KEY (JUDGE_ID) REFERENCES USER(ID) " +
+      "FOREIGN KEY (JUDGE_ID) REFERENCES USER(ID), " +
+      "FOREIGN KEY (APPEALED_LAWSUIT_ID) REFERENCES LAWSUIT(ID) " +
       ")";
 
   public LawsuitDao() throws SQLException, DbPoolException {
@@ -89,6 +92,7 @@ public class LawsuitDao extends AbstractEntityDao<Lawsuit> {
       lawsuit.setStartDate(sqlDateToDate(resultSet.getDate("START_DATE")));
       lawsuit.setVerdictDate(sqlDateToDate(resultSet.getDate("VERDICT_DATE")));
       lawsuit.setVerdictText(resultSet.getString("VERDICT_TEXT"));
+      lawsuit.setAppealedLawsuitId(resultSet.getLong("APPEALED_LAWSUIT_ID"));
       lawsuit.setAppealStatus(resultSet.getString("APPEAL_STATUS"));
       lawsuit.setExecutionDate(sqlDateToDate(resultSet.getDate("EXECUTION_DATE")));
       return lawsuit;
@@ -99,7 +103,11 @@ public class LawsuitDao extends AbstractEntityDao<Lawsuit> {
   }
 
   @Override
-  protected int setAllPreparedValues(@NotNull PreparedStatement preparedStatement, @NotNull Lawsuit lawsuit, boolean isAddOperation) throws SQLException {
+  protected int setAllPreparedValues(
+      @NotNull PreparedStatement preparedStatement,
+      @NotNull Lawsuit lawsuit,
+      boolean isAddOperation
+  ) throws SQLException {
     int index = 0;
     preparedStatement.setDate(++index, dateToSqlDate(lawsuit.getSueDate()));
     setPreparedValueOrNull(preparedStatement, ++index, lawsuit.getCourtId());
@@ -111,6 +119,7 @@ public class LawsuitDao extends AbstractEntityDao<Lawsuit> {
     preparedStatement.setDate(++index, dateToSqlDate(lawsuit.getStartDate()));
     preparedStatement.setDate(++index, dateToSqlDate(lawsuit.getVerdictDate()));
     preparedStatement.setString(++index, lawsuit.getVerdictText());
+    setPreparedValueOrNull(preparedStatement, ++index, lawsuit.getAppealedLawsuitId());
     preparedStatement.setString(++index, lawsuit.getAppealStatus());
     preparedStatement.setDate(++index, dateToSqlDate(lawsuit.getExecutionDate()));
     return ++index; // next index for preparedStatement.set_()
@@ -126,7 +135,7 @@ public class LawsuitDao extends AbstractEntityDao<Lawsuit> {
         lawsuit.setDefendant(new UserDao(connection).readEntity(lawsuit.getDefendantId()));
       }
       if (lawsuit.getCourt() == null && lawsuit.getCourtId() > 0) {
-        Court court =new CourtDao(connection).readEntity(lawsuit.getCourtId());
+        Court court = new CourtDao(connection).readEntity(lawsuit.getCourtId());
         lawsuit.setCourt(court);
         if (court != null && court.getMainCourt() == null && court.getMainCourtId() > 0) {
           court.setMainCourt(new CourtDao(connection).readEntity(court.getMainCourtId()));
@@ -134,6 +143,9 @@ public class LawsuitDao extends AbstractEntityDao<Lawsuit> {
       }
       if (lawsuit.getJudge() == null && lawsuit.getJudgeId() > 0) {
         lawsuit.setJudge(new UserDao(connection).readEntity(lawsuit.getJudgeId()));
+      }
+      if (lawsuit.getAppealedLawsuit() == null && lawsuit.getAppealedLawsuitId() > 0) {
+        lawsuit.setAppealedLawsuit(new LawsuitDao(connection).readEntity(lawsuit.getAppealedLawsuitId()));
       }
     }
     return lawsuit;

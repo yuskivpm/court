@@ -15,7 +15,7 @@
     <input type="hidden" name="id" value="${editEntity.id}"/>
     <c:set var="cassationCourt" scope="page" value="<%=CourtInstance.CASSATION%>"/>
     <c:if test="${editEntity.court.courtInstance == cassationCourt}">
-        <input type="hidden" name="executionDate" xevalue='<%= MyEntity.dateToStr(new Date())%>'/>
+        <input type="hidden" name="executionDate" value='<%= MyEntity.dateToStr(new Date())%>'/>
     </c:if>
     <table border="1" cellpadding="5">
         <caption>
@@ -31,7 +31,8 @@
                 />
             </td>
         </tr>
-        <th>verdictText:</th>
+        <tr>
+            <th>verdictText:</th>
             <td>
                 <input type="text" name="verdictText" size="45" required/>
             </td>
