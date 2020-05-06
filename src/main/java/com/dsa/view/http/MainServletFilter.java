@@ -37,10 +37,9 @@ import java.io.IOException;
 public class MainServletFilter implements Filter {
 
   private static final Logger LOG = Logger.getLogger(MainServletFilter.class);
-  private static final String LOGIN_PAGE;
+  private static final String LOGIN_PAGE = ConfigManager.getProperty("path.page.login");
 
   static {
-    LOGIN_PAGE = ConfigManager.getProperty("path.page.login");
     try {
       Initialization.initialize();
     } catch (Exception e) {

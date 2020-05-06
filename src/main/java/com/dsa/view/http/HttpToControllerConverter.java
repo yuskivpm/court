@@ -32,12 +32,14 @@ class HttpToControllerConverter {
   private static void getMainRequestReaderData(@NotNull HttpServletRequest request, @NotNull ControllerRequest controllerRequest) {
     try {
       BufferedReader reader = request.getReader();
-      String line;
-      String[] subLines;
-      while ((line = reader.readLine()) != null) {
-        subLines = line.split("&");
-        for (String subLine : subLines) {
-          controllerRequest.setParameter(subLine);
+      if (reader != null){
+        String line;
+        String[] subLines;
+        while ((line = reader.readLine()) != null) {
+          subLines = line.split("&");
+          for (String subLine : subLines) {
+            controllerRequest.setParameter(subLine);
+          }
         }
       }
     } catch (IOException e) {
