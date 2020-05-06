@@ -64,7 +64,8 @@
                 />
             </td>
         </tr>
-        <th>Appeal text:</th>
+        <tr>
+            <th>Appeal text:</th>
             <td>
                 <input type="text" name="claimText" size="45" value="${editEntity.claimText}" required/>
             </td>

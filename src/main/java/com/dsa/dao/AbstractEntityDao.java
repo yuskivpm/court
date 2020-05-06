@@ -31,7 +31,7 @@ public abstract class AbstractEntityDao<E extends MyEntity> implements AutoClose
   private final String SQL_INSERT;
   private final String SQL_UPDATE_BY_ID;
 
-  protected Connection connection;
+  protected final Connection connection;
 
   public AbstractEntityDao(
       String entityTableName,
@@ -70,7 +70,7 @@ public abstract class AbstractEntityDao<E extends MyEntity> implements AutoClose
     List<E> entities = new ArrayList<>();
     try (
         Statement st = connection.createStatement();
-        ResultSet rs = st.executeQuery(selectString);
+        ResultSet rs = st.executeQuery(selectString)
     ) {
       while (rs.next()) {
         E entity = recordToEntity(rs);
@@ -98,7 +98,7 @@ public abstract class AbstractEntityDao<E extends MyEntity> implements AutoClose
     E entity = null;
     try (
         PreparedStatement st = connection.prepareStatement(selectString);
-        ResultSet rs = st.executeQuery();
+        ResultSet rs = st.executeQuery()
     ) {
       if (rs.next()) {
         entity = recordToEntity(rs);

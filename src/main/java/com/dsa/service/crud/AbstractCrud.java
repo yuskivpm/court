@@ -24,7 +24,7 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
 
   private static final Logger log = Logger.getLogger(AbstractCrud.class);
 
-  protected String path = "";
+  protected String path;
 
   @Contract(pure = true)
   public AbstractCrud(String path) {
@@ -33,7 +33,7 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
 
   @Override
   public ControllerResponse apply(@NotNull ControllerRequest request, ControllerResponse controllerResponse) {
-    if (checkAuthority(request, controllerResponse)) {
+    if (checkAuthority(request)) {
       CrudEnum ce = CrudParser.getCrudOperation(request, getPath());
       switch (ce) {
         case PREPARE_UPDATE_FORM:
@@ -53,7 +53,7 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
   @NotNull
   @Contract("_, _, _ -> param2")
   private ControllerResponse executeCrudOperation(ControllerRequest request, ControllerResponse controllerResponse, CrudEnum ce) {
-    String responseValue = "";
+    String responseValue;
     try {
       String id = request.getParameter("id");
       boolean result = false;
@@ -127,7 +127,7 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
     return path;
   }
 
-  protected boolean checkAuthority(ControllerRequest request, ControllerResponse controllerResponse) {
+  protected boolean checkAuthority(ControllerRequest request) {
     return true;
   }
 

@@ -28,7 +28,7 @@ public class SueCrud extends AbstractCrud<Lawsuit, LawsuitDao> {
   }
 
   @Override
-  protected boolean checkAuthority(ControllerRequest request, ControllerResponse controllerResponse) {
+  protected boolean checkAuthority(ControllerRequest request) {
     User user = LoginCommand.getSessionUser(request);
     return user != null && (user.getRole() == Role.ATTORNEY);
   }
@@ -42,7 +42,7 @@ public class SueCrud extends AbstractCrud<Lawsuit, LawsuitDao> {
         long defendantId = Long.parseLong(request.getParameter("defendantId"));
         long courtId = Long.parseLong(request.getParameter("courtId"));
         long appealedLawsuitId = Long.parseLong(request.getParameter("appealedLawsuitId"));
-        Date sueDate = null;
+        Date sueDate;
         try {
           sueDate = MyEntity.strToDate(request.getParameter("sueDate"));
         } catch (ParseException e) {

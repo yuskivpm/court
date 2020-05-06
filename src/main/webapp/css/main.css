@@ -11,14 +11,3 @@ form{
 form input {
     margin: 10px;
 }
-input.form:checked+form,
-.hide{
-    display: none;
-}
-
-.likeButton{
-    border: 1px solid black;
-    padding: 5px 10px;
-    background-color: lightgray;
-    display: inline-block;
-}

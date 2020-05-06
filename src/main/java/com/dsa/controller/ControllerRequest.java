@@ -10,15 +10,11 @@ public class ControllerRequest {
   private static final String DEFAULT_REQUEST_CHARSET = "ISO-8859-1";
   private static final String UTF8 = "UTF-8";
 
-  private Map<String, String> params = new HashMap<>();
-  private Map<String, Object> sessionAttributes = new HashMap<>();
+  private final Map<String, String> params = new HashMap<>();
+  private final Map<String, Object> sessionAttributes = new HashMap<>();
 
   public ControllerRequest() {
     super();
-  }
-
-  public ControllerRequest(ControllerRequest controllerRequest) {
-    cloneSession(controllerRequest);
   }
 
   public String getParameter(String paramName) {
@@ -43,10 +39,6 @@ public class ControllerRequest {
     } else if (arr.length >= 1) {
       setParameter(arr[0], arr[1]);
     }
-  }
-
-  private void cloneSession(@NotNull ControllerRequest controllerRequest) {
-    sessionAttributes.putAll(controllerRequest.sessionAttributes);
   }
 
   public Object getSessionAttribute(String key) {

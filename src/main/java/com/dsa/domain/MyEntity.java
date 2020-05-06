@@ -11,7 +11,7 @@ import java.util.Date;
 
 public abstract class MyEntity implements Serializable, Cloneable {
 
-  private static String dateFormat = "dd.MM.yyyy";
+  private static final String dateFormat = "dd.MM.yyyy";
   protected String entityName = "MyEntity";
   private long id;
 

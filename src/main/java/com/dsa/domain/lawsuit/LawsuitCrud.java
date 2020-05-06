@@ -10,15 +10,13 @@ public class LawsuitCrud extends SueCrud {
 
   public static final String path = "/lawsuits/";
 
-  private User judge;
-
   public LawsuitCrud() {
     super(path);
   }
 
   @Override
-  protected boolean checkAuthority(ControllerRequest request, ControllerResponse controllerResponse) {
-    judge = LoginCommand.getSessionUser(request);
+  protected boolean checkAuthority(ControllerRequest request) {
+    User judge = LoginCommand.getSessionUser(request);
     return judge != null && (judge.getRole() == Role.JUDGE);
   }
 

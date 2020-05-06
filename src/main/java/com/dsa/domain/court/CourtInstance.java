@@ -8,7 +8,7 @@ public enum CourtInstance {
   APPEAL(2),
   CASSATION(3);
 
-  private int instanceLevel;
+  private final int instanceLevel;
 
   @Contract(pure = true)
   CourtInstance(int instanceLevel) {

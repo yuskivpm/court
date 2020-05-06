@@ -16,17 +16,17 @@ public class ControllerResponse {
 
   private ResponseType responseType;
   private String responseValue;
-  private Map<String, Object> attributes = new HashMap<>();
-  private Map<String, Object> sessionAttributes = new HashMap<>();
+  private final Map<String, Object> attributes = new HashMap<>();
+  private final Map<String, Object> sessionAttributes = new HashMap<>();
 
   public ControllerResponse() {
   }
-
-  @Contract(pure = true)
-  public ControllerResponse(ResponseType responseType, String responseValue) {
-    this.responseType = responseType;
-    this.responseValue = responseValue;
-  }
+//
+//  @Contract(pure = true)
+//  public ControllerResponse(ResponseType responseType, String responseValue) {
+//    this.responseType = responseType;
+//    this.responseValue = responseValue;
+//  }
 
   public ResponseType getResponseType() {
     return responseType;
