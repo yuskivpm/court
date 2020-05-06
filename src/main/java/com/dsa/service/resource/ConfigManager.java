@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ResourceBundle;
 
 public class ConfigManager {
+
   private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("config");
 
   @Contract(pure = true)
@@ -16,4 +17,5 @@ public class ConfigManager {
   public static String getProperty(String key) {
     return resourceBundle.getString(key);
   }
+
 }

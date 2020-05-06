@@ -11,7 +11,7 @@ import java.util.Date;
 
 public abstract class MyEntity implements Serializable, Cloneable {
 
-  public static String dateFormat = "dd.MM.yyyy";
+  private static String dateFormat = "dd.MM.yyyy";
   protected String entityName = "MyEntity";
   private long id;
 
@@ -49,13 +49,13 @@ public abstract class MyEntity implements Serializable, Cloneable {
   }
 
   @Contract("null, _ -> param2")
-  public static long getIdIfNotNull(MyEntity entity, long defaultValue) {
+  protected static long getIdIfNotNull(MyEntity entity, long defaultValue) {
     return entity == null ? defaultValue : entity.getId();
   }
 
   @NotNull
   @Contract("_ -> new")
-  public static SimpleDateFormat getDateFormatter(String dateFormat) {
+  private static SimpleDateFormat getDateFormatter(String dateFormat) {
     return new SimpleDateFormat(dateFormat == null ? MyEntity.dateFormat : dateFormat);
   }
 

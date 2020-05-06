@@ -10,13 +10,9 @@ import java.util.HashMap;
 
 public class ControllerResponse {
 
-  private static final String PATH_PAGE_INDEX;
-  private static final String NULL_PAGE_MESSAGE;
-
-  static {
-    PATH_PAGE_INDEX = ConfigManager.getProperty("path.page.index");
-    NULL_PAGE_MESSAGE = MessageManager.getProperty("message.nullPage");
-  }
+  private static final String PATH_PAGE_INDEX = ConfigManager.getProperty("path.page.index");
+  private static final String NULL_PAGE_MESSAGE = MessageManager.getProperty("message.nullPage");
+  private static final String NULL_PAGE_NAME = "nullPage";
 
   private ResponseType responseType;
   private String responseValue;
@@ -67,7 +63,7 @@ public class ControllerResponse {
   public void resetToDefault() {
     responseType = ResponseType.REDIRECT;
     responseValue = PATH_PAGE_INDEX;
-    setAttribute("nullPage", NULL_PAGE_MESSAGE);
+    setAttribute(NULL_PAGE_NAME, NULL_PAGE_MESSAGE);
   }
 
 }

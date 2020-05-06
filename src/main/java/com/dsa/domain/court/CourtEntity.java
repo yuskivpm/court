@@ -7,9 +7,10 @@ import java.util.Objects;
 public class CourtEntity extends MyEntity {
 
   private static final String ENTITY_NAME = "Court";
+
   private String courtName;
   private CourtInstance courtInstance;
-  protected long mainCourtId;
+  private long mainCourtId;
 
   public CourtEntity() {
     entityName = ENTITY_NAME;

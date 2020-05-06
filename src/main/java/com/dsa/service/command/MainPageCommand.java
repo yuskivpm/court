@@ -4,12 +4,12 @@ import com.dsa.controller.ControllerRequest;
 import com.dsa.controller.ControllerResponse;
 import com.dsa.controller.ResponseType;
 import com.dsa.domain.court.CourtDao;
+import com.dsa.domain.court.Court;
 import com.dsa.domain.lawsuit.Lawsuit;
 import com.dsa.domain.lawsuit.LawsuitDao;
 import com.dsa.domain.user.User;
 import com.dsa.domain.user.UserDao;
-import com.dsa.dao.service.DbPoolException;
-import com.dsa.domain.court.Court;
+import com.dsa.dao.DbPoolException;
 import com.dsa.service.resource.ConfigManager;
 
 import org.apache.log4j.Logger;
@@ -27,24 +27,23 @@ public class MainPageCommand implements BiFunction<ControllerRequest, Controller
   @Override
   public ControllerResponse apply(@NotNull ControllerRequest request, ControllerResponse controllerResponse) {
     User user = LoginCommand.getSessionUser(request);
-    return user == null ? new EmptyCommand().apply(request, controllerResponse) : apply(request, controllerResponse, user);
+    return user == null ? new EmptyCommand().apply(request, controllerResponse) : apply(controllerResponse, user);
   }
 
-  public ControllerResponse apply(@NotNull ControllerRequest request, @NotNull ControllerResponse controllerResponse, User user) {
+  public ControllerResponse apply(@NotNull ControllerResponse controllerResponse, User user) {
     controllerResponse.setResponseType(ResponseType.FORWARD);
     controllerResponse.setResponseValue(MainPageCommand.getMainPageForUser(user));
-    MainPageCommand.initializeJsp(user, request, controllerResponse);
+    MainPageCommand.initializeJsp(user, controllerResponse);
     return controllerResponse;
   }
 
   @NotNull
-  public static String getMainPageForUser(User user) {
+  private static String getMainPageForUser(User user) {
     return ConfigManager.getProperty("path.page.main" + (user == null ? "" : ("." + user.getRole())));
   }
 
   private static void initializeJspForAdmin(
       @NotNull User currentUser,
-      @NotNull ControllerRequest controllerRequest,
       @NotNull ControllerResponse controllerResponse
   ) {
     // get users list
@@ -71,7 +70,6 @@ public class MainPageCommand implements BiFunction<ControllerRequest, Controller
 
   private static void initializeJspForAttorney(
       @NotNull User currentUser,
-      @NotNull ControllerRequest controllerRequest,
       @NotNull ControllerResponse controllerResponse
   ) {
     try (LawsuitDao lawsuitDao = new LawsuitDao()) {
@@ -95,7 +93,6 @@ public class MainPageCommand implements BiFunction<ControllerRequest, Controller
 
   private static void initializeJspForJudge(
       @NotNull User currentUser,
-      @NotNull ControllerRequest controllerRequest,
       @NotNull ControllerResponse controllerResponse
   ) {
     try (LawsuitDao lawsuitDao = new LawsuitDao()) {
@@ -116,25 +113,20 @@ public class MainPageCommand implements BiFunction<ControllerRequest, Controller
 
   private static void initializeJsp(
       User currentUser,
-      @NotNull ControllerRequest controllerRequest,
       @NotNull ControllerResponse controllerResponse
   ) {
     controllerResponse.setAttribute("curUser", currentUser);
-    switch (currentUser.getRole().toString()) {
-      case "JUDGE":
-        initializeJspForJudge(currentUser, controllerRequest, controllerResponse);
+    switch (currentUser.getRole()) {
+      case JUDGE:
+        initializeJspForJudge(currentUser, controllerResponse);
         break;
-      case "ATTORNEY":
-        initializeJspForAttorney(currentUser, controllerRequest, controllerResponse);
+      case ATTORNEY:
+        initializeJspForAttorney(currentUser, controllerResponse);
         break;
-      case "ADMIN":
-        initializeJspForAdmin(currentUser, controllerRequest, controllerResponse);
+      case ADMIN:
+        initializeJspForAdmin(currentUser, controllerResponse);
         break;
-      case "GUEST":
-//        todo:  unready prepare jsp variables for GUEST main page
-//        break;
       default:
-//        todo:  unready ERROR main page
     }
   }
 

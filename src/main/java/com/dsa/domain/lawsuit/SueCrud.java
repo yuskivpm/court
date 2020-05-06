@@ -2,13 +2,13 @@ package com.dsa.domain.lawsuit;
 
 import com.dsa.controller.ControllerRequest;
 import com.dsa.controller.ControllerResponse;
-import com.dsa.dao.service.DbPoolException;
+import com.dsa.dao.DbPoolException;
 import com.dsa.domain.user.Role;
 import com.dsa.domain.user.User;
 import com.dsa.domain.MyEntity;
 import com.dsa.service.command.LoginCommand;
-
 import com.dsa.service.crud.AbstractCrud;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
@@ -61,6 +61,7 @@ public class SueCrud extends AbstractCrud<Lawsuit, LawsuitDao> {
         try (LawsuitDao lawsuitDao = new LawsuitDao()) {
           lawsuit = lawsuitDao.readEntity(id);
         }
+        lawsuit.setCourtId(getNotNull(request.getParameter("courtId"), lawsuit.getCourtId()));
         lawsuit.setClaimText(getNotNull(request.getParameter("claimText"), lawsuit.getClaimText()));
         lawsuit.setDefendantText(getNotNull(request.getParameter("defendantText"), lawsuit.getDefendantText()));
         lawsuit.setVerdictText(getNotNull(request.getParameter("verdictText"), lawsuit.getVerdictText()));

@@ -11,8 +11,8 @@ public class UserEntity extends MyEntity {
   private String login;
   private String password;
   private Role role;
-  long courtId;
-  boolean isActive;
+  private long courtId;
+  private boolean isActive;
 
   public UserEntity() {
     entityName = ENTITY_NAME;

@@ -1,6 +1,7 @@
 package com.dsa.service.crud;
 
 public enum CrudEnum {
+
   CREATE,
   READ,
   READ_ALL,
@@ -9,4 +10,5 @@ public enum CrudEnum {
   PREPARE_UPDATE_FORM,
   WRONG,
   UNKNOWN
+
 }

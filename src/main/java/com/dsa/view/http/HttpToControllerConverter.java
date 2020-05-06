@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Map;
 
-public class HttpToControllerConverter {
+class HttpToControllerConverter {
 
   private static void getMainRequestCommonData(@NotNull HttpServletRequest request, @NotNull ControllerRequest controllerRequest) {
     controllerRequest.setParameter(Controller.METHOD, request.getMethod());
@@ -24,6 +24,9 @@ public class HttpToControllerConverter {
         controllerRequest.setParameter(name, String.join(",", values));
       }
     });
+    if (controllerRequest.getParameter(Controller.COMMAND).isEmpty()) {
+      controllerRequest.setParameter(Controller.COMMAND, request.getPathInfo() + "/");
+    }
   }
 
   private static void getMainRequestReaderData(@NotNull HttpServletRequest request, @NotNull ControllerRequest controllerRequest) {
@@ -54,7 +57,7 @@ public class HttpToControllerConverter {
   }
 
   @NotNull
-  public static ControllerRequest prepareRequestDataForController(@NotNull HttpServletRequest request, boolean loadReaderData) {
+  static ControllerRequest prepareRequestDataForController(@NotNull HttpServletRequest request, boolean loadReaderData) {
     ControllerRequest controllerRequest = new ControllerRequest();
     getMainRequestCommonData(request, controllerRequest);
     if (loadReaderData) {

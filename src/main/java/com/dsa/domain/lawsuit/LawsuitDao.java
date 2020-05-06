@@ -1,7 +1,7 @@
 package com.dsa.domain.lawsuit;
 
 import com.dsa.dao.AbstractEntityDao;
-import com.dsa.dao.service.DbPoolException;
+import com.dsa.dao.DbPoolException;
 import com.dsa.domain.court.Court;
 import com.dsa.domain.court.CourtDao;
 import com.dsa.domain.user.UserDao;
@@ -15,38 +15,55 @@ import java.sql.Connection;
 import java.util.List;
 
 public class LawsuitDao extends AbstractEntityDao<Lawsuit> {
+
   private static final String LAWSUIT_TABLE_NAME = "LAWSUIT";
+  private static final String SUITOR_ID = "SUITOR_ID";
+  private static final String DEFENDANT_ID = "DEFENDANT_ID";
+  private static final String COURT_ID = "COURT_ID";
+  private static final String JUDGE_ID = "JUDGE_ID";
+  private static final String SUE_DATE = "SUE_DATE";
+  private static final String CLAIM_TEXT = "CLAIM_TEXT";
+  private static final String DEFENDANT_TEXT = "DEFENDANT_TEXT";
+  private static final String START_DATE = "START_DATE";
+  private static final String VERDICT_DATE = "VERDICT_DATE";
+  private static final String VERDICT_TEXT = "VERDICT_TEXT";
+  private static final String APPEALED_LAWSUIT_ID = "APPEALED_LAWSUIT_ID";
+  private static final String APPEAL_STATUS = "APPEAL_STATUS";
+  private static final String EXECUTION_DATE = "EXECUTION_DATE";
+
   private static final String SQL_INSERT = "INSERT INTO " + LAWSUIT_TABLE_NAME +
-      " (SUE_DATE, COURT_ID, SUITOR_ID, CLAIM_TEXT, DEFENDANT_ID, DEFENDANT_TEXT, JUDGE_ID, START_DATE, VERDICT_DATE," +
-      " VERDICT_TEXT, APPEALED_LAWSUIT_ID, APPEAL_STATUS, EXECUTION_DATE) " +
+      " (" + SUE_DATE + ", " + COURT_ID + ", " + SUITOR_ID + ", " + CLAIM_TEXT + ", " + DEFENDANT_ID + ", " +
+      DEFENDANT_TEXT + ", " + JUDGE_ID + ", " + START_DATE + ", " + VERDICT_DATE + ", " + VERDICT_TEXT + ", " +
+      APPEALED_LAWSUIT_ID + ", " + APPEAL_STATUS + ", " + EXECUTION_DATE + ") " +
       "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
   private static final String SQL_UPDATE = "UPDATE " + LAWSUIT_TABLE_NAME +
-      " SET SUE_DATE = ?, COURT_ID = ?, SUITOR_ID = ?, CLAIM_TEXT = ?, DEFENDANT_ID = ?, DEFENDANT_TEXT = ?," +
-      " JUDGE_ID = ?, START_DATE = ?, VERDICT_DATE = ?, VERDICT_TEXT = ?, APPEALED_LAWSUIT_ID = ?," +
-      " APPEAL_STATUS = ?, EXECUTION_DATE = ?" +
-      " WHERE ID = ?";
+      " SET " + SUE_DATE + " = ?, " + COURT_ID + " = ?, " + SUITOR_ID + " = ?, " + CLAIM_TEXT + " = ?, " +
+      DEFENDANT_ID + " = ?, " + DEFENDANT_TEXT + " = ?, " + JUDGE_ID + " = ?, " + START_DATE + " = ?, " +
+      VERDICT_DATE + " = ?, " + VERDICT_TEXT + " = ?, " + APPEALED_LAWSUIT_ID + " = ?, " + APPEAL_STATUS + " = ?, " +
+      EXECUTION_DATE + " = ?" +
+      " WHERE " + ID + " = ?";
 
   public static final String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + LAWSUIT_TABLE_NAME + " (" +
-      "ID BIGINT AUTO_INCREMENT PRIMARY KEY, " +
-      "SUE_DATE DATE NOT NULL, " +
-      "COURT_ID BIGINT NOT NULL, " +
-      "SUITOR_ID BIGINT NOT NULL, " +
-      "CLAIM_TEXT VARCHAR(255) NOT NULL, " +
-      "DEFENDANT_ID BIGINT NOT NULL, " +
-      "DEFENDANT_TEXT VARCHAR(255) DEFAULT NULL, " +
-      "JUDGE_ID BIGINT DEFAULT NULL, " +
-      "START_DATE DATE DEFAULT NULL, " +
-      "VERDICT_DATE DATE DEFAULT NULL, " +
-      "VERDICT_TEXT VARCHAR(255) DEFAULT NULL, " +
-      "APPEALED_LAWSUIT_ID BIGINT DEFAULT NULL, " +
-      "APPEAL_STATUS VARCHAR(255) DEFAULT NULL, " +
-      "EXECUTION_DATE DATE DEFAULT NULL," +
-      "FOREIGN KEY (SUITOR_ID) REFERENCES USER(ID), " +
-      "FOREIGN KEY (DEFENDANT_ID) REFERENCES USER(ID), " +
-      "FOREIGN KEY (COURT_ID) REFERENCES COURT(ID), " +
-      "FOREIGN KEY (JUDGE_ID) REFERENCES USER(ID), " +
-      "FOREIGN KEY (APPEALED_LAWSUIT_ID) REFERENCES LAWSUIT(ID) " +
+      ID + " BIGINT AUTO_INCREMENT PRIMARY KEY, " +
+      SUE_DATE + " DATE " + NOT_NULL + ", " +
+      COURT_ID + " BIGINT " + NOT_NULL + ", " +
+      SUITOR_ID + " BIGINT " + NOT_NULL + ", " +
+      CLAIM_TEXT + " VARCHAR(255) " + NOT_NULL + ", " +
+      DEFENDANT_ID + " BIGINT " + NOT_NULL + ", " +
+      DEFENDANT_TEXT + " VARCHAR(255) " + DEFAULT_NULL + ", " +
+      JUDGE_ID + " BIGINT " + DEFAULT_NULL + ", " +
+      START_DATE + " DATE " + DEFAULT_NULL + ", " +
+      VERDICT_DATE + " DATE " + DEFAULT_NULL + ", " +
+      VERDICT_TEXT + " VARCHAR(255) " + DEFAULT_NULL + ", " +
+      APPEALED_LAWSUIT_ID + " BIGINT " + DEFAULT_NULL + ", " +
+      APPEAL_STATUS + " VARCHAR(255) " + DEFAULT_NULL + ", " +
+      EXECUTION_DATE + " DATE " + DEFAULT_NULL + "," +
+      "FOREIGN KEY (" + SUITOR_ID + ") REFERENCES USER(" + ID + "), " +
+      "FOREIGN KEY (" + DEFENDANT_ID + ") REFERENCES USER(" + ID + "), " +
+      "FOREIGN KEY (" + COURT_ID + ") REFERENCES COURT(" + ID + "), " +
+      "FOREIGN KEY (" + JUDGE_ID + ") REFERENCES USER(" + ID + "), " +
+      "FOREIGN KEY (" + APPEALED_LAWSUIT_ID + ") REFERENCES LAWSUIT(" + ID + ") " +
       ")";
 
   public LawsuitDao() throws SQLException, DbPoolException {
@@ -58,22 +75,22 @@ public class LawsuitDao extends AbstractEntityDao<Lawsuit> {
   }
 
   public List<Lawsuit> readAllBySuitorId(long suitorId) throws SQLException {
-    String[] where = {"SUITOR_ID", Long.toString(suitorId)};
+    String[] where = {SUITOR_ID, Long.toString(suitorId)};
     return readAll(where);
   }
 
   public List<Lawsuit> readAllByDefendantId(long defendantId) throws SQLException {
-    String[] where = {"DEFENDANT_ID", Long.toString(defendantId)};
+    String[] where = {DEFENDANT_ID, Long.toString(defendantId)};
     return readAll(where);
   }
 
   public List<Lawsuit> readAllUnacceptedForCourtId(long courtId) throws SQLException {
-    String[] where = {"COURT_ID", Long.toString(courtId), "JUDGE_ID", null};
+    String[] where = {COURT_ID, Long.toString(courtId), JUDGE_ID, null};
     return readAll(where);
   }
 
   public List<Lawsuit> readAllForJudgeId(long judgeId) throws SQLException {
-    String[] where = {"JUDGE_ID", Long.toString(judgeId)};
+    String[] where = {JUDGE_ID, Long.toString(judgeId)};
     return readAll(where);
   }
 
@@ -81,23 +98,23 @@ public class LawsuitDao extends AbstractEntityDao<Lawsuit> {
   protected Lawsuit recordToEntity(@NotNull ResultSet resultSet) {
     Lawsuit lawsuit = new Lawsuit();
     try {
-      lawsuit.setId(resultSet.getLong("ID"));
-      lawsuit.setSueDate(sqlDateToDate(resultSet.getDate("SUE_DATE")));
-      lawsuit.setCourtId(resultSet.getLong("COURT_ID"));
-      lawsuit.setSuitorId(resultSet.getLong("SUITOR_ID"));
-      lawsuit.setClaimText(resultSet.getString("CLAIM_TEXT"));
-      lawsuit.setDefendantId(resultSet.getLong("DEFENDANT_ID"));
-      lawsuit.setDefendantText(resultSet.getString("DEFENDANT_TEXT"));
-      lawsuit.setJudgeId(resultSet.getLong("JUDGE_ID"));
-      lawsuit.setStartDate(sqlDateToDate(resultSet.getDate("START_DATE")));
-      lawsuit.setVerdictDate(sqlDateToDate(resultSet.getDate("VERDICT_DATE")));
-      lawsuit.setVerdictText(resultSet.getString("VERDICT_TEXT"));
-      lawsuit.setAppealedLawsuitId(resultSet.getLong("APPEALED_LAWSUIT_ID"));
-      lawsuit.setAppealStatus(resultSet.getString("APPEAL_STATUS"));
-      lawsuit.setExecutionDate(sqlDateToDate(resultSet.getDate("EXECUTION_DATE")));
+      lawsuit.setId(resultSet.getLong(ID));
+      lawsuit.setSueDate(sqlDateToDate(resultSet.getDate(SUE_DATE)));
+      lawsuit.setCourtId(resultSet.getLong(COURT_ID));
+      lawsuit.setSuitorId(resultSet.getLong(SUITOR_ID));
+      lawsuit.setClaimText(resultSet.getString(CLAIM_TEXT));
+      lawsuit.setDefendantId(resultSet.getLong(DEFENDANT_ID));
+      lawsuit.setDefendantText(resultSet.getString(DEFENDANT_TEXT));
+      lawsuit.setJudgeId(resultSet.getLong(JUDGE_ID));
+      lawsuit.setStartDate(sqlDateToDate(resultSet.getDate(START_DATE)));
+      lawsuit.setVerdictDate(sqlDateToDate(resultSet.getDate(VERDICT_DATE)));
+      lawsuit.setVerdictText(resultSet.getString(VERDICT_TEXT));
+      lawsuit.setAppealedLawsuitId(resultSet.getLong(APPEALED_LAWSUIT_ID));
+      lawsuit.setAppealStatus(resultSet.getString(APPEAL_STATUS));
+      lawsuit.setExecutionDate(sqlDateToDate(resultSet.getDate(EXECUTION_DATE)));
       return lawsuit;
     } catch (SQLException e) {
-      log.error("SQLException in LawsuitDao.recordToEntity: " + e);
+      LOG.error("SQLException in LawsuitDao.recordToEntity: " + e);
       return null;
     }
   }
@@ -122,7 +139,7 @@ public class LawsuitDao extends AbstractEntityDao<Lawsuit> {
     setPreparedValueOrNull(preparedStatement, ++index, lawsuit.getAppealedLawsuitId());
     preparedStatement.setString(++index, lawsuit.getAppealStatus());
     preparedStatement.setDate(++index, dateToSqlDate(lawsuit.getExecutionDate()));
-    return ++index; // next index for preparedStatement.set_()
+    return ++index;
   }
 
   @Override

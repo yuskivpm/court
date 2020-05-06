@@ -97,7 +97,11 @@ ${curUser.name}, hello!
             </td>
             <td>${lawsuit.verdictText}</td>
             <td>${lawsuit.appealStatus}</td>
-            <td>${lawsuit.appealedLawsuitId}</td>
+            <td>
+                <c:if test="${lawsuit.appealedLawsuitId != 0}">
+                    ${lawsuit.appealedLawsuitId}
+                </c:if>
+            </td>
             <td>
                 <fmt:formatDate pattern="dd.MM.yyyy" value="${lawsuit.executionDate}"/>
             </td>

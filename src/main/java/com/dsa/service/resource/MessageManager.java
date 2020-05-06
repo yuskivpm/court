@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ResourceBundle;
 
 public class MessageManager {
+
   private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("messages");
 
   @Contract(pure = true)

@@ -1,7 +1,7 @@
 package com.dsa.domain.court;
 
 import com.dsa.dao.AbstractEntityDao;
-import com.dsa.dao.service.DbPoolException;
+import com.dsa.dao.DbPoolException;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -11,17 +11,25 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class CourtDao extends AbstractEntityDao<Court> {
+
   private static final String COURT_TABLE_NAME = "COURT";
-  private static final String SQL_INSERT = "INSERT INTO " + COURT_TABLE_NAME + " (COURT_NAME,COURT_INSTANCE,MAIN_COURT_ID) VALUES(?, ?, ?)";
+  private static final String COURT_NAME = "COURT_NAME";
+  private static final String COURT_INSTANCE = "COURT_INSTANCE";
+  private static final String MAIN_COURT_ID = "MAIN_COURT_ID";
+
+  private static final String SQL_INSERT = "INSERT INTO " + COURT_TABLE_NAME +
+      " (" + COURT_NAME + "," + COURT_INSTANCE + "," + MAIN_COURT_ID + ") VALUES(?, ?, ?)";
+
   private static final String SQL_UPDATE = "UPDATE " + COURT_TABLE_NAME +
-      " SET COURT_NAME = ?, COURT_INSTANCE = ?, MAIN_COURT_ID = ?" +
-      " WHERE ID = ?";
+      " SET " + COURT_NAME + " = ?, " + COURT_INSTANCE + " = ?, " + MAIN_COURT_ID + " = ?" +
+      " WHERE " + ID + " = ?";
+
   public static final String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + COURT_TABLE_NAME + " (" +
-      "ID BIGINT AUTO_INCREMENT PRIMARY KEY, " +
-      "COURT_NAME VARCHAR(255) NOT NULL, " +
-      "COURT_INSTANCE VARCHAR(20) NOT NULL, " +
-      "MAIN_COURT_ID BIGINT DEFAULT NULL," +
-      "FOREIGN KEY (MAIN_COURT_ID) REFERENCES (ID) ON DELETE CASCADE" +
+      ID + " BIGINT AUTO_INCREMENT PRIMARY KEY, " +
+      COURT_NAME + " VARCHAR(255) " + NOT_NULL + ", " +
+      COURT_INSTANCE + " VARCHAR(20) " + NOT_NULL + ", " +
+      MAIN_COURT_ID + " BIGINT " + DEFAULT_NULL + "," +
+      "FOREIGN KEY (" + MAIN_COURT_ID + ") REFERENCES (" + ID + ") ON DELETE CASCADE" +
       ")";
 
   public CourtDao() throws SQLException, DbPoolException {
@@ -36,24 +44,28 @@ public class CourtDao extends AbstractEntityDao<Court> {
   protected Court recordToEntity(@NotNull ResultSet resultSet) {
     Court court = new Court();
     try {
-      court.setId(resultSet.getLong("ID"));
-      court.setCourtName(resultSet.getString("COURT_NAME"));
-      court.setCourtInstance(CourtInstance.valueOf(resultSet.getString("COURT_INSTANCE")));
-      court.setMainCourtId(resultSet.getLong("MAIN_COURT_ID"));
+      court.setId(resultSet.getLong(ID));
+      court.setCourtName(resultSet.getString(COURT_NAME));
+      court.setCourtInstance(CourtInstance.valueOf(resultSet.getString(COURT_INSTANCE)));
+      court.setMainCourtId(resultSet.getLong(MAIN_COURT_ID));
       return court;
     } catch (SQLException e) {
-      log.error("SQLException in CourtDao.recordToEntity: " + e);
+      LOG.error("SQLException in CourtDao.recordToEntity: " + e);
       return null;
     }
   }
 
   @Override
-  protected int setAllPreparedValues(@NotNull PreparedStatement preparedStatement, @NotNull Court court, boolean isAddOperation) throws SQLException {
+  protected int setAllPreparedValues(
+      @NotNull PreparedStatement preparedStatement,
+      @NotNull Court court,
+      boolean isAddOperation
+  ) throws SQLException {
     int index = 0;
     preparedStatement.setString(++index, court.getCourtName());
     preparedStatement.setString(++index, court.getCourtInstance().toString());
     setPreparedValueOrNull(preparedStatement, ++index, court.getMainCourtId());
-    return ++index; // next index for preparedStatement.set_()
+    return ++index;
   }
 
   @Override

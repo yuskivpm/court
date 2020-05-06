@@ -8,13 +8,12 @@ import java.util.Objects;
 public class LawsuitEntity extends MyEntity {
 
   private static final String ENTITY_NAME = "Lawsuit";
-  // sue data
+
   private Date sueDate;
   private long courtId;
   private long suitorId;
   private String claimText;
   private long defendantId;
-  // stage data
   private String defendantText;
   private long judgeId;
   private Date startDate;

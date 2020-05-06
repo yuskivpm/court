@@ -2,7 +2,7 @@ package com.dsa.domain.court;
 
 import com.dsa.controller.ControllerRequest;
 import com.dsa.controller.ControllerResponse;
-import com.dsa.dao.service.DbPoolException;
+import com.dsa.dao.DbPoolException;
 import com.dsa.domain.user.Role;
 import com.dsa.domain.user.User;
 import com.dsa.service.command.LoginCommand;
@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import java.sql.SQLException;
 
 public class CourtCrud extends AbstractCrud<Court, CourtDao> {
+
   public static final String path = "/courts/";
 
   public CourtCrud() {

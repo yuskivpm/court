@@ -1,8 +1,9 @@
 package com.dsa.dao.service;
 
+import com.dsa.dao.DbPoolException;
+
 import org.apache.log4j.Logger;
 import org.h2.jdbcx.JdbcConnectionPool;
-
 import org.jetbrains.annotations.Contract;
 
 import java.sql.Connection;
@@ -11,8 +12,8 @@ import java.util.ResourceBundle;
 
 public final class DbPool {
 
+  private static final Logger LOG = Logger.getLogger(DbPool.class);
   private static JdbcConnectionPool connectionPool = null;
-  private static final Logger log = Logger.getLogger(DbPool.class);
   private static final int MAX_CONNECTIONS = 30;
 
   static {
@@ -34,11 +35,11 @@ public final class DbPool {
         maxConnections = MAX_CONNECTIONS;
       }
       if (!dbClassName.isEmpty() && !url.isEmpty()) {
-        log.trace("Auto init DbPool");
+        LOG.trace("Auto init DbPool");
         initializeDbPool(dbClassName, url, user, password, maxConnections);
       }
     } catch (Exception e) {
-      log.error("Exception while static initialization of DbPool: " + e);
+      LOG.error("Exception while static initialization of DbPool: " + e);
     }
   }
 
@@ -46,28 +47,28 @@ public final class DbPool {
   private DbPool() {
   }
 
-  public static void initializeDbPool(String dbClassName, String url, String user, String password, int maxConnections) {
-    log.trace("Init DbPool");
+  private static void initializeDbPool(String dbClassName, String url, String user, String password, int maxConnections) {
+    LOG.trace("Init DbPool");
     if (connectionPool == null) {
       try {
         Class.forName(dbClassName);
       } catch (ClassNotFoundException e) {
         e.printStackTrace();
-        log.error("Init DbPool exception initialization db class(" + dbClassName + "): " + e);
+        LOG.error("Init DbPool exception initialization db class(" + dbClassName + "): " + e);
       }
       connectionPool = JdbcConnectionPool.create(url, user, password);
       connectionPool.setMaxConnections(maxConnections);
     }
   }
 
-  public static void closeDbPool() {
-    log.trace("Close DbPool");
+  private static void closeDbPool() {
+    LOG.trace("Close DbPool");
     if (connectionPool != null) {
       try {
         connectionPool.dispose();
         connectionPool = null;
       } catch (Exception e) {
-        log.error("ClosePool. Exception connectionPool.dispose: " + e);
+        LOG.error("ClosePool. Exception connectionPool.dispose: " + e);
       }
     }
   }
