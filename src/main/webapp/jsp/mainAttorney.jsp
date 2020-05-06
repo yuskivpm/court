@@ -224,7 +224,7 @@ ${curUser.name}, hello!
                 <c:if test="${lawsuit.executionDate == null && (lawsuit.appealStatus == null || lawsuit.appealStatus == '')}">
                     <c:if test="${lawsuit.verdictDate == null}">
                         <button type="button"
-                                onclick="changePositionText('claimText','${lawsuit.claimText}',${lawsuit.id})">
+                                onclick="changePositionText('defendantText','${lawsuit.defendantText}',${lawsuit.id})">
                             Change position
                         </button>
                     </c:if>
