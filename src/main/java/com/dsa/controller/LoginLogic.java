@@ -5,6 +5,7 @@ import com.dsa.domain.user.UserDao;
 import com.dsa.dao.DbPoolException;
 
 import org.apache.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
 
@@ -16,13 +17,15 @@ public class LoginLogic {
   private static final String LOGIN = "LOGIN";
   private static final String EXCEPTION_TEXT = "Can not get connection in checkLogin: ";
 
-  public static User checkLogin(String login, String password) {
+  public static User checkLogin(@NotNull String login, @NotNull String password) {
     User user = null;
-    try (UserDao userDao = new UserDao()) {
-      String[] loginRequest = {LOGIN, login, PASSWORD, password};
-      user = userDao.loadAllSubEntities(userDao.readEntity(loginRequest));
-    } catch (DbPoolException | SQLException e) {
-      log.error(EXCEPTION_TEXT + e);
+    if (!login.isEmpty() && !password.isEmpty()){
+      try (UserDao userDao = new UserDao()) {
+        String[] loginRequest = {LOGIN, login, PASSWORD, password};
+        user = userDao.loadAllSubEntities(userDao.readEntity(loginRequest));
+      } catch (DbPoolException | SQLException e) {
+        log.error(EXCEPTION_TEXT + e);
+      }
     }
     return user;
   }

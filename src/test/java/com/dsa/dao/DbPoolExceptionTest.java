@@ -1,0 +1,8 @@
+package com.dsa.dao;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class DbPoolExceptionTest {
+//todo: test
+
+}

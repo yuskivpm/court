@@ -18,6 +18,7 @@ public final class DbPool {
 
   static {
     try {
+      Class.forName("com.dsa.dao.service.DbCreator");
       ResourceBundle resourceBundle = ResourceBundle.getBundle("database");
       String dbClassName = resourceBundle.getString("dbClassName");
       String url = resourceBundle.getString("url");

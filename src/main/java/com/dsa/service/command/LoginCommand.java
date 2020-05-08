@@ -32,7 +32,6 @@ public class LoginCommand implements BiFunction<ControllerRequest, ControllerRes
     if (user != null) {
       controllerResponse = new MainPageCommand().apply(controllerResponse, user);
       LoginCommand.startUserSession(controllerResponse, user);
-      controllerResponse.setAttribute("curUser", user);
       return controllerResponse;
     } else {
       controllerResponse.setAttribute("errorFailLoginPassMessage", MessageManager.getProperty("message.loginError"));

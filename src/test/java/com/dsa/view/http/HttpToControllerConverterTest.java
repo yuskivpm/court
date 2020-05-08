@@ -1,17 +1,18 @@
 package com.dsa.view.http;
 
 import com.dsa.controller.ControllerRequest;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import javax.servlet.http.HttpServletRequest;
-
-import java.io.IOException;
-
 import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 class HttpToControllerConverterTest {
 
@@ -45,6 +46,13 @@ class HttpToControllerConverterTest {
     verify(request).getQueryString();
     verify(request).getSession();
     verify(request).getReader();
+  }
+
+  @Test
+  void httpToControllerConverter_Constructor() throws IOException {
+    System.out.println("Start httpToControllerConverter_Constructor");
+    HttpToControllerConverter httpToControllerConverter = new HttpToControllerConverter();
+    assertEquals(httpToControllerConverter.hashCode(), httpToControllerConverter.hashCode());
   }
 
   @BeforeAll

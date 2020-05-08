@@ -21,12 +21,6 @@ public class ControllerResponse {
 
   public ControllerResponse() {
   }
-//
-//  @Contract(pure = true)
-//  public ControllerResponse(ResponseType responseType, String responseValue) {
-//    this.responseType = responseType;
-//    this.responseValue = responseValue;
-//  }
 
   public ResponseType getResponseType() {
     return responseType;
