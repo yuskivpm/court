@@ -2,13 +2,13 @@ package com.dsa.controller;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.HashMap;
 
 public class ControllerRequest {
 
   private static final String DEFAULT_REQUEST_CHARSET = "ISO-8859-1";
-  private static final String UTF8 = "UTF-8";
 
   private final Map<String, String> params = new HashMap<>();
   private final Map<String, Object> sessionAttributes = new HashMap<>();
@@ -25,7 +25,7 @@ public class ControllerRequest {
   public void setParameter(String paramName, String paramValue) {
     String value;
     try {
-      value = new String(paramValue.getBytes(DEFAULT_REQUEST_CHARSET), UTF8);
+      value = new String(paramValue.getBytes(DEFAULT_REQUEST_CHARSET), StandardCharsets.UTF_8);
     } catch (Exception e) {
       value = paramValue;
     }

@@ -1,7 +1,6 @@
 package com.dsa.domain.court;
 
 import com.dsa.controller.ControllerRequest;
-import com.dsa.controller.ControllerResponse;
 import com.dsa.dao.DbPoolException;
 import com.dsa.domain.user.Role;
 import com.dsa.domain.user.User;

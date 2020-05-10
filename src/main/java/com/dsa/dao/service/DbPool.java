@@ -18,7 +18,6 @@ public final class DbPool {
 
   static {
     try {
-      Class.forName("com.dsa.dao.service.DbCreator");
       ResourceBundle resourceBundle = ResourceBundle.getBundle("database");
       String dbClassName = resourceBundle.getString("dbClassName");
       String url = resourceBundle.getString("url");
@@ -39,6 +38,7 @@ public final class DbPool {
         LOG.trace("Auto init DbPool");
         initializeDbPool(dbClassName, url, user, password, maxConnections);
       }
+      Class.forName("com.dsa.dao.service.DbCreator");
     } catch (Exception e) {
       LOG.error("Exception while static initialization of DbPool: " + e);
     }
@@ -79,11 +79,6 @@ public final class DbPool {
       throw new DbPoolException("DbPool isn't initialized");
     }
     return connectionPool.getConnection();
-  }
-
-  @Override
-  protected void finalize() {
-    closeDbPool();
   }
 
 }

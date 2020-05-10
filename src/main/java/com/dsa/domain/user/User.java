@@ -21,6 +21,9 @@ public class User extends UserEntity {
 
   public void setCourt(Court court) {
     this.court = court;
+    if (court == null){
+      super.setCourtId(0);
+    }
   }
 
   @Override

@@ -59,6 +59,7 @@ public class UserEntity extends MyEntity {
 
   public void setRole(Role role) {
     this.role = role;
+    setCourtId(getCourtId());
   }
 
   public long getCourtId() {

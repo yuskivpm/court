@@ -19,6 +19,9 @@ public class Court extends CourtEntity {
 
   public void setMainCourt(Court mainCourt) {
     this.mainCourt = mainCourt;
+    if (mainCourt == null){
+      super.setMainCourtId(0);
+    }
   }
 
   @Override
