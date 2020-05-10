@@ -41,7 +41,7 @@ public class MainServletFilter implements Filter {
 
   static {
     try {
-      Initialization.initialize();
+      Initialization.initialize(true);
     } catch (Exception e) {
       LOG.error("Fail to initialize some classes in MainServletFilter: " + e);
     }

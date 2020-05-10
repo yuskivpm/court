@@ -4,65 +4,31 @@ import com.dsa.dao.DbPoolException;
 
 import org.apache.log4j.Logger;
 import org.h2.jdbcx.JdbcConnectionPool;
-import org.jetbrains.annotations.Contract;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ResourceBundle;
 
-public final class DbPool {
+public class DbPool implements IDbPool{
 
   private static final Logger LOG = Logger.getLogger(DbPool.class);
   private static JdbcConnectionPool connectionPool = null;
-  private static final int MAX_CONNECTIONS = 30;
 
-  static {
-    try {
-      ResourceBundle resourceBundle = ResourceBundle.getBundle("database");
-      String dbClassName = resourceBundle.getString("dbClassName");
-      String url = resourceBundle.getString("url");
-      String user = resourceBundle.getString("user");
-      String password;
-      try {
-        password = resourceBundle.getString("password");
-      } catch (Exception e) {
-        password = "";
-      }
-      int maxConnections;
-      try {
-        maxConnections = Integer.parseInt(resourceBundle.getString("maxConnections"));
-      } catch (Exception e) {
-        maxConnections = MAX_CONNECTIONS;
-      }
-      if (!dbClassName.isEmpty() && !url.isEmpty()) {
-        LOG.trace("Auto init DbPool");
-        initializeDbPool(dbClassName, url, user, password, maxConnections);
-      }
-      Class.forName("com.dsa.dao.service.DbCreator");
-    } catch (Exception e) {
-      LOG.error("Exception while static initialization of DbPool: " + e);
-    }
-  }
-
-  @Contract(pure = true)
-  private DbPool() {
-  }
-
-  private static void initializeDbPool(String dbClassName, String url, String user, String password, int maxConnections) {
+  public DbPool(String dbClassName, String url, String user, String password, int maxConnections) throws DbPoolException {
     LOG.trace("Init DbPool");
     if (connectionPool == null) {
       try {
         Class.forName(dbClassName);
       } catch (ClassNotFoundException e) {
-        e.printStackTrace();
         LOG.error("Init DbPool exception initialization db class(" + dbClassName + "): " + e);
+        throw new DbPoolException("Fail init db class(" + dbClassName + ")");
       }
       connectionPool = JdbcConnectionPool.create(url, user, password);
       connectionPool.setMaxConnections(maxConnections);
     }
   }
 
-  private static void closeDbPool() {
+  @Override
+  public void closeDbPool() {
     LOG.trace("Close DbPool");
     if (connectionPool != null) {
       try {
@@ -74,7 +40,8 @@ public final class DbPool {
     }
   }
 
-  public static Connection getConnection() throws SQLException, DbPoolException {
+  @Override
+  public Connection getConnection() throws SQLException, DbPoolException {
     if (connectionPool == null) {
       throw new DbPoolException("DbPool isn't initialized");
     }

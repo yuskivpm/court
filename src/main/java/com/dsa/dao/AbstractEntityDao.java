@@ -1,6 +1,6 @@
 package com.dsa.dao;
 
-import com.dsa.dao.service.DbPool;
+import com.dsa.dao.service.IDbPool;
 import com.dsa.domain.MyEntity;
 
 import org.apache.log4j.Logger;
@@ -27,6 +27,8 @@ public abstract class AbstractEntityDao<E extends MyEntity> implements AutoClose
   private static final String SQL_SELECT_BY_MAP = "SELECT * FROM %s WHERE";
   private static final String SQL_DELETE_BY_ID = "DELETE FROM %s WHERE " + ID + "=?";
 
+  private static IDbPool dbPool;
+
   private final String TABLE_NAME;
   private final String SQL_INSERT;
   private final String SQL_UPDATE_BY_ID;
@@ -38,7 +40,7 @@ public abstract class AbstractEntityDao<E extends MyEntity> implements AutoClose
       String sqlInsert,
       String sqlUpdate
   ) throws DbPoolException, SQLException {
-    this(DbPool.getConnection(), entityTableName, sqlInsert, sqlUpdate);
+    this(dbPool.getConnection(), entityTableName, sqlInsert, sqlUpdate);
   }
 
   @Contract(pure = true)
@@ -213,6 +215,10 @@ public abstract class AbstractEntityDao<E extends MyEntity> implements AutoClose
     if (connection != null) {
       connection.close();
     }
+  }
+
+  public static void setDbPool(IDbPool dbPool){
+    AbstractEntityDao.dbPool = dbPool;
   }
 
 }

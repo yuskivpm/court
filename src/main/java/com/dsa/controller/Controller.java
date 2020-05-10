@@ -1,7 +1,6 @@
 package com.dsa.controller;
 
-import com.dsa.dao.service.DbPool;
-
+import com.dsa.dao.service.IDbPool;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
@@ -24,6 +23,12 @@ public class Controller {
 
   private static final Map<String, BiFunction<ControllerRequest, ControllerResponse, ControllerResponse>> executors = new HashMap<>();
 
+  private static IDbPool dbPool;
+
+  public static void setDbPool(IDbPool dbPool){
+    Controller.dbPool = dbPool;
+  }
+
   @NotNull
   public static ControllerResponse execute(@NotNull ControllerRequest mainRequest) {
     ControllerResponse controllerResponse = new ControllerResponse();
@@ -31,7 +36,7 @@ public class Controller {
     String[] commits = (mainRequest.getParameter(COMMIT_QUERY))
         .replace(COMMIT_COMMAND_OPERAND, "=")
         .split(COMMIT_SEPARATOR, -1);
-    try (Connection connection = DbPool.getConnection()) {
+    try (Connection connection = dbPool.getConnection()) {
       connection.setAutoCommit(false);
       try {
         int i = 0;

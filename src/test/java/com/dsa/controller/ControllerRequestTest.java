@@ -23,15 +23,10 @@ class ControllerRequestTest {
     assertEquals("", controllerRequest.getParameter(INCORRECT_KEY_NAME));
     controllerRequest.setParameter(KEY_PARAMETER, VALUE_PARAMETER);
     assertEquals(VALUE_PARAMETER, controllerRequest.getParameter(KEY_PARAMETER));
-  }
-
-  @Test
-  void setParameter() {
-    System.out.println("Start setParameter");
-    controllerRequest.setParameter(KEY_PARAMETER, VALUE_PARAMETER);
-    assertEquals(VALUE_PARAMETER, controllerRequest.getParameter(KEY_PARAMETER));
     controllerRequest.setParameter(VALUE_PARAMETER + "=" + KEY_PARAMETER);
     assertEquals(KEY_PARAMETER, controllerRequest.getParameter(VALUE_PARAMETER));
+    controllerRequest.setParameter(VALUE_PARAMETER + KEY_PARAMETER);
+    assertEquals("", controllerRequest.getParameter(VALUE_PARAMETER + KEY_PARAMETER));
   }
 
   @Test

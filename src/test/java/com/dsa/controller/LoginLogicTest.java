@@ -2,6 +2,8 @@ package com.dsa.controller;
 
 import com.dsa.InitDbForTests;
 
+import com.dsa.dao.AbstractEntityDao;
+import com.dsa.dao.DbPoolException;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -24,9 +26,9 @@ class LoginLogicTest {
   }
 
   @BeforeAll
-  static void beforeAll() throws ClassNotFoundException {
+  static void beforeAll() throws DbPoolException {
     System.out.println("Start testing LoginLogicTest");
-    InitDbForTests.initializeDb();
+    InitDbForTests.initializeDb(true);
   }
 
   @AfterAll

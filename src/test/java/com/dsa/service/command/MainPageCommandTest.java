@@ -5,6 +5,7 @@ import com.dsa.controller.ControllerRequest;
 import com.dsa.controller.ControllerResponse;
 import com.dsa.controller.LoginLogic;
 import com.dsa.controller.ResponseType;
+import com.dsa.dao.DbPoolException;
 import com.dsa.domain.user.User;
 import com.dsa.service.resource.ConfigManager;
 import org.junit.jupiter.api.AfterAll;
@@ -63,9 +64,9 @@ class MainPageCommandTest {
 
 
   @BeforeAll
-  static void beforeAll() throws ClassNotFoundException {
+  static void beforeAll() throws DbPoolException {
     System.out.println("Start testing MainPageCommandTest");
-    InitDbForTests.initializeDb();
+//    InitDbForTests.initializeDb();
     mainPageCommand = new MainPageCommand();
   }
 

@@ -1,5 +1,7 @@
 package com.dsa.service;
 
+import com.dsa.dao.DbPoolException;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -9,9 +11,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class InitializationTest {
 
   @Test
-  void initialize() throws ClassNotFoundException {
+  void initialize() throws DbPoolException {
     System.out.println("Start initialize");
-    Initialization.initialize();
+    Initialization.initialize(true);
     assertTrue(true);
   }
 
@@ -24,4 +26,5 @@ class InitializationTest {
   static void afterAll() {
     System.out.println("Finish testing InitializationTest");
   }
+
 }
