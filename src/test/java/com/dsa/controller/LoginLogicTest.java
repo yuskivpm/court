@@ -1,34 +1,46 @@
 package com.dsa.controller;
 
-import com.dsa.InitDbForTests;
-
 import com.dsa.dao.AbstractEntityDao;
 import com.dsa.dao.DbPoolException;
+import com.dsa.domain.user.Role;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.sql.SQLException;
+
+import static com.dsa.InitDbForTests.*;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class LoginLogicTest {
 
+  private static final String VALUE = "fail";
+  private static final String ROLE_ID = "ROLE_ID";
+
   @Test
-  void checkLogin_EmptyLogin() {
+  void checkLogin_EmptyLogin() throws SQLException {
     System.out.println("Start checkLogin_EmptyLogin");
     assertNull(LoginLogic.checkLogin("", ""));
-    assertNull(LoginLogic.checkLogin("fail", "fail"));
+    when(resultSet.next()).thenReturn(false);
+    assertNull(LoginLogic.checkLogin(VALUE, VALUE));
   }
 
   @Test
-  void checkLogin_CorrectLogin() {
+  void checkLogin_CorrectLogin() throws SQLException {
     System.out.println("Start checkLogin_CorrectLogin");
-    assertNotNull(LoginLogic.checkLogin("admin", "admin"));
+    when(resultSet.next()).thenReturn(true);
+    when(resultSet.getString(ROLE_ID)).thenReturn(Role.ATTORNEY.toString());
+    assertNotNull(LoginLogic.checkLogin(VALUE, VALUE));
   }
 
   @BeforeAll
-  static void beforeAll() throws DbPoolException {
+  static void beforeAll() throws DbPoolException, SQLException {
     System.out.println("Start testing LoginLogicTest");
-    InitDbForTests.initializeDb(true);
+    initDbPool();
+    AbstractEntityDao.setDbPool(dbPool);
   }
 
   @AfterAll

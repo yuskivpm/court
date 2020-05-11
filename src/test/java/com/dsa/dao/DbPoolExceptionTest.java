@@ -12,7 +12,7 @@ class DbPoolExceptionTest {
   void exception_Invoke() {
     System.out.println("Start exception_Invoke");
     assertThrows(DbPoolException.class, () -> {
-      throw new DbPoolException("DbPool exception test");
+      throw new DbPoolException("DbPoolException test");
     });
   }
 

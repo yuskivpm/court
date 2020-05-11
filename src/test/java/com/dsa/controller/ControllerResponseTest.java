@@ -44,7 +44,7 @@ class ControllerResponseTest {
   void getSessionAttributes() {
     System.out.println("Start getSessionAttributes");
     final Object object = new Object();
-    controllerResponse.setSessionAttribute(VALUE,object);
+    controllerResponse.setSessionAttribute(VALUE, object);
     assertEquals(object, controllerResponse.getSessionAttributes().get(VALUE));
   }
 

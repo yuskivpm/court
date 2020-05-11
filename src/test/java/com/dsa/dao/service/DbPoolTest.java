@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class DbPoolTest {
 
-  private static ResourceBundle resourceBundle = ResourceBundle.getBundle("database");
+  private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("database");
   private static final String DB_CLASS_NAME = resourceBundle.getString("dbClassName");
   private static final int MAX_CONNECTIONS = 5;
 
