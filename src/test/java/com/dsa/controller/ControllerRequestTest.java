@@ -30,6 +30,24 @@ class ControllerRequestTest {
   }
 
   @Test
+  void getResponseType() {
+    System.out.println("Start getResponseType");
+    controllerRequest.setResponseType(ResponseType.FAIL);
+    assertEquals(ResponseType.FAIL, controllerRequest.getResponseType());
+    controllerRequest.setResponseType(ResponseType.INVALIDATE);
+    assertEquals(ResponseType.INVALIDATE, controllerRequest.getResponseType());
+  }
+
+  @Test
+  void getResponseValue() {
+    System.out.println("Start getResponseValue");
+    controllerRequest.setResponseValue("");
+    assertEquals("", controllerRequest.getResponseValue());
+    controllerRequest.setResponseValue(VALUE_PARAMETER);
+    assertEquals(VALUE_PARAMETER, controllerRequest.getResponseValue());
+  }
+
+  @Test
   void getSessionAttribute() {
     System.out.println("Start getSessionAttribute");
     controllerRequest.setSessionAttribute(KEY_SESSION_ATTRIBUTE, VALUE_SESSION_ATTRIBUTE);

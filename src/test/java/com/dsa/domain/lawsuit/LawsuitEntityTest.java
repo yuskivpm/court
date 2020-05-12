@@ -17,7 +17,7 @@ class LawsuitEntityTest {
     System.out.println("Start getSueDate");
     Date date = new Date();
     lawsuitEntity.setSueDate(null);
-    assertEquals(null, lawsuitEntity.getSueDate());
+    assertNull(lawsuitEntity.getSueDate());
     lawsuitEntity.setSueDate(date);
     assertEquals(date, lawsuitEntity.getSueDate());
   }
@@ -83,7 +83,7 @@ class LawsuitEntityTest {
     System.out.println("Start getStartDate");
     Date date = new Date();
     lawsuitEntity.setStartDate(null);
-    assertEquals(null, lawsuitEntity.getStartDate());
+    assertNull(lawsuitEntity.getStartDate());
     lawsuitEntity.setStartDate(date);
     assertEquals(date, lawsuitEntity.getStartDate());
   }
@@ -93,7 +93,7 @@ class LawsuitEntityTest {
     System.out.println("Start getVerdictDate");
     Date date = new Date();
     lawsuitEntity.setVerdictDate(null);
-    assertEquals(null, lawsuitEntity.getVerdictDate());
+    assertNull(lawsuitEntity.getVerdictDate());
     lawsuitEntity.setVerdictDate(date);
     assertEquals(date, lawsuitEntity.getVerdictDate());
   }
@@ -113,7 +113,7 @@ class LawsuitEntityTest {
     System.out.println("Start getExecutionDate");
     Date date = new Date();
     lawsuitEntity.setExecutionDate(null);
-    assertEquals(null, lawsuitEntity.getExecutionDate());
+    assertNull(lawsuitEntity.getExecutionDate());
     lawsuitEntity.setExecutionDate(date);
     assertEquals(date, lawsuitEntity.getExecutionDate());
   }

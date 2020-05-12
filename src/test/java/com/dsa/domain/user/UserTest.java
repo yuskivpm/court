@@ -2,6 +2,7 @@ package com.dsa.domain.user;
 
 import com.dsa.domain.court.Court;
 import com.dsa.domain.court.CourtInstance;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

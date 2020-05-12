@@ -32,7 +32,7 @@ public class Controller {
   @NotNull
   public static ControllerRequest execute(@NotNull ControllerRequest mainRequest) {
     mainRequest.resetToDefault();
-    String[] commits = (mainRequest.getParameter(COMMIT_QUERY))
+    String[] commits = mainRequest.getParameter(COMMIT_QUERY)
         .replace(COMMIT_COMMAND_OPERAND, "=")
         .split(COMMIT_SEPARATOR, -1);
     try (Connection connection = dbPool.getConnection()) {

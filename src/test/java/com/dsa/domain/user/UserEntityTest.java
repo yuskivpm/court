@@ -67,9 +67,9 @@ class UserEntityTest {
   void getIsActive() {
     System.out.println("Start getIsActive");
     userEntity.setIsActive(false);
-    assertEquals(false, userEntity.getIsActive());
+    assertFalse(userEntity.getIsActive());
     userEntity.setIsActive(true);
-    assertEquals(true, userEntity.getIsActive());
+    assertTrue(userEntity.getIsActive());
   }
 
   @Test

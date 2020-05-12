@@ -23,6 +23,7 @@ class CourtDaoTest {
   private static final CourtInstance courtInstance = CourtInstance.CASSATION;
   private static final String COURT_NAME = "court name";
   private static final long MAIN_COURT_ID = 2;
+  private static final int PREPARED_VALUES_COUNT = 3;
 
   @Test
   void constructors() throws SQLException, DbPoolException {
@@ -45,7 +46,7 @@ class CourtDaoTest {
     assertNull(courtDao.recordToEntity(resultSet));
     System.out.println("Start recordToEntity - test normal invocation");
     createResultSet();
-    when(resultSet.getLong(ID)).thenReturn(1l);
+    when(resultSet.getLong(ID)).thenReturn(MAIN_COURT_ID);
     when(resultSet.getString(COURT_INSTANCE)).thenReturn(courtInstance.toString());
     assertNotNull(courtDao.recordToEntity(resultSet));
   }
@@ -55,13 +56,12 @@ class CourtDaoTest {
     System.out.println("Start setAllPreparedValues");
     Court court = new Court(1, COURT_NAME, courtInstance, null);
     CourtDao courtDao = new CourtDao(connection);
-    int count = courtDao.setAllPreparedValues(preparedStatement, court, true);
-    assertEquals(count, 4);
+    assertEquals(PREPARED_VALUES_COUNT + 1, courtDao.setAllPreparedValues(preparedStatement, court, true));
     verify(preparedStatement, Mockito.times(2)).setString(Mockito.anyInt(), Mockito.anyString());
-    verify(preparedStatement).setNull(3, 0);
+    verify(preparedStatement).setNull(PREPARED_VALUES_COUNT, 0);
     court.setMainCourtId(MAIN_COURT_ID);
     courtDao.setAllPreparedValues(preparedStatement, court, true);
-    verify(preparedStatement).setLong(3, MAIN_COURT_ID);
+    verify(preparedStatement).setLong(PREPARED_VALUES_COUNT, MAIN_COURT_ID);
   }
 
   @Test

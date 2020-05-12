@@ -27,7 +27,6 @@ class ControllerTest {
     when(mainRequest.getParameter(COMMIT_QUERY)).thenReturn("");
     when(mainRequest.getParameter(COMMAND)).thenReturn("incorrect");
     mainRequest = Controller.execute(mainRequest);
-    assertEquals(mainRequest.getResponseType(), ResponseType.REDIRECT);
     verify(mainRequest).getParameter(COMMIT_QUERY);
     verify(InitDbForTests.dbPool).getConnection();
     verify(InitDbForTests.connection).setAutoCommit(false);
@@ -35,6 +34,8 @@ class ControllerTest {
 
     ControllerRequest mainRequest1 = Mockito.mock(ControllerRequest.class);
     when(mainRequest1.getParameter(COMMAND)).thenReturn("test/fail");
+    when(mainRequest1.getParameter(COMMIT_QUERY)).thenReturn("");
+    when(mainRequest1.getResponseType()).thenReturn(ResponseType.FAIL);
     Controller.registerExecutor("test/fail", request -> {
       request.setResponseType(ResponseType.FAIL);
       return request;
