@@ -1,7 +1,6 @@
 package com.dsa.service.command;
 
 import com.dsa.controller.ControllerRequest;
-import com.dsa.controller.ControllerResponse;
 import com.dsa.controller.ResponseType;
 import com.dsa.controller.LoginLogic;
 import com.dsa.domain.user.UserDao;
@@ -14,9 +13,9 @@ import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
-public class LoginCommand implements BiFunction<ControllerRequest, ControllerResponse, ControllerResponse> {
+public class LoginCommand implements Function<ControllerRequest, ControllerRequest> {
 
   public static final String path = "login";
   private static final Logger log = Logger.getLogger(LoginCommand.class);
@@ -25,24 +24,24 @@ public class LoginCommand implements BiFunction<ControllerRequest, ControllerRes
   private static final String USER_SESSION_ID = "user_id";
 
   @Override
-  public ControllerResponse apply(@NotNull ControllerRequest request, ControllerResponse controllerResponse) {
+  public ControllerRequest apply(@NotNull ControllerRequest request) {
     String login = request.getParameter(PARAM_NAME_LOGIN);
     String password = request.getParameter(PARAM_NAME_PASSWORD);
     User user = LoginLogic.checkLogin(login, password);
     if (user != null) {
-      controllerResponse = new MainPageCommand().apply(controllerResponse, user);
-      LoginCommand.startUserSession(controllerResponse, user);
-      return controllerResponse;
+      request = new MainPageCommand().apply(request, user);
+      LoginCommand.startUserSession(request, user);
+      return request;
     } else {
-      controllerResponse.setAttribute("errorFailLoginPassMessage", MessageManager.getProperty("message.loginError"));
-      controllerResponse.setResponseValue(ConfigManager.getProperty("path.page.login"));
-      controllerResponse.setResponseType(ResponseType.FORWARD);
+      request.setAttribute("errorFailLoginPassMessage", MessageManager.getProperty("message.loginError"));
+      request.setResponseValue(ConfigManager.getProperty("path.page.login"));
+      request.setResponseType(ResponseType.FORWARD);
     }
-    return controllerResponse;
+    return request;
   }
 
-  private static void startUserSession(@NotNull ControllerResponse response, @NotNull User user) {
-    response.setSessionAttribute(USER_SESSION_ID, user.getId());
+  private static void startUserSession(@NotNull ControllerRequest request, @NotNull User user) {
+    request.setSessionAttribute(USER_SESSION_ID, user.getId());
   }
 
   public static String getUserSessionId(@NotNull ControllerRequest request) {

@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.sql.Connection;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public class Controller {
 
@@ -21,7 +21,7 @@ public class Controller {
   private static final String COMMIT_COMMAND_OPERAND = "@"; // -> =
 // USAGE: commit= method@GET ~ id=1 ^ method@POST ~ id@2
 
-  private static final Map<String, BiFunction<ControllerRequest, ControllerResponse, ControllerResponse>> executors = new HashMap<>();
+  private static final Map<String, Function<ControllerRequest, ControllerRequest>> executors = new HashMap<>();
 
   private static IDbPool dbPool;
 
@@ -30,9 +30,8 @@ public class Controller {
   }
 
   @NotNull
-  public static ControllerResponse execute(@NotNull ControllerRequest mainRequest) {
-    ControllerResponse controllerResponse = new ControllerResponse();
-    controllerResponse.resetToDefault();
+  public static ControllerRequest execute(@NotNull ControllerRequest mainRequest) {
+    mainRequest.resetToDefault();
     String[] commits = (mainRequest.getParameter(COMMIT_QUERY))
         .replace(COMMIT_COMMAND_OPERAND, "=")
         .split(COMMIT_SEPARATOR, -1);
@@ -44,11 +43,11 @@ public class Controller {
           String command = mainRequest.getParameter(COMMAND).toLowerCase();
           for (String entityPath : executors.keySet()) {
             if (command.startsWith(entityPath)) {
-              controllerResponse = executors.get(entityPath).apply(mainRequest, controllerResponse);
+              mainRequest = executors.get(entityPath).apply(mainRequest);
               break;
             }
           }
-          if (controllerResponse.getResponseType() == ResponseType.FAIL) {
+          if (mainRequest.getResponseType() == ResponseType.FAIL) {
             throw new ControllerException("Fail process request");
           }
         } while (i < commits.length && mainRequest.loadNextCommitParameters(commits[i++].split(COMMIT_COMMAND_SEPARATOR)));
@@ -58,12 +57,12 @@ public class Controller {
         throw new ControllerException("Rollback", e);
       }
     } catch (Exception e) {
-      controllerResponse.resetToDefault();
+      mainRequest.resetToDefault();
     }
-    return controllerResponse;
+    return mainRequest;
   }
 
-  public static void registerExecutor(String path, BiFunction<ControllerRequest, ControllerResponse, ControllerResponse> executor) {
+  public static void registerExecutor(String path, Function<ControllerRequest, ControllerRequest> executor) {
     executors.put(path, executor);
   }
 

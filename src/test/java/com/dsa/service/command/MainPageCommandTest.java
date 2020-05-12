@@ -1,8 +1,6 @@
 package com.dsa.service.command;
 
-import com.dsa.InitDbForTests;
 import com.dsa.controller.ControllerRequest;
-import com.dsa.controller.ControllerResponse;
 import com.dsa.controller.LoginLogic;
 import com.dsa.controller.ResponseType;
 import com.dsa.dao.DbPoolException;
@@ -22,19 +20,18 @@ class MainPageCommandTest {
   private static final String PARAM_NAME_LOGIN = "login";
   private static final String PARAM_NAME_PASSWORD = "password";
   private static final String USER_SESSION_ID = "user_id";
-  final String LOGIN_VALUE = "admin";
-  final String PASSWORD_VALUE = "admin";
+  private static final String LOGIN_VALUE = "admin";
+  private static final String PASSWORD_VALUE = "admin";
 
   private static MainPageCommand mainPageCommand;
   private static ControllerRequest request;
-  private static ControllerResponse response;
 
   @Test
   void apply_IncorrectSessionUser() {
     System.out.println("Start apply_IncorrectLogin");
-    mainPageCommand.apply(request, response);
-    verify(response).setResponseType(ResponseType.FORWARD);
-    verify(response).setResponseValue(ConfigManager.getProperty("path.page.login"));
+    mainPageCommand.apply(request);
+    verify(request).setResponseType(ResponseType.FORWARD);
+    verify(request).setResponseValue(ConfigManager.getProperty("path.page.login"));
   }
 
   @Test
@@ -45,10 +42,10 @@ class MainPageCommandTest {
     when(request.getSessionAttribute(USER_SESSION_ID)).thenReturn("1");
     User user = LoginLogic.checkLogin(LOGIN_VALUE, PASSWORD_VALUE);
     assertNotNull(user);
-    mainPageCommand.apply(request, response);
-    verify(response).setResponseType(ResponseType.FORWARD);
-    verify(response).setResponseValue(ConfigManager.getProperty("path.page.main." + user.getRole()));
-    verify(response).setAttribute("curUser", user);
+    mainPageCommand.apply(request);
+    verify(request).setResponseType(ResponseType.FORWARD);
+    verify(request).setResponseValue(ConfigManager.getProperty("path.page.main." + user.getRole()));
+    verify(request).setAttribute("curUser", user);
   }
 
   @Test
@@ -56,17 +53,16 @@ class MainPageCommandTest {
     System.out.println("Start apply_CorrectLogin");
     User user = LoginLogic.checkLogin(LOGIN_VALUE, PASSWORD_VALUE);
     assertNotNull(user);
-    mainPageCommand.apply(response, user);
-    verify(response).setResponseType(ResponseType.FORWARD);
-    verify(response).setResponseValue(ConfigManager.getProperty("path.page.main." + user.getRole()));
-    verify(response).setAttribute("curUser", user);
+    mainPageCommand.apply(request, user);
+    verify(request).setResponseType(ResponseType.FORWARD);
+    verify(request).setResponseValue(ConfigManager.getProperty("path.page.main." + user.getRole()));
+    verify(request).setAttribute("curUser", user);
   }
 
 
   @BeforeAll
-  static void beforeAll() throws DbPoolException {
+  static void beforeAll() {
     System.out.println("Start testing MainPageCommandTest");
-//    InitDbForTests.initializeDb();
     mainPageCommand = new MainPageCommand();
   }
 
@@ -74,7 +70,6 @@ class MainPageCommandTest {
   void beforeEach() {
     System.out.println("BeforeEach MainPageCommandTest");
     request = Mockito.mock(ControllerRequest.class);
-    response = Mockito.mock(ControllerResponse.class);
   }
 
   @AfterAll

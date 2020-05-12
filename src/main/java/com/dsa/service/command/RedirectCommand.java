@@ -1,20 +1,19 @@
 package com.dsa.service.command;
 
 import com.dsa.controller.ControllerRequest;
-import com.dsa.controller.ControllerResponse;
 import com.dsa.controller.ResponseType;
 import com.dsa.service.resource.ConfigManager;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
-public class RedirectCommand implements BiFunction<ControllerRequest, ControllerResponse, ControllerResponse> {
+public class RedirectCommand implements Function<ControllerRequest, ControllerRequest> {
 
   public static final String path = "redirect";
 
   @Override
-  public ControllerResponse apply(@NotNull ControllerRequest request, @NotNull ControllerResponse controllerResponse) {
+  public ControllerRequest apply(@NotNull ControllerRequest request) {
     String pageName = request.getParameter("page");
     String realPageName;
     try {
@@ -22,9 +21,9 @@ public class RedirectCommand implements BiFunction<ControllerRequest, Controller
     } catch (Exception e) {
       realPageName = pageName;
     }
-    controllerResponse.setResponseType(ResponseType.FORWARD);
-    controllerResponse.setResponseValue(realPageName);
-    return controllerResponse;
+    request.setResponseType(ResponseType.FORWARD);
+    request.setResponseValue(realPageName);
+    return request;
   }
 
 }

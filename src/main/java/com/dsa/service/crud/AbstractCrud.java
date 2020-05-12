@@ -1,7 +1,6 @@
 package com.dsa.service.crud;
 
 import com.dsa.controller.ControllerRequest;
-import com.dsa.controller.ControllerResponse;
 import com.dsa.controller.ResponseType;
 import com.dsa.dao.AbstractEntityDao;
 import com.dsa.dao.DbPoolException;
@@ -16,11 +15,11 @@ import java.text.ParseException;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
-import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityDao>
-    implements BiFunction<ControllerRequest, ControllerResponse, ControllerResponse> {
+    implements Function<ControllerRequest, ControllerRequest> {
 
   private static final Logger log = Logger.getLogger(AbstractCrud.class);
 
@@ -32,27 +31,27 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
   }
 
   @Override
-  public ControllerResponse apply(@NotNull ControllerRequest request, ControllerResponse controllerResponse) {
+  public ControllerRequest apply(@NotNull ControllerRequest request) {
     if (checkAuthority(request)) {
       CrudEnum ce = CrudParser.getCrudOperation(request, getPath());
       switch (ce) {
         case PREPARE_UPDATE_FORM:
-          return prepareEditForm(request, controllerResponse);
+          return prepareEditForm(request);
         case CREATE:
         case UPDATE:
         case READ_ALL:
         case READ:
         case DELETE:
-          return executeCrudOperation(request, controllerResponse, ce);
+          return executeCrudOperation(request, ce);
       }
     }
-    controllerResponse.setResponseType(ResponseType.FAIL);
-    return controllerResponse;
+    request.setResponseType(ResponseType.FAIL);
+    return request;
   }
 
   @NotNull
   @Contract("_, _, _ -> param2")
-  private ControllerResponse executeCrudOperation(ControllerRequest request, ControllerResponse controllerResponse, CrudEnum ce) {
+  private ControllerRequest executeCrudOperation(ControllerRequest request, CrudEnum ce) {
     String responseValue;
     try {
       String id = request.getParameter("id");
@@ -88,26 +87,26 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
     } catch (Exception e) {
       responseValue = "{\"error\":\"Exception in createOrUpdateEntity(): " + e + "\"}";
     }
-    controllerResponse.setResponseType(ResponseType.PLAIN_TEXT);
-    controllerResponse.setResponseValue(responseValue);
-    return controllerResponse;
+    request.setResponseType(ResponseType.PLAIN_TEXT);
+    request.setResponseValue(responseValue);
+    return request;
   }
 
   @NotNull
-  private ControllerResponse prepareEditForm(@NotNull ControllerRequest request, @NotNull ControllerResponse controllerResponse) {
+  private ControllerRequest prepareEditForm(@NotNull ControllerRequest request) {
     String id = request.getParameter("id");
     try (D entityDao = createEntityDao()) {
       MyEntity entity = entityDao.loadAllSubEntities(entityDao.readEntity("ID", id));
       if (entity != null) {
-        controllerResponse = new RedirectCommand().apply(request, controllerResponse);
-        controllerResponse.setAttribute("editEntity", entity);
-        return controllerResponse;
+        request = new RedirectCommand().apply(request);
+        request.setAttribute("editEntity", entity);
+        return request;
       }
     } catch (Exception e) {
       log.error("Fail get User in prepareEditForm for Entity.id(" + id + "): " + e);
     }
-    controllerResponse.setResponseType(ResponseType.FAIL);
-    return controllerResponse;
+    request.setResponseType(ResponseType.FAIL);
+    return request;
   }
 
   @Contract(pure = true)

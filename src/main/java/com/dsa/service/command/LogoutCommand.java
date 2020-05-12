@@ -1,23 +1,22 @@
 package com.dsa.service.command;
 
 import com.dsa.controller.ControllerRequest;
-import com.dsa.controller.ControllerResponse;
 import com.dsa.controller.ResponseType;
 import com.dsa.service.resource.ConfigManager;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
-public class LogoutCommand implements BiFunction<ControllerRequest, ControllerResponse, ControllerResponse> {
+public class LogoutCommand implements Function<ControllerRequest, ControllerRequest> {
 
   public static final String path = "logout";
 
   @Override
-  public ControllerResponse apply(@NotNull ControllerRequest request, @NotNull ControllerResponse controllerResponse) {
-    controllerResponse.setResponseType(ResponseType.INVALIDATE);
-    controllerResponse.setResponseValue(ConfigManager.getProperty("path.page.index"));
-    return controllerResponse;
+  public ControllerRequest apply(@NotNull ControllerRequest request) {
+    request.setResponseType(ResponseType.INVALIDATE);
+    request.setResponseValue(ConfigManager.getProperty("path.page.index"));
+    return request;
   }
 
 }

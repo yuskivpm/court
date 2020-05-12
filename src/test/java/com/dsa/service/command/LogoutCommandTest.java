@@ -1,7 +1,6 @@
 package com.dsa.service.command;
 
 import com.dsa.controller.ControllerRequest;
-import com.dsa.controller.ControllerResponse;
 import com.dsa.controller.ResponseType;
 import com.dsa.service.resource.ConfigManager;
 
@@ -18,10 +17,9 @@ class LogoutCommandTest {
   void apply() {
     System.out.println("Start apply");
     ControllerRequest request = Mockito.mock(ControllerRequest.class);
-    ControllerResponse response = Mockito.mock(ControllerResponse.class);
-    new LogoutCommand().apply(request, response);
-    verify(response).setResponseType(ResponseType.INVALIDATE);
-    verify(response).setResponseValue(ConfigManager.getProperty("path.page.index"));
+    new LogoutCommand().apply(request);
+    verify(request).setResponseType(ResponseType.INVALIDATE);
+    verify(request).setResponseValue(ConfigManager.getProperty("path.page.index"));
   }
 
   @BeforeAll

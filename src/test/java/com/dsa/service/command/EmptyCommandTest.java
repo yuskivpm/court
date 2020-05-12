@@ -1,6 +1,6 @@
 package com.dsa.service.command;
 
-import com.dsa.controller.ControllerResponse;
+import com.dsa.controller.ControllerRequest;
 import com.dsa.controller.ResponseType;
 import com.dsa.service.resource.ConfigManager;
 
@@ -16,10 +16,10 @@ class EmptyCommandTest {
   @Test
   void apply() {
     System.out.println("Start apply");
-    ControllerResponse response = Mockito.mock(ControllerResponse.class);
-    new EmptyCommand().apply(null, response);
-    verify(response).setResponseType(ResponseType.FORWARD);
-    verify(response).setResponseValue(ConfigManager.getProperty("path.page.login"));
+    ControllerRequest request = Mockito.mock(ControllerRequest.class);
+    new EmptyCommand().apply(request);
+    verify(request).setResponseType(ResponseType.FORWARD);
+    verify(request).setResponseValue(ConfigManager.getProperty("path.page.login"));
   }
 
   @BeforeAll

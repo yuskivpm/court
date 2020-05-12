@@ -1,7 +1,7 @@
 package com.dsa.view.http;
 
 import com.dsa.controller.Controller;
-import com.dsa.controller.ControllerResponse;
+import com.dsa.controller.ControllerRequest;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -36,24 +36,24 @@ public class MainServlet extends HttpServlet {
   }
 
   private void processRequest(@NotNull HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    ControllerResponse controllerResponse = Controller.execute(
+    ControllerRequest controllerRequest = Controller.execute(
         HttpToControllerConverter.prepareRequestDataForController(request, true)
     );
-    controllerResponse.getAttributes().forEach(request::setAttribute);
-    controllerResponse.getSessionAttributes().forEach(request.getSession()::setAttribute);
-    switch (controllerResponse.getResponseType()) {
+    controllerRequest.getAttributes().forEach(request::setAttribute);
+    controllerRequest.getSessionAttributes().forEach(request.getSession()::setAttribute);
+    switch (controllerRequest.getResponseType()) {
       case FORWARD:
-        getServletContext().getRequestDispatcher(controllerResponse.getResponseValue()).forward(request, response);
+        getServletContext().getRequestDispatcher(controllerRequest.getResponseValue()).forward(request, response);
         break;
       case PLAIN_TEXT:
-        response.getWriter().print(controllerResponse.getResponseValue());
+        response.getWriter().print(controllerRequest.getResponseValue());
         break;
       case INVALIDATE:
         request.setAttribute("user", "");
         request.getSession().invalidate();
       case REDIRECT:
       default:
-        response.sendRedirect(request.getContextPath() + controllerResponse.getResponseValue());
+        response.sendRedirect(request.getContextPath() + controllerRequest.getResponseValue());
         break;
     }
   }

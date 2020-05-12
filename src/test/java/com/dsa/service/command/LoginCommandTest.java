@@ -1,7 +1,6 @@
 package com.dsa.service.command;
 
 import com.dsa.controller.ControllerRequest;
-import com.dsa.controller.ControllerResponse;
 import com.dsa.controller.LoginLogic;
 import com.dsa.controller.ResponseType;
 import com.dsa.dao.AbstractEntityDao;
@@ -35,7 +34,6 @@ class LoginCommandTest {
 
   private static LoginCommand loginCommand;
   private static ControllerRequest request;
-  private static ControllerResponse response;
   private static ResultSet resultSet;
 
   @Test
@@ -65,12 +63,12 @@ class LoginCommandTest {
     System.out.println("Start apply_IncorrectLogin");
     when(request.getParameter(PARAM_NAME_LOGIN)).thenReturn("");
     when(request.getParameter(PARAM_NAME_PASSWORD)).thenReturn("");
-    loginCommand.apply(request, response);
+    loginCommand.apply(request);
     verify(request).getParameter(PARAM_NAME_LOGIN);
     verify(request).getParameter(PARAM_NAME_PASSWORD);
-    verify(response).setAttribute("errorFailLoginPassMessage", MessageManager.getProperty("message.loginError"));
-    verify(response).setResponseType(ResponseType.FORWARD);
-    verify(response).setResponseValue(ConfigManager.getProperty("path.page.login"));
+    verify(request).setAttribute("errorFailLoginPassMessage", MessageManager.getProperty("message.loginError"));
+    verify(request).setResponseType(ResponseType.FORWARD);
+    verify(request).setResponseValue(ConfigManager.getProperty("path.page.login"));
 
   }
 
@@ -85,13 +83,13 @@ class LoginCommandTest {
     User user = LoginLogic.checkLogin(LOGIN_VALUE, PASSWORD_VALUE);
     assertNotNull(user);
     when(resultSet.next()).thenReturn(true).thenReturn(false);
-    loginCommand.apply(request, response);
+    loginCommand.apply(request);
     verify(request).getParameter(PARAM_NAME_LOGIN);
     verify(request).getParameter(PARAM_NAME_PASSWORD);
-    verify(response).setResponseType(ResponseType.FORWARD);
-    verify(response).setAttribute("curUser", user);
-    verify(response).setSessionAttribute(USER_SESSION_ID, user.getId());
-    verify(response).setResponseValue(ConfigManager.getProperty("path.page.main." + user.getRole()));
+    verify(request).setResponseType(ResponseType.FORWARD);
+    verify(request).setAttribute("curUser", user);
+    verify(request).setSessionAttribute(USER_SESSION_ID, user.getId());
+    verify(request).setResponseValue(ConfigManager.getProperty("path.page.main." + user.getRole()));
   }
 
   @BeforeAll
@@ -115,7 +113,6 @@ class LoginCommandTest {
     when(statement.executeQuery(Mockito.anyString())).thenReturn(resultSet);
     when(resultSet.getString(ROLE_ID)).thenReturn(ROLE_VALUE);
     request = Mockito.mock(ControllerRequest.class);
-    response = Mockito.mock(ControllerResponse.class);
   }
 
   @AfterAll

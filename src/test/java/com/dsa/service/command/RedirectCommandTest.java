@@ -1,7 +1,6 @@
 package com.dsa.service.command;
 
 import com.dsa.controller.ControllerRequest;
-import com.dsa.controller.ControllerResponse;
 import com.dsa.controller.ResponseType;
 
 import org.junit.jupiter.api.AfterAll;
@@ -20,15 +19,14 @@ class RedirectCommandTest {
     System.out.println("Start apply");
     RedirectCommand redirectCommand = new RedirectCommand();
     ControllerRequest request = Mockito.mock(ControllerRequest.class);
-    ControllerResponse response = Mockito.mock(ControllerResponse.class);
     when(request.getParameter("page")).thenReturn(UNKNOWN_PAGE);
-    redirectCommand.apply(request, response);
-    verify(response).setResponseType(ResponseType.FORWARD);
-    verify(response).setResponseValue(UNKNOWN_PAGE);
+    redirectCommand.apply(request);
+    verify(request).setResponseType(ResponseType.FORWARD);
+    verify(request).setResponseValue(UNKNOWN_PAGE);
     when(request.getParameter("page")).thenReturn("main.ADMIN");
-    redirectCommand.apply(request, response);
-    verify(response, Mockito.times(2)).setResponseType(ResponseType.FORWARD);
-    verify(response).setResponseValue("/jsp/mainAdmin.jsp");
+    redirectCommand.apply(request);
+    verify(request, Mockito.times(2)).setResponseType(ResponseType.FORWARD);
+    verify(request).setResponseValue("/jsp/mainAdmin.jsp");
   }
 
   @BeforeAll
