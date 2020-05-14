@@ -165,4 +165,5 @@ class CourtDaoTest {
   static void afterAll() {
     System.out.println("Finish testing CourtDaoTest");
   }
+
 }
