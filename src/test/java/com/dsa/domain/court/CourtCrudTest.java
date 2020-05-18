@@ -13,6 +13,7 @@ import org.mockito.Mockito;
 import java.sql.SQLException;
 
 import static com.dsa.InitDbForTests.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 

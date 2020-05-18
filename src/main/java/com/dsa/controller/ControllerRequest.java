@@ -3,6 +3,7 @@ package com.dsa.controller;
 import com.dsa.service.resource.ConfigManager;
 import com.dsa.service.resource.MessageManager;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.charset.StandardCharsets;
@@ -26,6 +27,7 @@ public class ControllerRequest {
     super();
   }
 
+  @Contract("_ -> !null")
   public String getParameter(String paramName) {
     String value = params.get(paramName);
     return value == null ? "" : value;
