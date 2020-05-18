@@ -14,6 +14,9 @@ import java.sql.SQLException;
 public class CourtCrud extends AbstractCrud<Court, CourtDao> {
 
   public static final String path = "/courts/";
+  private static final String COURT_NAME = "courtName";
+  private static final String COURT_INSTANCE = "courtInstance";
+  private static final String MAIN_COURT_ID = "mainCourtId";
 
   public CourtCrud() {
     super(path);
@@ -28,23 +31,23 @@ public class CourtCrud extends AbstractCrud<Court, CourtDao> {
   @Override
   protected Court createEntityFromParameters(@NotNull ControllerRequest request, long id) {
     Court court = null;
-    String courtName = request.getParameter("courtName");
-    CourtInstance courtInstance = CourtInstance.valueOf(request.getParameter("courtInstance"));
-    long mainCourtId = Long.parseLong(request.getParameter("mainCourtId"));
-    if (mainCourtId == id || courtInstance == CourtInstance.CASSATION) {
-      mainCourtId = 0;
-    } else {
-      Court mainCourt;
-      try (CourtDao courtDao = new CourtDao()) {
-        mainCourt = courtDao.readEntity(mainCourtId);
-        if (mainCourt.getCourtInstance().getInstanceLevel() <= courtInstance.getInstanceLevel()) {
+    String courtName = request.getParameter(COURT_NAME);
+    if (!courtName.isEmpty()) {
+      CourtInstance courtInstance = CourtInstance.valueOf(request.getParameter(COURT_INSTANCE));
+      long mainCourtId = Long.parseLong(request.getParameter(MAIN_COURT_ID));
+      if (mainCourtId == id || courtInstance == CourtInstance.CASSATION) {
+        mainCourtId = 0;
+      } else {
+        Court mainCourt;
+        try (CourtDao courtDao = new CourtDao()) {
+          mainCourt = courtDao.readEntity(mainCourtId);
+          if (mainCourt.getCourtInstance().getInstanceLevel() <= courtInstance.getInstanceLevel()) {
+            mainCourtId = 0;
+          }
+        } catch (SQLException | DbPoolException e) {
           mainCourtId = 0;
         }
-      } catch (SQLException | DbPoolException e) {
-        mainCourtId = 0;
       }
-    }
-    if (courtName != null && !courtName.isEmpty()) {
       court = new Court(id, courtName, courtInstance, null);
       court.setMainCourtId(mainCourtId);
     }

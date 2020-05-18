@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class LawsuitDaoTest {
-//todo: test
 
   protected static final String ID = "ID";
   private static final int PREPARED_VALUES_COUNT = 13;
@@ -89,18 +88,6 @@ class LawsuitDaoTest {
     verify(lawsuit).getAppealedLawsuit();
   }
 
-  @BeforeAll
-  static void beforeAll() throws SQLException, DbPoolException {
-    System.out.println("Start testing LawsuitDaoTest");
-    initDbPool();
-    AbstractEntityDao.setDbPool(dbPool);
-  }
-
-  @AfterAll
-  static void afterAll() {
-    System.out.println("Finish testing LawsuitDaoTest");
-  }
-
   @Test
   void readAllBySuitorId() throws SQLException {
     System.out.println("Start readAllBySuitorId");
@@ -163,6 +150,18 @@ class LawsuitDaoTest {
     lawsuits = lawsuitDao.readAllForJudgeId(1);
     assertNotNull(lawsuits);
     assertEquals(lawsuits.size(), 0);
+  }
+
+  @BeforeAll
+  static void beforeAll() throws SQLException, DbPoolException {
+    System.out.println("Start testing LawsuitDaoTest");
+    initDbPool();
+    AbstractEntityDao.setDbPool(dbPool);
+  }
+
+  @AfterAll
+  static void afterAll() {
+    System.out.println("Finish testing LawsuitDaoTest");
   }
 
 }

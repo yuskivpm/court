@@ -5,6 +5,7 @@ import com.dsa.dao.DbPoolException;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.apache.log4j.Logger;
@@ -53,15 +54,28 @@ class CourtDaoTest {
 
   @Test
   void setAllPreparedValues() throws SQLException {
-    System.out.println("Start setAllPreparedValues");
-    Court court = new Court(1, COURT_NAME, courtInstance, null);
+    System.out.println("Start setAllPreparedValues - without main court");
+    Court court = Mockito.mock(Court.class);
     CourtDao courtDao = new CourtDao(connection);
+    int index = 0;
+    final String COURT_NAME = "COURT_NAME";
+    when(court.getCourtName()).thenReturn(COURT_NAME);
+    when(court.getCourtInstance()).thenReturn(CourtInstance.APPEAL);
+    when(court.getMainCourtId()).thenReturn(0L);
+    assertEquals(PREPARED_VALUES_COUNT + 1, courtDao.setAllPreparedValues(preparedStatement, court, true));
+    verify(preparedStatement).setString(++index, COURT_NAME);
+    verify(preparedStatement).setString(++index, CourtInstance.APPEAL.toString());
+    verify(preparedStatement).setNull(PREPARED_VALUES_COUNT, 0);
+    System.out.println("Start setAllPreparedValues - has main court id");
+    createPreparedStatement();
+    when(court.getMainCourtId()).thenReturn(MAIN_COURT_ID);
     assertEquals(PREPARED_VALUES_COUNT + 1, courtDao.setAllPreparedValues(preparedStatement, court, true));
     verify(preparedStatement, Mockito.times(2)).setString(Mockito.anyInt(), Mockito.anyString());
-    verify(preparedStatement).setNull(PREPARED_VALUES_COUNT, 0);
-    court.setMainCourtId(MAIN_COURT_ID);
-    courtDao.setAllPreparedValues(preparedStatement, court, true);
     verify(preparedStatement).setLong(PREPARED_VALUES_COUNT, MAIN_COURT_ID);
+    System.out.println("Start setAllPreparedValues - exception");
+    createPreparedStatement();
+    when(court.getCourtInstance()).thenReturn(null);
+    assertThrows(NullPointerException.class, () -> courtDao.setAllPreparedValues(preparedStatement, court, true));
   }
 
   @Test
@@ -159,6 +173,12 @@ class CourtDaoTest {
     System.out.println("Start testing CourtDaoTest");
     initDbPool();
     AbstractEntityDao.setDbPool(dbPool);
+  }
+
+  @BeforeEach
+  void beforeEach() throws SQLException {
+    System.out.println("BeforeEach CourtDaoTest");
+    createPreparedStatement();
   }
 
   @AfterAll
