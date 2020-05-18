@@ -2,16 +2,17 @@ package com.dsa.domain.lawsuit;
 
 import com.dsa.dao.AbstractEntityDao;
 import com.dsa.dao.DbPoolException;
-
 import com.dsa.domain.court.Court;
+import com.dsa.domain.user.Role;
 import com.dsa.domain.user.User;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.sql.SQLException;
-import java.util.Date;
+import java.util.List;
 
 import static com.dsa.InitDbForTests.*;
 
@@ -22,20 +23,8 @@ class LawsuitDaoTest {
 //todo: test
 
   protected static final String ID = "ID";
-  private static final String SUITOR_ID = "SUITOR_ID";
-  private static final String DEFENDANT_ID = "DEFENDANT_ID";
-  private static final String COURT_ID = "COURT_ID";
-  private static final String JUDGE_ID = "JUDGE_ID";
-  private static final String SUE_DATE = "SUE_DATE";
-  private static final String CLAIM_TEXT = "CLAIM_TEXT";
-  private static final String DEFENDANT_TEXT = "DEFENDANT_TEXT";
-  private static final String START_DATE = "START_DATE";
-  private static final String VERDICT_DATE = "VERDICT_DATE";
-  private static final String VERDICT_TEXT = "VERDICT_TEXT";
-  private static final String APPEALED_LAWSUIT_ID = "APPEALED_LAWSUIT_ID";
-  private static final String APPEAL_STATUS = "APPEAL_STATUS";
-  private static final String EXECUTION_DATE = "EXECUTION_DATE";
   private static final int PREPARED_VALUES_COUNT = 13;
+  private static final String ROLE_ID = "ROLE_ID";
 
   @Test
   void constructors() throws SQLException, DbPoolException {
@@ -49,6 +38,7 @@ class LawsuitDaoTest {
   @Test
   void recordToEntity() throws SQLException {
     System.out.println("Start recordToEntity");
+    createResultSet();
     LawsuitDao lawsuitDao = new LawsuitDao(connection);
     System.out.println("Start recordToEntity - test normal invocation");
     assertNotNull(lawsuitDao.recordToEntity(resultSet));
@@ -77,6 +67,28 @@ class LawsuitDaoTest {
     verify(preparedStatement, Mockito.times(3)).setNull(Mockito.anyInt(), eq(0));
   }
 
+  @Test
+  void loadAllSubEntities() throws SQLException {
+    System.out.println("Start loadAllSubEntities");
+    LawsuitDao lawsuitDao = new LawsuitDao(connection);
+    System.out.println("loadAllSubEntities from null");
+    assertNull(lawsuitDao.loadAllSubEntities(null));
+    System.out.println("loadAllSubEntities exist");
+    Lawsuit lawsuit = Mockito.mock(Lawsuit.class);
+    final long SUITOR_ID = 2;
+    when(lawsuit.getSuitorId()).thenReturn(SUITOR_ID);
+    when(resultSet.next()).thenReturn(true);
+    when(resultSet.getString(ROLE_ID)).thenReturn(Role.ATTORNEY.toString());
+    lawsuitDao.loadAllSubEntities(lawsuit);
+    verify(lawsuit).getSuitor();
+    verify(lawsuit, Mockito.times(2)).getSuitorId();
+    verify(lawsuit).setSuitor(Mockito.any());
+    verify(lawsuit).getDefendant();
+    verify(lawsuit).getCourt();
+    verify(lawsuit).getJudge();
+    verify(lawsuit).getAppealedLawsuit();
+  }
+
   @BeforeAll
   static void beforeAll() throws SQLException, DbPoolException {
     System.out.println("Start testing LawsuitDaoTest");
@@ -90,82 +102,67 @@ class LawsuitDaoTest {
   }
 
   @Test
-  void readAllBySuitorId() {
+  void readAllBySuitorId() throws SQLException {
     System.out.println("Start readAllBySuitorId");
-  }
-
-  @Test
-  void readAllByDefendantId() {
-    System.out.println("Start readAllByDefendantId");
-  }
-
-  @Test
-  void readAllUnacceptedForCourtId() {
-    System.out.println("Start readAllUnacceptedForCourtId");
-  }
-
-  @Test
-  void readAllForJudgeId() {
-    System.out.println("Start readAllForJudgeId");
-  }
-
-  @Test
-  void loadAllSubEntities() throws SQLException {
-    System.out.println("Start loadAllSubEntities");
+    final int LIST_SIZE = 2;
+    when(resultSet.next()).thenReturn(true).thenReturn(true).thenReturn(false);
     LawsuitDao lawsuitDao = new LawsuitDao(connection);
-    System.out.println("loadAllSubEntities from null");
-    assertNull(lawsuitDao.loadAllSubEntities(null));
-    Lawsuit lawsuit = Mockito.mock(Lawsuit.class);
-    System.out.println("loadAllSubEntities exist");
-    final long SUITOR_ID = 2;
-    User user = new User(3, null, null, null, null, null, true);
-    when(lawsuit.getSuitorId()).thenReturn(SUITOR_ID);
-
-    9
-
-    verify(lawsuit).setSuitor(null);
-
-    /*
-
-
-        lawsuit.setSuitor(new UserDao(connection).readEntity(lawsuit.getSuitorId()));
-      }
-      if (lawsuit.getDefendant() == null && lawsuit.getDefendantId() > 0) {
-        lawsuit.setDefendant(new UserDao(connection).readEntity(lawsuit.getDefendantId()));
-      }
-      if (lawsuit.getCourt() == null && lawsuit.getCourtId() > 0) {
-        Court court = new CourtDao(connection).readEntity(lawsuit.getCourtId());
-        lawsuit.setCourt(court);
-        if (court != null && court.getMainCourt() == null && court.getMainCourtId() > 0) {
-          court.setMainCourt(new CourtDao(connection).readEntity(court.getMainCourtId()));
-        }
-      }
-      if (lawsuit.getJudge() == null && lawsuit.getJudgeId() > 0) {
-        lawsuit.setJudge(new UserDao(connection).readEntity(lawsuit.getJudgeId()));
-      }
-      if (lawsuit.getAppealedLawsuit() == null && lawsuit.getAppealedLawsuitId() > 0) {
-        lawsuit.setAppealedLawsuit(new LawsuitDao(connection).readEntity(lawsuit.getAppealedLawsuitId()));
-      }*/
-     */
-    lawsuitDao.loadAllSubEntities(lawsuit);
-
-
-
-    Court court = new Court(2, null, null, null);
-    User user = new User(3, null, null, null, null, null, true);
-
-    assertEquals(.getMainCourtId(), 0);
-
-
+    List<Lawsuit> lawsuits = lawsuitDao.readAllBySuitorId(1);
+    assertNotNull(lawsuits);
+    assertEquals(lawsuits.size(), LIST_SIZE);
     when(resultSet.next()).thenReturn(false);
-    assertNull(courtDao.loadAllSubEntities(court).getMainCourt());
-    court.setMainCourtId(MAIN_COURT_ID);
-    when(resultSet.next()).thenReturn(true);
-    when(resultSet.getLong(ID)).thenReturn(MAIN_COURT_ID);
-    when(resultSet.getString(COURT_INSTANCE)).thenReturn(courtInstance.toString());
-    court = courtDao.loadAllSubEntities(court);
-    assertEquals(court.getMainCourtId(), MAIN_COURT_ID);
-    assertNotNull(court.getMainCourt());
+    lawsuitDao = new LawsuitDao(connection);
+    lawsuits = lawsuitDao.readAllBySuitorId(1);
+    assertNotNull(lawsuits);
+    assertEquals(lawsuits.size(), 0);
+  }
+
+  @Test
+  void readAllByDefendantId() throws SQLException {
+    System.out.println("Start readAllByDefendantId");
+    final int LIST_SIZE = 2;
+    when(resultSet.next()).thenReturn(true).thenReturn(true).thenReturn(false);
+    LawsuitDao lawsuitDao = new LawsuitDao(connection);
+    List<Lawsuit> lawsuits = lawsuitDao.readAllByDefendantId(1);
+    assertNotNull(lawsuits);
+    assertEquals(lawsuits.size(), LIST_SIZE);
+    when(resultSet.next()).thenReturn(false);
+    lawsuitDao = new LawsuitDao(connection);
+    lawsuits = lawsuitDao.readAllByDefendantId(1);
+    assertNotNull(lawsuits);
+    assertEquals(lawsuits.size(), 0);
+  }
+
+  @Test
+  void readAllUnacceptedForCourtId() throws SQLException {
+    System.out.println("Start readAllUnacceptedForCourtId");
+    final int LIST_SIZE = 2;
+    when(resultSet.next()).thenReturn(true).thenReturn(true).thenReturn(false);
+    LawsuitDao lawsuitDao = new LawsuitDao(connection);
+    List<Lawsuit> lawsuits = lawsuitDao.readAllUnacceptedForCourtId(1);
+    assertNotNull(lawsuits);
+    assertEquals(lawsuits.size(), LIST_SIZE);
+    when(resultSet.next()).thenReturn(false);
+    lawsuitDao = new LawsuitDao(connection);
+    lawsuits = lawsuitDao.readAllUnacceptedForCourtId(1);
+    assertNotNull(lawsuits);
+    assertEquals(lawsuits.size(), 0);
+  }
+
+  @Test
+  void readAllForJudgeId() throws SQLException {
+    System.out.println("Start readAllForJudgeId");
+    final int LIST_SIZE = 2;
+    when(resultSet.next()).thenReturn(true).thenReturn(true).thenReturn(false);
+    LawsuitDao lawsuitDao = new LawsuitDao(connection);
+    List<Lawsuit> lawsuits = lawsuitDao.readAllForJudgeId(1);
+    assertNotNull(lawsuits);
+    assertEquals(lawsuits.size(), LIST_SIZE);
+    when(resultSet.next()).thenReturn(false);
+    lawsuitDao = new LawsuitDao(connection);
+    lawsuits = lawsuitDao.readAllForJudgeId(1);
+    assertNotNull(lawsuits);
+    assertEquals(lawsuits.size(), 0);
   }
 
 }
