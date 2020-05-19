@@ -1,0 +1,1 @@
+web: java -jar target/court-1.0-SNAPSHOT.war
