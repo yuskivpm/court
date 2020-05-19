@@ -17,9 +17,12 @@ import org.mockito.Mockito;
 
 import java.sql.SQLException;
 
+import static com.dsa.InitDbForTests.*;
+
+import static com.dsa.domain.user.UserConst.ROLE;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static com.dsa.InitDbForTests.*;
 
 class MainPageCommandTest {
 
@@ -28,7 +31,6 @@ class MainPageCommandTest {
   private static final String USER_SESSION_ID = "user_id";
   private static final String LOGIN_VALUE = "admin";
   private static final String PASSWORD_VALUE = "admin";
-  private static final String ROLE_ID = "ROLE_ID";
 
   private static MainPageCommand mainPageCommand;
   private static ControllerRequest request;
@@ -47,7 +49,7 @@ class MainPageCommandTest {
     when(request.getParameter(PARAM_NAME_LOGIN)).thenReturn(LOGIN_VALUE);
     when(request.getParameter(PARAM_NAME_PASSWORD)).thenReturn(PASSWORD_VALUE);
     when(request.getSessionAttribute(USER_SESSION_ID)).thenReturn("1");
-    when(resultSet.getString(ROLE_ID)).thenReturn(Role.ATTORNEY.toString());
+    when(resultSet.getString(ROLE)).thenReturn(Role.ATTORNEY.toString());
     when(resultSet.next()).thenReturn(true);
     User user = LoginLogic.checkLogin(LOGIN_VALUE, PASSWORD_VALUE);
     assertNotNull(user);
@@ -64,7 +66,7 @@ class MainPageCommandTest {
     when(request.getParameter(PARAM_NAME_LOGIN)).thenReturn(LOGIN_VALUE);
     when(request.getParameter(PARAM_NAME_PASSWORD)).thenReturn(PASSWORD_VALUE);
     when(request.getSessionAttribute(USER_SESSION_ID)).thenReturn("1");
-    when(resultSet.getString(ROLE_ID)).thenReturn(Role.ATTORNEY.toString());
+    when(resultSet.getString(ROLE)).thenReturn(Role.ATTORNEY.toString());
     when(resultSet.next()).thenReturn(true);
     User user = LoginLogic.checkLogin(LOGIN_VALUE, PASSWORD_VALUE);
     assertNotNull(user);

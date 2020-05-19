@@ -11,40 +11,34 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 
+import static com.dsa.domain.user.UserConst.*;
+
 public class UserDao extends AbstractEntityDao<User> {
 
-  private static final String USER_TABLE_NAME = "USER";
-  private static final String LOGIN = "LOGIN";
-  private static final String PASSWORD = "PASSWORD";
-  private static final String ROLE_ID = "ROLE_ID";
-  private static final String NAME = "NAME";
-  private static final String COURT_ID = "COURT_ID";
-  private static final String IS_ACTIVE = "IS_ACTIVE";
-
-  private static final String SQL_INSERT = "INSERT INTO " + USER_TABLE_NAME + " (" + LOGIN + "," + PASSWORD + "," +
-      ROLE_ID + "," + NAME + "," + COURT_ID + "," + IS_ACTIVE + ") " +
+  private static final String SQL_INSERT = INSERT_TO + ENTITY_NAME + " (" + LOGIN + "," +
+      PASSWORD + "," + ROLE + "," + NAME + "," + COURT_ID + "," + IS_ACTIVE + ") " +
       "VALUES(?, ?, ?, ?, ?, ?)";
-  private static final String SQL_UPDATE = "UPDATE " + USER_TABLE_NAME +
-      " SET " + LOGIN + " = ?, " + PASSWORD + " = ?, " + ROLE_ID + " = ?,  " + NAME + "= ?,  " +
-      COURT_ID + "= ?,  " + IS_ACTIVE + "= ?" +
+  private static final String SQL_UPDATE = UPDATE + ENTITY_NAME +
+      " SET " + LOGIN + " = ?, " + PASSWORD + " = ?, " + ROLE + " = ?,  " +
+      NAME + "= ?,  " + COURT_ID + "= ?,  " + IS_ACTIVE + "= ?" +
       " WHERE " + ID + " = ?";
-  public static final String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + USER_TABLE_NAME + "(" +
-      ID + " BIGINT AUTO_INCREMENT PRIMARY KEY, " +
-      LOGIN + " VARCHAR(255) " + NOT_NULL + ", " +
-      PASSWORD + " VARCHAR(255) " + NOT_NULL + ", " +
-      ROLE_ID + " VARCHAR(20) " + NOT_NULL + ", " +
-      NAME + " VARCHAR(255) " + NOT_NULL + ", " +
+  public static final String SQL_CREATE_TABLE = CREATE_TABLE_IF_NOT_EXISTS + ENTITY_NAME + "(" +
+      ID + PRIMARY_KEY + ", " +
+      LOGIN + VARCHAR_255 + NOT_NULL + ", " +
+      PASSWORD + VARCHAR_255 + NOT_NULL + ", " +
+      ROLE + " VARCHAR(20) " + NOT_NULL + ", " +
+      NAME + VARCHAR_255 + NOT_NULL + ", " +
       COURT_ID + " BIGINT " + DEFAULT_NULL + ", " +
       IS_ACTIVE + " BOOLEAN DEFAULT TRUE, " +
-      "FOREIGN KEY (" + COURT_ID + ") REFERENCES COURT(" + ID + ") ON DELETE CASCADE" +
+      FOREIGN_KEY + COURT_ID + ") REFERENCES COURT(" + ID + ") ON DELETE CASCADE" +
       ")";
 
   public UserDao() throws SQLException, DbPoolException {
-    super(USER_TABLE_NAME, SQL_INSERT, SQL_UPDATE);
+    super(ENTITY_NAME, SQL_INSERT, SQL_UPDATE);
   }
 
   public UserDao(Connection connection) {
-    super(connection, USER_TABLE_NAME, SQL_INSERT, SQL_UPDATE);
+    super(connection, ENTITY_NAME, SQL_INSERT, SQL_UPDATE);
   }
 
   @Override
@@ -54,7 +48,7 @@ public class UserDao extends AbstractEntityDao<User> {
       user.setId(resultSet.getLong(ID));
       user.setLogin(resultSet.getString(LOGIN));
       user.setPassword(resultSet.getString(PASSWORD));
-      user.setRole(Role.valueOf(resultSet.getString(ROLE_ID)));
+      user.setRole(Role.valueOf(resultSet.getString(ROLE)));
       user.setName(resultSet.getString(NAME));
       user.setCourtId(resultSet.getLong(COURT_ID));
       user.setIsActive(resultSet.getBoolean(IS_ACTIVE));

@@ -10,34 +10,31 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import static com.dsa.domain.court.CourtConst.*;
+
 public class CourtDao extends AbstractEntityDao<Court> {
 
-  private static final String COURT_TABLE_NAME = "COURT";
-  private static final String COURT_NAME = "COURT_NAME";
-  private static final String COURT_INSTANCE = "COURT_INSTANCE";
-  private static final String MAIN_COURT_ID = "MAIN_COURT_ID";
-
-  private static final String SQL_INSERT = "INSERT INTO " + COURT_TABLE_NAME +
+  private static final String SQL_INSERT = INSERT_TO + ENTITY_NAME +
       " (" + COURT_NAME + "," + COURT_INSTANCE + "," + MAIN_COURT_ID + ") VALUES(?, ?, ?)";
 
-  private static final String SQL_UPDATE = "UPDATE " + COURT_TABLE_NAME +
+  private static final String SQL_UPDATE = UPDATE + ENTITY_NAME +
       " SET " + COURT_NAME + " = ?, " + COURT_INSTANCE + " = ?, " + MAIN_COURT_ID + " = ?" +
       " WHERE " + ID + " = ?";
 
-  public static final String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + COURT_TABLE_NAME + " (" +
-      ID + " BIGINT AUTO_INCREMENT PRIMARY KEY, " +
-      COURT_NAME + " VARCHAR(255) " + NOT_NULL + ", " +
+  public static final String SQL_CREATE_TABLE = CREATE_TABLE_IF_NOT_EXISTS + ENTITY_NAME + " (" +
+      ID + PRIMARY_KEY + ", " +
+      COURT_NAME + VARCHAR_255 + NOT_NULL + ", " +
       COURT_INSTANCE + " VARCHAR(20) " + NOT_NULL + ", " +
       MAIN_COURT_ID + " BIGINT " + DEFAULT_NULL + "," +
-      "FOREIGN KEY (" + MAIN_COURT_ID + ") REFERENCES (" + ID + ") ON DELETE CASCADE" +
+      FOREIGN_KEY + MAIN_COURT_ID + ") REFERENCES (" + ID + ") ON DELETE CASCADE" +
       ")";
 
   public CourtDao() throws SQLException, DbPoolException {
-    super(COURT_TABLE_NAME, SQL_INSERT, SQL_UPDATE);
+    super(ENTITY_NAME, SQL_INSERT, SQL_UPDATE);
   }
 
   public CourtDao(Connection connection) {
-    super(connection, COURT_TABLE_NAME, SQL_INSERT, SQL_UPDATE);
+    super(connection, ENTITY_NAME, SQL_INSERT, SQL_UPDATE);
   }
 
   @Override

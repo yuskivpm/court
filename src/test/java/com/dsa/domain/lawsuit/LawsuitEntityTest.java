@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Date;
 
+import static com.dsa.domain.lawsuit.LawsuitConst.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class LawsuitEntityTest {
@@ -43,11 +45,10 @@ class LawsuitEntityTest {
   @Test
   void getClaimText() {
     System.out.println("Start getClaimText");
-    final String VALUE = "CLAIM";
     lawsuitEntity.setClaimText("");
     assertEquals("", lawsuitEntity.getClaimText());
-    lawsuitEntity.setClaimText(VALUE);
-    assertEquals(VALUE, lawsuitEntity.getClaimText());
+    lawsuitEntity.setClaimText(CLAIM_TEXT);
+    assertEquals(CLAIM_TEXT, lawsuitEntity.getClaimText());
   }
 
   @Test
@@ -62,11 +63,10 @@ class LawsuitEntityTest {
   @Test
   void getDefendantText() {
     System.out.println("Start getDefendantText");
-    final String VALUE = "getDefendantText";
     lawsuitEntity.setDefendantText("");
     assertEquals("", lawsuitEntity.getDefendantText());
-    lawsuitEntity.setDefendantText(VALUE);
-    assertEquals(VALUE, lawsuitEntity.getDefendantText());
+    lawsuitEntity.setDefendantText(DEFENDANT_TEXT);
+    assertEquals(DEFENDANT_TEXT, lawsuitEntity.getDefendantText());
   }
 
   @Test
@@ -101,11 +101,10 @@ class LawsuitEntityTest {
   @Test
   void getVerdictText() {
     System.out.println("Start getVerdictText");
-    final String VALUE = "getVerdictText";
     lawsuitEntity.setVerdictText("");
     assertEquals("", lawsuitEntity.getVerdictText());
-    lawsuitEntity.setVerdictText(VALUE);
-    assertEquals(VALUE, lawsuitEntity.getVerdictText());
+    lawsuitEntity.setVerdictText(VERDICT_TEXT);
+    assertEquals(VERDICT_TEXT, lawsuitEntity.getVerdictText());
   }
 
   @Test
@@ -130,11 +129,10 @@ class LawsuitEntityTest {
   @Test
   void getAppealStatus() {
     System.out.println("Start getAppealStatus");
-    final String VALUE = "getAppealStatus";
     lawsuitEntity.setAppealStatus("");
     assertEquals("", lawsuitEntity.getAppealStatus());
-    lawsuitEntity.setAppealStatus(VALUE);
-    assertEquals(VALUE, lawsuitEntity.getAppealStatus());
+    lawsuitEntity.setAppealStatus(APPEALED_STATUS);
+    assertEquals(APPEALED_STATUS, lawsuitEntity.getAppealStatus());
   }
 
   @Test

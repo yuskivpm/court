@@ -13,18 +13,15 @@ import java.sql.SQLException;
 
 import static com.dsa.InitDbForTests.*;
 
+import static com.dsa.domain.user.UserConst.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class UserDaoTest {
 
-  private static final String ID = "ID";
   private static final int PREPARED_VALUES_COUNT = 6;
-  private static final String ROLE_ID = "ROLE_ID";
-  private static final String LOGIN = "LOGIN";
-  private static final String PASSWORD = "PASSWORD";
-  private static final Role ROLE = Role.ATTORNEY;
-  private static final String NAME = "NAME";
+  private static final Role ROLE_VALUE = Role.ATTORNEY;
   private static final long COURT_ID = 2L;
   private static final boolean IS_ACTIVE = true;
 
@@ -34,7 +31,7 @@ class UserDaoTest {
     createResultSet();
     UserDao userDao = new UserDao(connection);
     System.out.println("Start recordToEntity - test normal invocation");
-    when(resultSet.getString(ROLE_ID)).thenReturn(Role.JUDGE.toString());
+    when(resultSet.getString(ROLE)).thenReturn(Role.JUDGE.toString());
     assertNotNull(userDao.recordToEntity(resultSet));
     verify(resultSet, Mockito.times(2)).getLong(Mockito.anyString());
     verify(resultSet).getBoolean(Mockito.anyString());
@@ -43,7 +40,7 @@ class UserDaoTest {
     when(resultSet.getLong(ID)).thenThrow(SQLException.class);
     assertNull(userDao.recordToEntity(resultSet));
     createResultSet();
-    when(resultSet.getString(ROLE_ID)).thenReturn(null);
+    when(resultSet.getString(ROLE)).thenReturn(null);
     assertThrows(NullPointerException.class, () -> userDao.recordToEntity(resultSet));
     createResultSet();
   }
@@ -56,14 +53,14 @@ class UserDaoTest {
     int index = 0;
     when(user.getLogin()).thenReturn(LOGIN);
     when(user.getPassword()).thenReturn(PASSWORD);
-    when(user.getRole()).thenReturn(ROLE);
+    when(user.getRole()).thenReturn(ROLE_VALUE);
     when(user.getName()).thenReturn(NAME);
     when(user.getCourtId()).thenReturn(0L);
     when(user.getIsActive()).thenReturn(IS_ACTIVE);
     assertEquals(PREPARED_VALUES_COUNT + 1, userDao.setAllPreparedValues(preparedStatement, user, true));
     verify(preparedStatement).setString(++index, LOGIN);
     verify(preparedStatement).setString(++index, PASSWORD);
-    verify(preparedStatement).setString(++index, ROLE.toString());
+    verify(preparedStatement).setString(++index, ROLE_VALUE.toString());
     verify(preparedStatement).setString(++index, NAME);
     verify(preparedStatement).setNull(++index, 0);
     verify(preparedStatement).setBoolean(++index, IS_ACTIVE);

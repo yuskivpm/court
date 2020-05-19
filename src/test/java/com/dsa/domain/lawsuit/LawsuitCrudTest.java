@@ -14,6 +14,8 @@ import java.sql.SQLException;
 
 import static com.dsa.InitDbForTests.*;
 
+import static com.dsa.domain.user.UserConst.ROLE;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -22,7 +24,6 @@ class LawsuitCrudTest {
   private static final String PATH = "/lawsuits/";
   private static final String USER_SESSION_ID = "user_id";
   private static final String USER_SESSION_ID_VALUE = "1";
-  private static final String ROLE_ID = "ROLE_ID";
 
   private static LawsuitCrud lawsuitCrud;
 
@@ -48,10 +49,10 @@ class LawsuitCrudTest {
     when(resultSet.next()).thenReturn(true);
     assertThrows(NullPointerException.class, () -> lawsuitCrud.checkAuthority(request));
     System.out.println("Start checkAuthority user - Admin");
-    when(resultSet.getString(ROLE_ID)).thenReturn(Role.ADMIN.toString());
+    when(resultSet.getString(ROLE)).thenReturn(Role.ADMIN.toString());
     assertFalse(lawsuitCrud.checkAuthority(request));
     System.out.println("Start checkAuthority user - Judge");
-    when(resultSet.getString(ROLE_ID)).thenReturn(Role.JUDGE.toString());
+    when(resultSet.getString(ROLE)).thenReturn(Role.JUDGE.toString());
     assertTrue(lawsuitCrud.checkAuthority(request));
   }
 

@@ -4,9 +4,9 @@ import com.dsa.domain.MyEntity;
 
 import java.util.Objects;
 
-public class CourtEntity extends MyEntity {
+import static com.dsa.domain.court.CourtConst.*;
 
-  private static final String ENTITY_NAME = "Court";
+public class CourtEntity extends MyEntity {
 
   private String courtName;
   private CourtInstance courtInstance;
@@ -56,9 +56,9 @@ public class CourtEntity extends MyEntity {
   @Override
   public String toString() {
     return "{" + super.toString() + ", "
-        + "\"courtName\":\"" + courtName + "\", "
-        + "\"courtInstance\":\"" + courtInstance + "\", "
-        + "\"mainCourtId\":\"" + mainCourtId + "\""
+        + "\"" + COURT_NAME + "\":\"" + courtName + "\", "
+        + "\"" + COURT_INSTANCE + "\":\"" + courtInstance + "\", "
+        + "\"" + MAIN_COURT_ID + "\":\"" + mainCourtId + "\""
         + "}";
   }
 

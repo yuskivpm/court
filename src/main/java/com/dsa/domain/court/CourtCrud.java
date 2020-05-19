@@ -11,12 +11,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
 
+import static com.dsa.domain.court.CourtConst.*;
+
 public class CourtCrud extends AbstractCrud<Court, CourtDao> {
 
   public static final String path = "/courts/";
-  private static final String COURT_NAME = "courtName";
-  private static final String COURT_INSTANCE = "courtInstance";
-  private static final String MAIN_COURT_ID = "mainCourtId";
 
   public CourtCrud() {
     super(path);
@@ -41,7 +40,7 @@ public class CourtCrud extends AbstractCrud<Court, CourtDao> {
         Court mainCourt;
         try (CourtDao courtDao = new CourtDao()) {
           mainCourt = courtDao.readEntity(mainCourtId);
-          if (mainCourt.getCourtInstance().getInstanceLevel() <= courtInstance.getInstanceLevel()) {
+          if (mainCourt == null || mainCourt.getCourtInstance().getInstanceLevel() <= courtInstance.getInstanceLevel()) {
             mainCourtId = 0;
           }
         } catch (SQLException | DbPoolException e) {

@@ -5,9 +5,9 @@ import com.dsa.domain.MyEntity;
 import java.util.Date;
 import java.util.Objects;
 
-public class LawsuitEntity extends MyEntity {
+import static com.dsa.domain.lawsuit.LawsuitConst.*;
 
-  private static final String ENTITY_NAME = "Lawsuit";
+public class LawsuitEntity extends MyEntity {
 
   private Date sueDate;
   private long courtId;
@@ -186,19 +186,19 @@ public class LawsuitEntity extends MyEntity {
   @Override
   public String toString() {
     return "{" + super.toString() + ", "
-        + "\"sueDate\":\"" + sueDate + "\", "
-        + "\"courtId\":\"" + courtId + "\", "
-        + "\"suitorId\":\"" + suitorId + "\", "
-        + "\"claimText\":\"" + claimText + "\", "
-        + "\"defendantId\":\"" + defendantId + "\", "
-        + "\"defendantText\":\"" + defendantText + "\", "
-        + "\"judgeId\":\"" + judgeId + "\", "
-        + "\"startDate\":\"" + startDate + "\", "
-        + "\"verdictDate\":\"" + verdictDate + "\", "
-        + "\"verdictText\":\"" + verdictText + "\", "
-        + "\"AppealedLawsuitId\":\"" + appealedLawsuitId + "\", "
-        + "\"appealStatus\":\"" + appealStatus + "\", "
-        + "\"executionDate\":\"" + executionDate + "\""
+        + "\"" + SUE_DATE + "\":\"" + sueDate + "\", "
+        + "\"" + COURT_ID + "\":\"" + courtId + "\", "
+        + "\"" + SUITOR_ID + "\":\"" + suitorId + "\", "
+        + "\"" + CLAIM_TEXT + "\":\"" + claimText + "\", "
+        + "\"" + DEFENDANT_ID + "\":\"" + defendantId + "\", "
+        + "\"" + DEFENDANT_TEXT + "\":\"" + defendantText + "\", "
+        + "\"" + JUDGE_ID + "\":\"" + judgeId + "\", "
+        + "\"" + START_DATE + "\":\"" + startDate + "\", "
+        + "\"" + VERDICT_DATE + "\":\"" + verdictDate + "\", "
+        + "\"" + VERDICT_TEXT + "\":\"" + verdictText + "\", "
+        + "\"" + APPEALED_LAWSUIT_ID + "\":\"" + appealedLawsuitId + "\", "
+        + "\"" + APPEALED_STATUS + "\":\"" + appealStatus + "\", "
+        + "\"" + EXECUTION_DATE + "\":\"" + executionDate + "\""
         + "}";
   }
 

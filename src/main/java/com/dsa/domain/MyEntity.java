@@ -11,6 +11,8 @@ import java.util.Date;
 
 public abstract class MyEntity implements Serializable, Cloneable {
 
+  public static final String ID = "id";
+
   private static final String dateFormat = "dd.MM.yyyy";
   protected String entityName = "MyEntity";
   private long id;
@@ -45,7 +47,7 @@ public abstract class MyEntity implements Serializable, Cloneable {
 
   @Override
   public String toString() {
-    return "\"entity\":\"" + entityName + "\", \"id\":\"" + id + "\"";
+    return "\"entity\":\"" + entityName + "\", \"" + ID + "\":\"" + id + "\"";
   }
 
   @Contract("null, _ -> param2")

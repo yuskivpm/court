@@ -4,6 +4,8 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import static com.dsa.domain.user.UserConst.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserEntityTest {
@@ -13,7 +15,6 @@ class UserEntityTest {
   @Test
   void getName() {
     System.out.println("Start getName");
-    final String NAME = "NAME";
     userEntity.setName("");
     assertEquals("", userEntity.getName());
     userEntity.setName(NAME);
@@ -23,7 +24,6 @@ class UserEntityTest {
   @Test
   void getLogin() {
     System.out.println("Start getLogin");
-    final String LOGIN = "LOGIN";
     userEntity.setLogin("");
     assertEquals("", userEntity.getLogin());
     userEntity.setLogin(LOGIN);
@@ -33,7 +33,6 @@ class UserEntityTest {
   @Test
   void getPassword() {
     System.out.println("Start getPassword");
-    final String PASSWORD = "PASSWORD";
     userEntity.setPassword("");
     assertEquals("", userEntity.getPassword());
     userEntity.setPassword(PASSWORD);

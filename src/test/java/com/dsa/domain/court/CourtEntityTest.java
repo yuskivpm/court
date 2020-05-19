@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import static com.dsa.domain.court.CourtConst.*;
+
 class CourtEntityTest {
 
   private static CourtEntity courtEntity;
@@ -13,7 +15,6 @@ class CourtEntityTest {
   @Test
   void getCourtName() {
     System.out.println("Start getCourtName");
-    final String COURT_NAME = "COURT_NAME";
     courtEntity.setCourtName("");
     assertEquals("", courtEntity.getCourtName());
     courtEntity.setCourtName(COURT_NAME);

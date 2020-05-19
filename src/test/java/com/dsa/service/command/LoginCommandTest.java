@@ -6,6 +6,7 @@ import com.dsa.controller.ResponseType;
 import com.dsa.dao.AbstractEntityDao;
 import com.dsa.dao.DbPoolException;
 import com.dsa.dao.service.DbPool;
+import com.dsa.domain.user.Role;
 import com.dsa.domain.user.User;
 import com.dsa.service.resource.ConfigManager;
 import com.dsa.service.resource.MessageManager;
@@ -21,6 +22,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import static com.dsa.domain.user.UserConst.ROLE;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -29,8 +32,7 @@ class LoginCommandTest {
   private static final String PARAM_NAME_LOGIN = "login";
   private static final String PARAM_NAME_PASSWORD = "password";
   private static final String USER_SESSION_ID = "user_id";
-  private static final String ROLE_ID = "ROLE_ID";
-  private static final String ROLE_VALUE = "JUDGE";
+  private static final String ROLE_VALUE = Role.JUDGE.toString();
 
   private static LoginCommand loginCommand;
   private static ControllerRequest request;
@@ -111,7 +113,7 @@ class LoginCommandTest {
     resultSet = Mockito.mock(ResultSet.class);
     when(statement.executeQuery()).thenReturn(resultSet);
     when(statement.executeQuery(Mockito.anyString())).thenReturn(resultSet);
-    when(resultSet.getString(ROLE_ID)).thenReturn(ROLE_VALUE);
+    when(resultSet.getString(ROLE)).thenReturn(ROLE_VALUE);
     request = Mockito.mock(ControllerRequest.class);
   }
 

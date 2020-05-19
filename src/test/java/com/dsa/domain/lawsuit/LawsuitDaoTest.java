@@ -16,14 +16,15 @@ import java.util.List;
 
 import static com.dsa.InitDbForTests.*;
 
+import static com.dsa.domain.lawsuit.LawsuitConst.*;
+import static com.dsa.domain.user.UserConst.ROLE;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class LawsuitDaoTest {
 
-  protected static final String ID = "ID";
   private static final int PREPARED_VALUES_COUNT = 13;
-  private static final String ROLE_ID = "ROLE_ID";
 
   @Test
   void constructors() throws SQLException, DbPoolException {
@@ -77,7 +78,7 @@ class LawsuitDaoTest {
     final long SUITOR_ID = 2;
     when(lawsuit.getSuitorId()).thenReturn(SUITOR_ID);
     when(resultSet.next()).thenReturn(true);
-    when(resultSet.getString(ROLE_ID)).thenReturn(Role.ATTORNEY.toString());
+    when(resultSet.getString(ROLE)).thenReturn(Role.ATTORNEY.toString());
     lawsuitDao.loadAllSubEntities(lawsuit);
     verify(lawsuit).getSuitor();
     verify(lawsuit, Mockito.times(2)).getSuitorId();

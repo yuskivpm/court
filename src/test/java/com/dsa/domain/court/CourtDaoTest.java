@@ -14,13 +14,13 @@ import java.sql.SQLException;
 
 import static com.dsa.InitDbForTests.*;
 
+import static com.dsa.domain.court.CourtConst.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class CourtDaoTest {
 
-  private static final String ID = "ID";
-  private static final String COURT_INSTANCE = "COURT_INSTANCE";
   private static final CourtInstance courtInstance = CourtInstance.CASSATION;
   private static final String COURT_NAME = "court name";
   private static final long MAIN_COURT_ID = 2;
@@ -58,7 +58,6 @@ class CourtDaoTest {
     Court court = Mockito.mock(Court.class);
     CourtDao courtDao = new CourtDao(connection);
     int index = 0;
-    final String COURT_NAME = "COURT_NAME";
     when(court.getCourtName()).thenReturn(COURT_NAME);
     when(court.getCourtInstance()).thenReturn(CourtInstance.APPEAL);
     when(court.getMainCourtId()).thenReturn(0L);

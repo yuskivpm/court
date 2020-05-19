@@ -12,13 +12,14 @@ import java.sql.SQLException;
 
 import static com.dsa.InitDbForTests.*;
 
+import static com.dsa.domain.user.UserConst.ROLE;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class LoginLogicTest {
 
   private static final String VALUE = "fail";
-  private static final String ROLE_ID = "ROLE_ID";
 
   @Test
   void checkLogin_EmptyLogin() throws SQLException {
@@ -32,7 +33,7 @@ class LoginLogicTest {
   void checkLogin_CorrectLogin() throws SQLException {
     System.out.println("Start checkLogin_CorrectLogin");
     when(resultSet.next()).thenReturn(true);
-    when(resultSet.getString(ROLE_ID)).thenReturn(Role.ATTORNEY.toString());
+    when(resultSet.getString(ROLE)).thenReturn(Role.ATTORNEY.toString());
     assertNotNull(LoginLogic.checkLogin(VALUE, VALUE));
   }
 

@@ -14,6 +14,8 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.Date;
 
+import static com.dsa.domain.lawsuit.LawsuitConst.*;
+
 public class SueCrud extends AbstractCrud<Lawsuit, LawsuitDao> {
 
   public static final String path = "/sues/";
@@ -37,18 +39,18 @@ public class SueCrud extends AbstractCrud<Lawsuit, LawsuitDao> {
     Lawsuit lawsuit = null;
     try {
       if (id == 0) {
-        long suitorId = Long.parseLong(request.getParameter("suitorId"));
-        long defendantId = Long.parseLong(request.getParameter("defendantId"));
-        long courtId = Long.parseLong(request.getParameter("courtId"));
-        long appealedLawsuitId = Long.parseLong(request.getParameter("appealedLawsuitId"));
+        long suitorId = Long.parseLong(request.getParameter(SUITOR_ID));
+        long defendantId = Long.parseLong(request.getParameter(DEFENDANT_ID));
+        long courtId = Long.parseLong(request.getParameter(COURT_ID));
+        long appealedLawsuitId = Long.parseLong(request.getParameter(APPEALED_LAWSUIT_ID));
         Date sueDate;
         try {
-          sueDate = MyEntity.strToDate(request.getParameter("sueDate"));
+          sueDate = MyEntity.strToDate(request.getParameter(SUE_DATE));
         } catch (ParseException e) {
           sueDate = new Date();
         }
-        String claimText = request.getParameter("claimText");
-        if (claimText != null && !claimText.isEmpty() && courtId > 0 && defendantId > 0 && suitorId > 0 && defendantId != suitorId) {
+        String claimText = request.getParameter(CLAIM_TEXT);
+        if (!claimText.isEmpty() && courtId > 0 && defendantId > 0 && suitorId > 0 && defendantId != suitorId) {
           lawsuit = new Lawsuit(id, sueDate, null, null, claimText, null, "",
               null, null, null, null, null, null, null);
           lawsuit.setSuitorId(suitorId);
@@ -60,16 +62,18 @@ public class SueCrud extends AbstractCrud<Lawsuit, LawsuitDao> {
         try (LawsuitDao lawsuitDao = new LawsuitDao()) {
           lawsuit = lawsuitDao.readEntity(id);
         }
-        lawsuit.setCourtId(getNotNull(request.getParameter("courtId"), lawsuit.getCourtId()));
-        lawsuit.setClaimText(getNotNull(request.getParameter("claimText"), lawsuit.getClaimText()));
-        lawsuit.setDefendantText(getNotNull(request.getParameter("defendantText"), lawsuit.getDefendantText()));
-        lawsuit.setVerdictText(getNotNull(request.getParameter("verdictText"), lawsuit.getVerdictText()));
-        lawsuit.setJudgeId(getNotNull(request.getParameter("judgeId"), lawsuit.getJudgeId()));
-        lawsuit.setStartDate(getNotNull(request.getParameter("startDate"), lawsuit.getStartDate()));
-        lawsuit.setVerdictDate(getNotNull(request.getParameter("verdictDate"), lawsuit.getVerdictDate()));
-        lawsuit.setAppealedLawsuitId(getNotNull(request.getParameter("appealedLawsuitId"), lawsuit.getAppealedLawsuitId()));
-        lawsuit.setAppealStatus(getNotNull(request.getParameter("appealStatus"), lawsuit.getAppealStatus()));
-        lawsuit.setExecutionDate(getNotNull(request.getParameter("executionDate"), lawsuit.getExecutionDate()));
+        if(lawsuit != null){
+          lawsuit.setCourtId(getNotNull(request.getParameter(COURT_ID), lawsuit.getCourtId()));
+          lawsuit.setClaimText(getNotNull(request.getParameter(CLAIM_TEXT), lawsuit.getClaimText()));
+          lawsuit.setDefendantText(getNotNull(request.getParameter(DEFENDANT_TEXT), lawsuit.getDefendantText()));
+          lawsuit.setVerdictText(getNotNull(request.getParameter(VERDICT_TEXT), lawsuit.getVerdictText()));
+          lawsuit.setJudgeId(getNotNull(request.getParameter(JUDGE_ID), lawsuit.getJudgeId()));
+          lawsuit.setStartDate(getNotNull(request.getParameter(START_DATE), lawsuit.getStartDate()));
+          lawsuit.setVerdictDate(getNotNull(request.getParameter(VERDICT_DATE), lawsuit.getVerdictDate()));
+          lawsuit.setAppealedLawsuitId(getNotNull(request.getParameter(APPEALED_LAWSUIT_ID), lawsuit.getAppealedLawsuitId()));
+          lawsuit.setAppealStatus(getNotNull(request.getParameter(APPEALED_STATUS), lawsuit.getAppealStatus()));
+          lawsuit.setExecutionDate(getNotNull(request.getParameter(EXECUTION_DATE), lawsuit.getExecutionDate()));
+        }
       }
     } catch (Exception e) {
     }

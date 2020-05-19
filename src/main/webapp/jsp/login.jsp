@@ -13,11 +13,11 @@
     <input type="hidden" name="command" value="Login"/>
     Login:
     <br/>
-    <input type="text" name="login" value="localJudge1"/>
+    <input type="text" name="login"/>
     <br/>
     Password:
     <br/>
-    <input type="password" name="password" value="localJudge1"/>
+    <input type="password" name="password"/>
     <br/>
     ${errorFailLoginPassMessage}
     <br/>

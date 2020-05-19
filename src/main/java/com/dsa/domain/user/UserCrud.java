@@ -5,20 +5,15 @@ import com.dsa.dao.DbPoolException;
 import com.dsa.service.command.LoginCommand;
 import com.dsa.service.crud.AbstractCrud;
 
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
 
+import static com.dsa.domain.user.UserConst.*;
+
 public class UserCrud extends AbstractCrud<User, UserDao> {
 
   public static final String path = "/users/";
-  private static final String NAME = "name";
-  private static final String LOGIN = "login";
-  private static final String PASSWORD = "password";
-  private static final String ROLE = "role";
-  private static final String COURT_ID = "courtId";
-  private static final String IS_ACTIVE = "isActive";
   private static final String ACTIVE_IS_ON = "on";
 
   public UserCrud() {

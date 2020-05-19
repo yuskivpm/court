@@ -19,9 +19,15 @@ import java.util.List;
 public abstract class AbstractEntityDao<E extends MyEntity> implements AutoCloseable {
 
   protected static final Logger LOG = Logger.getLogger(AbstractEntityDao.class);
-  protected static final String ID = "ID";
+  protected static final String ID = MyEntity.ID;
   protected static final String NOT_NULL = "NOT NULL";
   protected static final String DEFAULT_NULL = "DEFAULT NULL";
+  protected static final String VARCHAR_255 = " VARCHAR(255) ";
+  protected static final String INSERT_TO = "INSERT INTO ";
+  protected static final String UPDATE = "UPDATE ";
+  protected static final String CREATE_TABLE_IF_NOT_EXISTS = "CREATE TABLE IF NOT EXISTS ";
+  protected static final String PRIMARY_KEY = " BIGINT AUTO_INCREMENT PRIMARY KEY";
+  protected static final String FOREIGN_KEY = "FOREIGN KEY (";
 
   private static final String SQL_SELECT_ALL = "SELECT * FROM ";
   private static final String SQL_SELECT_BY_MAP = "SELECT * FROM %s WHERE";

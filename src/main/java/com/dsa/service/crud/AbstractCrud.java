@@ -21,6 +21,8 @@ import java.util.stream.Collectors;
 public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityDao>
     implements Function<ControllerRequest, ControllerRequest> {
 
+  protected static final String ID = "ID";
+
   private static final Logger log = Logger.getLogger(AbstractCrud.class);
 
   protected String path;
@@ -75,7 +77,8 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
             result = true;
             break;
           case READ:
-            successMessage = entityDao.readEntity(getNotNull(id, 0)).toString();
+            MyEntity resultEntity = entityDao.readEntity(getNotNull(id, 0));
+            successMessage = resultEntity != null ? resultEntity.toString() : "";
             result = !successMessage.isEmpty();
             break;
           case DELETE:
@@ -96,7 +99,7 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
   private ControllerRequest prepareEditForm(@NotNull ControllerRequest request) {
     String id = request.getParameter("id");
     try (D entityDao = createEntityDao()) {
-      MyEntity entity = entityDao.loadAllSubEntities(entityDao.readEntity("ID", id));
+      MyEntity entity = entityDao.loadAllSubEntities(entityDao.readEntity(ID, id));
       if (entity != null) {
         request = new RedirectCommand().apply(request);
         request.setAttribute("editEntity", entity);

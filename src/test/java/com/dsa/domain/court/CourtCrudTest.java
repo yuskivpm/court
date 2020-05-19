@@ -14,6 +14,9 @@ import java.sql.SQLException;
 
 import static com.dsa.InitDbForTests.*;
 
+import static com.dsa.domain.court.CourtConst.*;
+import static com.dsa.domain.user.UserConst.ROLE;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -22,11 +25,6 @@ class CourtCrudTest {
   private static final String PATH = "/courts/";
   private static final String USER_SESSION_ID = "user_id";
   private static final String USER_SESSION_ID_VALUE = "1";
-  private static final String ROLE_ID = "ROLE_ID";
-  private static final String COURT_NAME = "courtName";
-  private static final String COURT_INSTANCE = "courtInstance";
-  private static final String RESULT_SET_COURT_INSTANCE = "COURT_INSTANCE";
-  private static final String MAIN_COURT_ID = "mainCourtId";
 
   private static CourtCrud courtCrud;
 
@@ -52,10 +50,10 @@ class CourtCrudTest {
     when(resultSet.next()).thenReturn(true);
     assertThrows(NullPointerException.class, () -> courtCrud.checkAuthority(request));
     System.out.println("Start checkAuthority user - Judge");
-    when(resultSet.getString(ROLE_ID)).thenReturn(Role.JUDGE.toString());
+    when(resultSet.getString(ROLE)).thenReturn(Role.JUDGE.toString());
     assertFalse(courtCrud.checkAuthority(request));
     System.out.println("Start checkAuthority user - Admin");
-    when(resultSet.getString(ROLE_ID)).thenReturn(Role.ADMIN.toString());
+    when(resultSet.getString(ROLE)).thenReturn(Role.ADMIN.toString());
     assertTrue(courtCrud.checkAuthority(request));
   }
 
@@ -84,7 +82,7 @@ class CourtCrudTest {
     assertEquals(0, court.getMainCourtId());
     System.out.println("Start createEntityFromParameters - local court");
     when(request.getParameter(COURT_INSTANCE)).thenReturn(CourtInstance.LOCAL.toString());
-    when(resultSet.getString(RESULT_SET_COURT_INSTANCE)).thenReturn(CourtInstance.APPEAL.toString());
+    when(resultSet.getString(COURT_INSTANCE)).thenReturn(CourtInstance.APPEAL.toString());
     when(resultSet.next()).thenReturn(true);
     court = courtCrud.createEntityFromParameters(request, COURT_ID_VALUE);
     assertEquals(COURT_ID_VALUE, court.getId());

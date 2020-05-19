@@ -4,9 +4,10 @@ import com.dsa.domain.MyEntity;
 
 import java.util.Objects;
 
+import static com.dsa.domain.user.UserConst.*;
+
 public class UserEntity extends MyEntity {
 
-  private static final String ENTITY_NAME = "User";
   private String name;
   private String login;
   private String password;
@@ -86,12 +87,12 @@ public class UserEntity extends MyEntity {
   @Override
   public String toString() {
     return "{" + super.toString() + ", "
-        + "\"login\":\"" + login + "\", "
-        + "\"password\":\"" + password + "\", "
-        + "\"role\":\"" + role + "\", "
-        + "\"name\":\"" + name + "\", "
-        + "\"courtId\":\"" + courtId + "\", "
-        + "\"isActive\":\"" + isActive + "\""
+        + "\"" + LOGIN + "\":\"" + login + "\", "
+        + "\"" + PASSWORD + "\":\"" + password + "\", "
+        + "\"" + ROLE + "\":\"" + role + "\", "
+        + "\"" + NAME + "\":\"" + name + "\", "
+        + "\"" + COURT_ID + "\":\"" + courtId + "\", "
+        + "\"" + IS_ACTIVE + "\":\"" + isActive + "\""
         + "}";
   }
 
