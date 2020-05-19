@@ -61,20 +61,20 @@ class CourtDaoTest {
     when(court.getCourtName()).thenReturn(COURT_NAME);
     when(court.getCourtInstance()).thenReturn(CourtInstance.APPEAL);
     when(court.getMainCourtId()).thenReturn(0L);
-    assertEquals(PREPARED_VALUES_COUNT + 1, courtDao.setAllPreparedValues(preparedStatement, court, true));
+    assertEquals(PREPARED_VALUES_COUNT + 1, courtDao.setAllPreparedValues(preparedStatement, court));
     verify(preparedStatement).setString(++index, COURT_NAME);
     verify(preparedStatement).setString(++index, CourtInstance.APPEAL.toString());
     verify(preparedStatement).setNull(PREPARED_VALUES_COUNT, 0);
     System.out.println("Start setAllPreparedValues - has main court id");
     createPreparedStatement();
     when(court.getMainCourtId()).thenReturn(MAIN_COURT_ID);
-    assertEquals(PREPARED_VALUES_COUNT + 1, courtDao.setAllPreparedValues(preparedStatement, court, true));
+    assertEquals(PREPARED_VALUES_COUNT + 1, courtDao.setAllPreparedValues(preparedStatement, court));
     verify(preparedStatement, Mockito.times(2)).setString(Mockito.anyInt(), Mockito.anyString());
     verify(preparedStatement).setLong(PREPARED_VALUES_COUNT, MAIN_COURT_ID);
     System.out.println("Start setAllPreparedValues - exception");
     createPreparedStatement();
     when(court.getCourtInstance()).thenReturn(null);
-    assertThrows(NullPointerException.class, () -> courtDao.setAllPreparedValues(preparedStatement, court, true));
+    assertThrows(NullPointerException.class, () -> courtDao.setAllPreparedValues(preparedStatement, court));
   }
 
   @Test

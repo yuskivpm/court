@@ -25,6 +25,7 @@ class LawsuitConstTest {
   private static final String APPEALED_LAWSUIT_ID = "appealedLawsuitId";
   private static final String APPEALED_STATUS = "appealStatus";
   private static final String EXECUTION_DATE = "executionDate";
+  private static final String PATH = "/lawsuits/";
 
   @Test
   void constantsTest() {
@@ -46,8 +47,14 @@ class LawsuitConstTest {
     assertEquals(EXECUTION_DATE, LawsuitConst.EXECUTION_DATE);
   }
 
+  @Test
+  void getPath_Test() {
+    System.out.println("Start getPath_Test");
+    assertEquals(PATH, LawsuitConst.getPath());
+  }
+
   @BeforeAll
-  static void beforeAll()  {
+  static void beforeAll() {
     System.out.println("Start testing LawsuitConstTest");
   }
 

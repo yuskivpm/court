@@ -1,6 +1,7 @@
 package com.dsa.domain.lawsuit;
 
 import com.dsa.domain.MyEntity;
+import org.jetbrains.annotations.Contract;
 
 public class LawsuitConst {
 
@@ -19,5 +20,12 @@ public class LawsuitConst {
   public static final String APPEALED_LAWSUIT_ID = "appealedLawsuitId";
   public static final String APPEALED_STATUS = "appealStatus";
   public static final String EXECUTION_DATE = "executionDate";
+
+  private static final String PATH = "/lawsuits/";
+
+  @Contract(pure = true)
+  public static String getPath() {
+    return PATH;
+  }
 
 }

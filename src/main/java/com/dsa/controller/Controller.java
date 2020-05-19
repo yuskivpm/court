@@ -1,6 +1,7 @@
 package com.dsa.controller;
 
 import com.dsa.dao.service.IDbPool;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
@@ -25,7 +26,7 @@ public class Controller {
 
   private static IDbPool dbPool;
 
-  public static void setDbPool(IDbPool dbPool){
+  public static void setDbPool(IDbPool dbPool) {
     Controller.dbPool = dbPool;
   }
 

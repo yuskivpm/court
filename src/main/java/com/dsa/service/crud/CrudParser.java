@@ -30,11 +30,11 @@ public class CrudParser {
     if (method.equals(GET)) {
       String redirect = request.getParameter("redirect");
       boolean hasIdValue = hasId(request.getParameter(ID));
-      if (redirect != null && !redirect.isEmpty()) {
+      if (!redirect.isEmpty()) {
         return hasIdValue ? CrudEnum.PREPARE_UPDATE_FORM : CrudEnum.WRONG;
       }
       String path = request.getParameter(Controller.PATH_INFO);
-      path = ((path == null) || (path.length() <= entityPart.length())) ? "" : path.substring(entityPart.length()).toUpperCase();
+      path = path.length() <= entityPart.length() ? "" : path.substring(entityPart.length()).toUpperCase();
       if (hasIdValue) {
         if (path.startsWith("/" + DELETE)) {
           return CrudEnum.DELETE;

@@ -31,7 +31,7 @@ public class Initialization {
     Controller.registerExecutor(SueCrud.path, new SueCrud());
   }
 
-  public static void initializeDbPool() throws DbPoolException {
+  private static void initializeDbPool() throws DbPoolException {
       ResourceBundle resourceBundle = ResourceBundle.getBundle("database");
       String dbClassName = resourceBundle.getString("dbClassName");
       String url = resourceBundle.getString("url");
@@ -43,11 +43,7 @@ public class Initialization {
       }
   }
 
-//  private static void registerClasses() {
-////    ClassProvider.registerClass(DB_POOL, DbPool.class);
-//  }
-
-  public static void createDefaultDb(boolean createDefaultDb, IDbPool defaultDbPool) {
+  private static void createDefaultDb(boolean createDefaultDb, IDbPool defaultDbPool) {
     if (createDefaultDb){
       DbCreator.createDb(defaultDbPool);
     }
@@ -55,7 +51,6 @@ public class Initialization {
 
   public static void initialize(boolean createDefaultDb) throws DbPoolException {
     registerExecutors();
-//    registerClasses();
     initializeDbPool();
     createDefaultDb(createDefaultDb, dbPool);
     Controller.setDbPool(dbPool);

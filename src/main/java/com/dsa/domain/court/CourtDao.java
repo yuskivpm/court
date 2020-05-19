@@ -55,8 +55,7 @@ public class CourtDao extends AbstractEntityDao<Court> {
   @Override
   protected int setAllPreparedValues(
       @NotNull PreparedStatement preparedStatement,
-      @NotNull Court court,
-      boolean isAddOperation
+      @NotNull Court court
   ) throws SQLException {
     int index = 0;
     preparedStatement.setString(++index, court.getCourtName());

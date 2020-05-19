@@ -18,11 +18,11 @@ public abstract class MyEntity implements Serializable, Cloneable {
   private long id;
 
   @Contract(pure = true)
-  public MyEntity() {
+  protected MyEntity() {
   }
 
   @Contract(pure = true)
-  public MyEntity(long id) {
+  protected MyEntity(long id) {
     this.id = id;
   }
 

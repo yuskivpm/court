@@ -41,7 +41,7 @@ public abstract class AbstractEntityDao<E extends MyEntity> implements AutoClose
 
   protected final Connection connection;
 
-  public AbstractEntityDao(
+  protected AbstractEntityDao(
       String entityTableName,
       String sqlInsert,
       String sqlUpdate
@@ -50,7 +50,7 @@ public abstract class AbstractEntityDao<E extends MyEntity> implements AutoClose
   }
 
   @Contract(pure = true)
-  public AbstractEntityDao(@NotNull Connection connection, String entityTableName, String sqlInsert, String sqlUpdate) {
+  protected AbstractEntityDao(@NotNull Connection connection, String entityTableName, String sqlInsert, String sqlUpdate) {
     this.connection = connection;
     this.TABLE_NAME = entityTableName;
     this.SQL_INSERT = sqlInsert;
@@ -60,7 +60,7 @@ public abstract class AbstractEntityDao<E extends MyEntity> implements AutoClose
   public boolean createEntity(E entity) {
     boolean result = false;
     try (PreparedStatement st = connection.prepareStatement(SQL_INSERT)) {
-      setAllPreparedValues(st, entity, true);
+      setAllPreparedValues(st, entity);
       result = st.executeUpdate() > 0;
       LOG.info("Create entity (" + entity + ")");
     } catch (SQLException e) {
@@ -120,7 +120,7 @@ public abstract class AbstractEntityDao<E extends MyEntity> implements AutoClose
   public boolean updateEntity(E entity) {
     boolean result = false;
     try (PreparedStatement st = connection.prepareStatement(SQL_UPDATE_BY_ID)) {
-      st.setLong(setAllPreparedValues(st, entity, false), entity.getId());
+      st.setLong(setAllPreparedValues(st, entity), entity.getId());
       result = st.executeUpdate() > 0;
       LOG.info("Update entity (" + entity + ")");
     } catch (SQLException e) {
@@ -155,8 +155,7 @@ public abstract class AbstractEntityDao<E extends MyEntity> implements AutoClose
 
   protected abstract int setAllPreparedValues(
       PreparedStatement preparedStatement,
-      E entity,
-      boolean isAddOperation
+      E entity
   ) throws SQLException;
 
   protected abstract E recordToEntity(ResultSet resultSet);

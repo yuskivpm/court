@@ -57,7 +57,7 @@ class UserDaoTest {
     when(user.getName()).thenReturn(NAME);
     when(user.getCourtId()).thenReturn(0L);
     when(user.getIsActive()).thenReturn(IS_ACTIVE);
-    assertEquals(PREPARED_VALUES_COUNT + 1, userDao.setAllPreparedValues(preparedStatement, user, true));
+    assertEquals(PREPARED_VALUES_COUNT + 1, userDao.setAllPreparedValues(preparedStatement, user));
     verify(preparedStatement).setString(++index, LOGIN);
     verify(preparedStatement).setString(++index, PASSWORD);
     verify(preparedStatement).setString(++index, ROLE_VALUE.toString());
@@ -68,14 +68,14 @@ class UserDaoTest {
     createPreparedStatement();
     when(user.getCourtId()).thenReturn(COURT_ID);
     when(user.getIsActive()).thenReturn(!IS_ACTIVE);
-    assertEquals(PREPARED_VALUES_COUNT + 1, userDao.setAllPreparedValues(preparedStatement, user, true));
+    assertEquals(PREPARED_VALUES_COUNT + 1, userDao.setAllPreparedValues(preparedStatement, user));
     verify(preparedStatement, Mockito.times(4)).setString(Mockito.anyInt(), Mockito.anyString());
     verify(preparedStatement).setLong(Mockito.anyInt(), eq(COURT_ID));
     verify(preparedStatement).setBoolean(PREPARED_VALUES_COUNT,  !IS_ACTIVE);
     System.out.println("Start setAllPreparedValues - exception");
     createPreparedStatement();
     when(user.getRole()).thenReturn(null);
-    assertThrows(NullPointerException.class, () -> userDao.setAllPreparedValues(preparedStatement, user, true));
+    assertThrows(NullPointerException.class, () -> userDao.setAllPreparedValues(preparedStatement, user));
   }
 
   @Test

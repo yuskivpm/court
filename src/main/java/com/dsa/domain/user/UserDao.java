@@ -62,8 +62,7 @@ public class UserDao extends AbstractEntityDao<User> {
   @Override
   protected int setAllPreparedValues(
       @NotNull PreparedStatement preparedStatement,
-      @NotNull User user,
-      boolean isAddOperation
+      @NotNull User user
   ) throws SQLException {
     int index = 0;
     preparedStatement.setString(++index, user.getLogin());

@@ -59,7 +59,7 @@ class LawsuitDaoTest {
     Lawsuit lawsuit = new Lawsuit(1, null, court, user, null, null, null,
         null, null, null, null, null, null, null);
     LawsuitDao lawsuitDao = new LawsuitDao(connection);
-    assertEquals(PREPARED_VALUES_COUNT + 1, lawsuitDao.setAllPreparedValues(preparedStatement, lawsuit, true));
+    assertEquals(PREPARED_VALUES_COUNT + 1, lawsuitDao.setAllPreparedValues(preparedStatement, lawsuit));
     verify(preparedStatement, Mockito.times(4)).setDate(Mockito.anyInt(), Mockito.isNull());
     verify(preparedStatement).setLong(Mockito.anyInt(), eq(court.getId()));
     verify(preparedStatement).setLong(Mockito.anyInt(), eq(user.getId()));

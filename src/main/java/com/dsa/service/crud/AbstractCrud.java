@@ -21,14 +21,13 @@ import java.util.stream.Collectors;
 public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityDao>
     implements Function<ControllerRequest, ControllerRequest> {
 
-  protected static final String ID = "ID";
-
+  protected static final String ID = MyEntity.ID;
   private static final Logger log = Logger.getLogger(AbstractCrud.class);
 
-  protected String path;
+  private final String path;
 
   @Contract(pure = true)
-  public AbstractCrud(String path) {
+  protected AbstractCrud(String path) {
     this.path = path;
   }
 
@@ -52,8 +51,8 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
   }
 
   @NotNull
-  @Contract("_, _, _ -> param2")
-  private ControllerRequest executeCrudOperation(ControllerRequest request, CrudEnum ce) {
+  @Contract("_, _ -> param1")
+  private ControllerRequest executeCrudOperation(@NotNull ControllerRequest request, @NotNull CrudEnum ce) {
     String responseValue;
     try {
       String id = request.getParameter("id");
@@ -129,9 +128,7 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
     return path;
   }
 
-  protected boolean checkAuthority(ControllerRequest request) {
-    return true;
-  }
+  protected abstract boolean checkAuthority(ControllerRequest request);
 
   protected abstract E createEntityFromParameters(ControllerRequest request, long id);
 

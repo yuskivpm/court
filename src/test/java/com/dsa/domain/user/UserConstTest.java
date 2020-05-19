@@ -18,6 +18,7 @@ class UserConstTest {
   private static final String NAME = "name";
   private static final String COURT_ID = "courtId";
   private static final String IS_ACTIVE = "isActive";
+  private static final String PATH = "/users/";
 
   @Test
   void constantsTest() {
@@ -30,6 +31,12 @@ class UserConstTest {
     assertEquals(NAME, UserConst.NAME);
     assertEquals(COURT_ID, UserConst.COURT_ID);
     assertEquals(IS_ACTIVE, UserConst.IS_ACTIVE);
+  }
+
+  @Test
+  void getPath_Test() {
+    System.out.println("Start getPath_Test");
+    assertEquals(PATH, UserConst.getPath());
   }
 
   @BeforeAll

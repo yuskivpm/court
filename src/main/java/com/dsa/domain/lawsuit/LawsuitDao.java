@@ -109,8 +109,7 @@ public class LawsuitDao extends AbstractEntityDao<Lawsuit> {
   @Override
   protected int setAllPreparedValues(
       @NotNull PreparedStatement preparedStatement,
-      @NotNull Lawsuit lawsuit,
-      boolean isAddOperation
+      @NotNull Lawsuit lawsuit
   ) throws SQLException {
     int index = 0;
     preparedStatement.setDate(++index, dateToSqlDate(lawsuit.getSueDate()));

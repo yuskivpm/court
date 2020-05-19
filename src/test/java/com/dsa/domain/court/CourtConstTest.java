@@ -15,9 +15,10 @@ class CourtConstTest {
   private static final String COURT_NAME = "courtName";
   private static final String COURT_INSTANCE = "courtInstance";
   private static final String MAIN_COURT_ID = "mainCourtId";
+  private static final String PATH = "/courts/";
 
   @Test
-  void constantsTest() {
+  void constants_Test() {
     System.out.println("Start constantsTest");
     assertEquals(ID, CourtConst.ID);
     assertEquals(ENTITY_NAME, CourtConst.ENTITY_NAME);
@@ -26,8 +27,14 @@ class CourtConstTest {
     assertEquals(MAIN_COURT_ID, CourtConst.MAIN_COURT_ID);
   }
 
+  @Test
+  void getPath_Test() {
+    System.out.println("Start getPath_Test");
+    assertEquals(PATH, CourtConst.getPath());
+  }
+
   @BeforeAll
-  static void beforeAll()  {
+  static void beforeAll() {
     System.out.println("Start testing CourtConstTest");
   }
 
