@@ -3,6 +3,7 @@ package com.dsa.domain.user;
 import com.dsa.controller.ControllerRequest;
 import com.dsa.dao.AbstractEntityDao;
 import com.dsa.dao.DbPoolException;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -91,8 +92,7 @@ class UserCrudTest {
   @Test
   void createEntityDao() throws SQLException, DbPoolException {
     System.out.println("Start createEntityDao");
-    UserDao userDao = userCrud.createEntityDao();
-    assertNotNull(userDao);
+    assertNotNull(userCrud.createEntityDao());
   }
 
   @BeforeAll

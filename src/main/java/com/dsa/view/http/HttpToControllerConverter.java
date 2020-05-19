@@ -14,7 +14,10 @@ import java.util.Map;
 
 class HttpToControllerConverter {
 
-  private static void getMainRequestCommonData(@NotNull HttpServletRequest request, @NotNull ControllerRequest controllerRequest) {
+  private static void getMainRequestCommonData(
+      @NotNull HttpServletRequest request,
+      @NotNull ControllerRequest controllerRequest
+  ) {
     controllerRequest.setParameter(Controller.METHOD, request.getMethod());
     controllerRequest.setParameter(Controller.PATH_INFO, request.getPathInfo() + "/");
     controllerRequest.setParameter(Controller.QUERY_STRING, request.getQueryString());
@@ -29,10 +32,13 @@ class HttpToControllerConverter {
     }
   }
 
-  private static void getMainRequestReaderData(@NotNull HttpServletRequest request, @NotNull ControllerRequest controllerRequest) {
+  private static void getMainRequestReaderData(
+      @NotNull HttpServletRequest request,
+      @NotNull ControllerRequest controllerRequest
+  ) {
     try {
       BufferedReader reader = request.getReader();
-      if (reader != null){
+      if (reader != null) {
         String line;
         String[] subLines;
         while ((line = reader.readLine()) != null) {

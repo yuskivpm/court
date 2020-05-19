@@ -1,6 +1,7 @@
 package com.dsa.domain.court;
 
 import com.dsa.domain.MyEntity;
+
 import org.jetbrains.annotations.Contract;
 
 public class CourtConst {

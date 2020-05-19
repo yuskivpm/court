@@ -18,6 +18,7 @@ import java.util.function.Function;
 public class LoginCommand implements Function<ControllerRequest, ControllerRequest> {
 
   public static final String path = "login";
+
   private static final Logger log = Logger.getLogger(LoginCommand.class);
   private static final String PARAM_NAME_LOGIN = "login";
   private static final String PARAM_NAME_PASSWORD = "password";

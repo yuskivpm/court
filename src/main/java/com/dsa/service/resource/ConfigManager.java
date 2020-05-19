@@ -14,7 +14,7 @@ public class ConfigManager {
   }
 
   @NotNull
-  public static String getProperty(String key) {
+  public static String getProperty(@NotNull String key) {
     return resourceBundle.getString(key);
   }
 

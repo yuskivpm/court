@@ -71,7 +71,7 @@ class UserDaoTest {
     assertEquals(PREPARED_VALUES_COUNT + 1, userDao.setAllPreparedValues(preparedStatement, user));
     verify(preparedStatement, Mockito.times(4)).setString(Mockito.anyInt(), Mockito.anyString());
     verify(preparedStatement).setLong(Mockito.anyInt(), eq(COURT_ID));
-    verify(preparedStatement).setBoolean(PREPARED_VALUES_COUNT,  !IS_ACTIVE);
+    verify(preparedStatement).setBoolean(PREPARED_VALUES_COUNT, !IS_ACTIVE);
     System.out.println("Start setAllPreparedValues - exception");
     createPreparedStatement();
     when(user.getRole()).thenReturn(null);

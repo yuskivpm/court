@@ -5,6 +5,7 @@ import com.dsa.dao.AbstractEntityDao;
 import com.dsa.dao.DbPoolException;
 import com.dsa.domain.MyEntity;
 import com.dsa.domain.user.Role;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -76,7 +77,7 @@ class SueCrudTest {
     when(request.getParameter(DEFENDANT_ID)).thenReturn(DEFENDANT_ID_VALUE);
     when(request.getParameter(COURT_ID)).thenReturn(COURT_ID_VALUE);
     when(request.getParameter(APPEALED_LAWSUIT_ID)).thenReturn(APPEALED_LAWSUIT_ID_VALUE);
-    when(request.getParameter(SUE_DATE)).thenReturn(SUE_DATE_VALUE );
+    when(request.getParameter(SUE_DATE)).thenReturn(SUE_DATE_VALUE);
     when(request.getParameter(CLAIM_TEXT)).thenReturn(CLAIM_TEXT_VALUE);
     Lawsuit lawsuit = sueCrud.createEntityFromParameters(request, 0);
     assertNotNull(lawsuit);

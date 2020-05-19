@@ -14,6 +14,7 @@ import static com.dsa.domain.user.UserConst.*;
 public class UserCrud extends AbstractCrud<User, UserDao> {
 
   public static final String path = "/users/";
+
   private static final String ACTIVE_IS_ON = "on";
 
   public UserCrud() {
@@ -21,7 +22,7 @@ public class UserCrud extends AbstractCrud<User, UserDao> {
   }
 
   @Override
-  protected boolean checkAuthority(ControllerRequest request) {
+  protected boolean checkAuthority(@NotNull ControllerRequest request) {
     User user = LoginCommand.getSessionUser(request);
     return user != null && user.getRole() == Role.ADMIN;
   }

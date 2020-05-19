@@ -19,6 +19,7 @@ public class ControllerRequest {
 
   private ResponseType responseType;
   private String responseValue;
+
   private final Map<String, String> params = new HashMap<>();
   private final Map<String, Object> attributes = new HashMap<>();
   private final Map<String, Object> sessionAttributes = new HashMap<>();

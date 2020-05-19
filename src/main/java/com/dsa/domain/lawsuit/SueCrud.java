@@ -29,7 +29,7 @@ public class SueCrud extends AbstractCrud<Lawsuit, LawsuitDao> {
   }
 
   @Override
-  protected boolean checkAuthority(ControllerRequest request) {
+  protected boolean checkAuthority(@NotNull ControllerRequest request) {
     User user = LoginCommand.getSessionUser(request);
     return user != null && (user.getRole() == Role.ATTORNEY);
   }
@@ -62,7 +62,7 @@ public class SueCrud extends AbstractCrud<Lawsuit, LawsuitDao> {
         try (LawsuitDao lawsuitDao = new LawsuitDao()) {
           lawsuit = lawsuitDao.readEntity(id);
         }
-        if(lawsuit != null){
+        if (lawsuit != null) {
           lawsuit.setCourtId(getNotNull(request.getParameter(COURT_ID), lawsuit.getCourtId()));
           lawsuit.setClaimText(getNotNull(request.getParameter(CLAIM_TEXT), lawsuit.getClaimText()));
           lawsuit.setDefendantText(getNotNull(request.getParameter(DEFENDANT_TEXT), lawsuit.getDefendantText()));

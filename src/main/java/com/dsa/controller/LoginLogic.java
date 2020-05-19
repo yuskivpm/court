@@ -19,7 +19,7 @@ public class LoginLogic {
 
   public static User checkLogin(@NotNull String login, @NotNull String password) {
     User user = null;
-    if (!login.isEmpty() && !password.isEmpty()){
+    if (!login.isEmpty() && !password.isEmpty()) {
       try (UserDao userDao = new UserDao()) {
         String[] loginRequest = {LOGIN, login, PASSWORD, password};
         user = userDao.loadAllSubEntities(userDao.readEntity(loginRequest));

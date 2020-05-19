@@ -22,7 +22,7 @@ public class CourtCrud extends AbstractCrud<Court, CourtDao> {
   }
 
   @Override
-  protected boolean checkAuthority(ControllerRequest request) {
+  protected boolean checkAuthority(@NotNull ControllerRequest request) {
     User user = LoginCommand.getSessionUser(request);
     return user != null && user.getRole() == Role.ADMIN;
   }

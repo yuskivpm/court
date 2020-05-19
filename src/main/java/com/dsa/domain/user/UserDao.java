@@ -18,10 +18,12 @@ public class UserDao extends AbstractEntityDao<User> {
   private static final String SQL_INSERT = INSERT_TO + ENTITY_NAME + " (" + LOGIN + "," +
       PASSWORD + "," + ROLE + "," + NAME + "," + COURT_ID + "," + IS_ACTIVE + ") " +
       "VALUES(?, ?, ?, ?, ?, ?)";
+
   private static final String SQL_UPDATE = UPDATE + ENTITY_NAME +
       " SET " + LOGIN + " = ?, " + PASSWORD + " = ?, " + ROLE + " = ?,  " +
       NAME + "= ?,  " + COURT_ID + "= ?,  " + IS_ACTIVE + "= ?" +
       " WHERE " + ID + " = ?";
+
   public static final String SQL_CREATE_TABLE = CREATE_TABLE_IF_NOT_EXISTS + ENTITY_NAME + "(" +
       ID + PRIMARY_KEY + ", " +
       LOGIN + VARCHAR_255 + NOT_NULL + ", " +

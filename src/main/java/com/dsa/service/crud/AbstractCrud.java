@@ -22,6 +22,7 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
     implements Function<ControllerRequest, ControllerRequest> {
 
   protected static final String ID = MyEntity.ID;
+
   private static final Logger log = Logger.getLogger(AbstractCrud.class);
 
   private final String path;
@@ -128,9 +129,9 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
     return path;
   }
 
-  protected abstract boolean checkAuthority(ControllerRequest request);
+  protected abstract boolean checkAuthority(@NotNull ControllerRequest request);
 
-  protected abstract E createEntityFromParameters(ControllerRequest request, long id);
+  protected abstract E createEntityFromParameters(@NotNull ControllerRequest request, long id);
 
   protected abstract D createEntityDao() throws SQLException, DbPoolException;
 

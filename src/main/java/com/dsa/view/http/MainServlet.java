@@ -35,7 +35,10 @@ public class MainServlet extends HttpServlet {
     processRequest(request, response);
   }
 
-  private void processRequest(@NotNull HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+  private void processRequest(
+      @NotNull HttpServletRequest request,
+      HttpServletResponse response
+  ) throws ServletException, IOException {
     ControllerRequest controllerRequest = Controller.execute(
         HttpToControllerConverter.prepareRequestDataForController(request, true)
     );

@@ -25,7 +25,7 @@ class HttpToControllerConverterTest {
     when(request.getPathInfo()).thenReturn("api");
     when(request.getQueryString()).thenReturn("sues");
     when(request.getSession()).thenReturn(null);
-    ControllerRequest controllerRequest = HttpToControllerConverter.prepareRequestDataForController(request,false);
+    ControllerRequest controllerRequest = HttpToControllerConverter.prepareRequestDataForController(request, false);
     verify(request).getMethod();
     verify(request, Mockito.times(2)).getPathInfo();
     verify(request).getQueryString();
@@ -40,7 +40,7 @@ class HttpToControllerConverterTest {
     when(request.getQueryString()).thenReturn("sues");
     when(request.getSession()).thenReturn(null);
     when(request.getReader()).thenReturn(null);
-    ControllerRequest controllerRequest = HttpToControllerConverter.prepareRequestDataForController(request,true);
+    ControllerRequest controllerRequest = HttpToControllerConverter.prepareRequestDataForController(request, true);
     verify(request).getMethod();
     verify(request, Mockito.times(2)).getPathInfo();
     verify(request).getQueryString();

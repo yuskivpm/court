@@ -222,7 +222,7 @@ public abstract class AbstractEntityDao<E extends MyEntity> implements AutoClose
     }
   }
 
-  public static void setDbPool(IDbPool dbPool){
+  public static void setDbPool(IDbPool dbPool) {
     AbstractEntityDao.dbPool = dbPool;
   }
 

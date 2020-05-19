@@ -60,7 +60,7 @@ public class Lawsuit extends LawsuitEntity {
 
   public void setSuitor(User suitor) {
     this.suitor = suitor;
-    if (suitor == null){
+    if (suitor == null) {
       super.setSuitorId(0);
     }
   }
@@ -71,7 +71,7 @@ public class Lawsuit extends LawsuitEntity {
 
   public void setDefendant(User defendant) {
     this.defendant = defendant;
-    if (defendant == null){
+    if (defendant == null) {
       super.setDefendantId(0);
     }
   }
@@ -82,7 +82,7 @@ public class Lawsuit extends LawsuitEntity {
 
   public void setCourt(Court court) {
     this.court = court;
-    if (court == null){
+    if (court == null) {
       super.setCourtId(0);
     }
   }
@@ -93,7 +93,7 @@ public class Lawsuit extends LawsuitEntity {
 
   public void setJudge(User judge) {
     this.judge = judge;
-    if (judge == null){
+    if (judge == null) {
       super.setJudgeId(0);
     }
   }
@@ -104,7 +104,7 @@ public class Lawsuit extends LawsuitEntity {
 
   public void setAppealedLawsuit(Lawsuit appealedLawsuit) {
     this.appealedLawsuit = appealedLawsuit;
-    if (appealedLawsuit == null){
+    if (appealedLawsuit == null) {
       super.setAppealedLawsuitId(0);
     }
   }

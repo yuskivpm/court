@@ -69,7 +69,8 @@ class LawsuitTest {
     lawsuit.setAppealedLawsuit(null);
     assertNull(lawsuit.getAppealedLawsuit());
     assertEquals(0, lawsuit.getAppealedLawsuitId());
-    Lawsuit appealedLawsuit = new Lawsuit(1, null, null, null, null, null, null, null, null, null, null, null, null, null);
+    Lawsuit appealedLawsuit = new Lawsuit(1, null, null, null, null, null,
+        null, null, null, null, null, null, null, null);
     lawsuit.setAppealedLawsuit(appealedLawsuit);
     assertEquals(appealedLawsuit, lawsuit.getAppealedLawsuit());
     assertEquals(1, lawsuit.getAppealedLawsuitId());

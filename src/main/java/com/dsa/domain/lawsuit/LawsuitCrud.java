@@ -5,6 +5,8 @@ import com.dsa.domain.user.Role;
 import com.dsa.domain.user.User;
 import com.dsa.service.command.LoginCommand;
 
+import org.jetbrains.annotations.NotNull;
+
 public class LawsuitCrud extends SueCrud {
 
   public static final String path = "/lawsuits/";
@@ -14,7 +16,7 @@ public class LawsuitCrud extends SueCrud {
   }
 
   @Override
-  protected boolean checkAuthority(ControllerRequest request) {
+  protected boolean checkAuthority(@NotNull ControllerRequest request) {
     User judge = LoginCommand.getSessionUser(request);
     return judge != null && (judge.getRole() == Role.JUDGE);
   }

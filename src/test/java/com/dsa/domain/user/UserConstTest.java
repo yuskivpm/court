@@ -40,7 +40,7 @@ class UserConstTest {
   }
 
   @BeforeAll
-  static void beforeAll()  {
+  static void beforeAll() {
     System.out.println("Start testing UserConstTest");
   }
 

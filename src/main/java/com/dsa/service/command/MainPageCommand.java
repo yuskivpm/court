@@ -20,8 +20,9 @@ import java.util.function.Function;
 
 public class MainPageCommand implements Function<ControllerRequest, ControllerRequest> {
 
-  private static final Logger log = Logger.getLogger(MainPageCommand.class);
   public static final String path = "main_page";
+
+  private static final Logger log = Logger.getLogger(MainPageCommand.class);
 
   @Override
   public ControllerRequest apply(@NotNull ControllerRequest request) {

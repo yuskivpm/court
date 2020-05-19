@@ -20,7 +20,7 @@ class ControllerTest {
 
   @Test
   void execute() throws SQLException, DbPoolException {
-    System.out.println("Start execute");
+    System.out.println("Start execute - incorrect command");
     InitDbForTests.initDbPool();
     Controller.setDbPool(InitDbForTests.dbPool);
     ControllerRequest mainRequest = Mockito.mock(ControllerRequest.class);
@@ -31,7 +31,7 @@ class ControllerTest {
     verify(InitDbForTests.dbPool).getConnection();
     verify(InitDbForTests.connection).setAutoCommit(false);
     verify(InitDbForTests.connection).commit();
-
+    System.out.println("Start execute - check test/fail");
     ControllerRequest mainRequest1 = Mockito.mock(ControllerRequest.class);
     when(mainRequest1.getParameter(COMMAND)).thenReturn("test/fail");
     when(mainRequest1.getParameter(COMMIT_QUERY)).thenReturn("");

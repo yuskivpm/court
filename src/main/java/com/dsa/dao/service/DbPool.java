@@ -8,7 +8,7 @@ import org.h2.jdbcx.JdbcConnectionPool;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class DbPool implements IDbPool{
+public class DbPool implements IDbPool {
 
   private static final Logger LOG = Logger.getLogger(DbPool.class);
   private static JdbcConnectionPool connectionPool = null;
