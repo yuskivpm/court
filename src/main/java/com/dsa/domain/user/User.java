@@ -1,5 +1,6 @@
 package com.dsa.domain.user;
 
+import com.dsa.domain.IEntity;
 import com.dsa.domain.court.Court;
 
 public class User extends UserEntity {
@@ -11,7 +12,7 @@ public class User extends UserEntity {
   }
 
   public User(long id, String login, String password, Role role, String name, Court court, boolean isActive) {
-    super(id, login, password, role, name, getIdIfNotNull(court, 0), isActive);
+    super(id, login, password, role, name, IEntity.getIdIfNotNull(court, 0), isActive);
     this.court = court;
   }
 
@@ -28,7 +29,7 @@ public class User extends UserEntity {
 
   @Override
   public long getCourtId() {
-    return getIdIfNotNull(court, super.getCourtId());
+    return IEntity.getIdIfNotNull(court, super.getCourtId());
   }
 
 }

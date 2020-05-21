@@ -1,6 +1,5 @@
 package com.dsa.view.http;
 
-import com.dsa.controller.Controller;
 import com.dsa.controller.ControllerRequest;
 import com.dsa.service.Initialization;
 import com.dsa.service.command.LoginCommand;
@@ -38,6 +37,7 @@ public class MainServletFilter implements Filter {
 
   private static final Logger LOG = Logger.getLogger(MainServletFilter.class);
   private static final String LOGIN_PAGE = ConfigManager.getProperty("path.page.login");
+  private static final String COMMAND = "command";
 
   static {
     try {
@@ -53,7 +53,7 @@ public class MainServletFilter implements Filter {
     ControllerRequest controllerRequest = HttpToControllerConverter.prepareRequestDataForController(req, false);
     String path = req.getRequestURI();
     if (!path.equals(LOGIN_PAGE) &&
-        !controllerRequest.getParameter(Controller.COMMAND).toLowerCase().equals(LoginCommand.path)) {
+        !controllerRequest.getParameter(COMMAND).toLowerCase().equals(LoginCommand.path)) {
       // all requests except "/jsp/login.jsp" check for prior login
       String UserSession = LoginCommand.getUserSessionId(controllerRequest);
       if (UserSession.isEmpty()) {

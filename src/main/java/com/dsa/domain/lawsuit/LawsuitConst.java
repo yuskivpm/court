@@ -1,12 +1,12 @@
 package com.dsa.domain.lawsuit;
 
-import com.dsa.domain.MyEntity;
+import com.dsa.domain.IEntity;
 
 import org.jetbrains.annotations.Contract;
 
 public class LawsuitConst {
 
-  public static final String ID = MyEntity.ID;
+  public static final String ID =IEntity.ID;
   public static final String ENTITY_NAME = "Lawsuit";
   public static final String SUE_DATE = "sueDate";
   public static final String COURT_ID = "courtId";

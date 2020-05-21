@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.function.Function;
 
-public class Controller {
+public class Controller implements IController {
 
   public static final String METHOD = "method";
   public static final String PATH_INFO = "pathInfo";
@@ -31,7 +31,8 @@ public class Controller {
   }
 
   @NotNull
-  public static ControllerRequest execute(@NotNull ControllerRequest mainRequest) {
+  @Override
+  public ControllerRequest execute(@NotNull ControllerRequest mainRequest) {
     mainRequest.resetToDefault();
     String[] commits = mainRequest.getParameter(COMMIT_QUERY)
         .replace(COMMIT_COMMAND_OPERAND, "=")

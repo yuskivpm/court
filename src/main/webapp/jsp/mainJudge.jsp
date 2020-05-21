@@ -1,5 +1,5 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ page import="com.dsa.domain.MyEntity" %>
+<%@ page import="com.dsa.domain.IEntity" %>
 <%@ page import="java.util.Date" %>
 <jsp:directive.include file="mainHeader.jsp"/>
 
@@ -41,7 +41,7 @@ ${curUser.name}, hello!
                         onclick="fetchThis({
                                 url:'api/lawsuits',
                                 method:'POST',
-                                body:'id=${sue.id}&judgeId=${curUser.id}&startDate=<%= MyEntity.dateToStr(new Date())%>'
+                                body:'id=${sue.id}&judgeId=${curUser.id}&startDate=<%= IEntity.dateToStr(new Date())%>'
                                 }, data=>{crudInformationCallback(data,()=>sendGetRequest('api?command=main_Page'))}
                                 )"
                 >

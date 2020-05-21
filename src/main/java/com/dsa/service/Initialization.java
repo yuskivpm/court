@@ -13,6 +13,9 @@ import com.dsa.domain.court.CourtCrud;
 import com.dsa.domain.lawsuit.LawsuitCrud;
 import com.dsa.domain.lawsuit.SueCrud;
 import com.dsa.domain.user.UserCrud;
+import com.dsa.service.crud.AbstractCrud;
+import com.dsa.service.crud.CrudParser;
+import com.dsa.view.http.MainServlet;
 
 import java.util.ResourceBundle;
 
@@ -55,6 +58,8 @@ public class Initialization {
     createDefaultDb(createDefaultDb, dbPool);
     Controller.setDbPool(dbPool);
     AbstractEntityDao.setDbPool(dbPool);
+    AbstractCrud.setCrudParser(new CrudParser());
+    MainServlet.setController(new Controller());
   }
 
 }

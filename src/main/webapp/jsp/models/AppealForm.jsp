@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="com.dsa.domain.lawsuit.Lawsuit" %>
-<%@ page import="com.dsa.domain.MyEntity" %>
+<%@ page import="com.dsa.domain.IEntity" %>
 
 <h1>Appeal Management</h1>
 <h2>
@@ -56,10 +56,10 @@
             <td>
                 <input type="text" name="sueDate" size="45" required readonly
                     <c:if test="${editEntity != null}">
-                        value='<%= MyEntity.dateToStr(((Lawsuit)request.getAttribute("editEntity")).getSueDate()) %>'
+                        value='<%= IEntity.dateToStr(((Lawsuit)request.getAttribute("editEntity")).getSueDate()) %>'
                     </c:if>
                     <c:if test="${editEntity == null}">
-                        value='<%= MyEntity.dateToStr(new Date())%>'
+                        value='<%= IEntity.dateToStr(new Date())%>'
                     </c:if>
                 />
             </td>

@@ -1,12 +1,12 @@
 package com.dsa.domain.user;
 
-import com.dsa.domain.MyEntity;
+import com.dsa.domain.IEntity;
 
 import org.jetbrains.annotations.Contract;
 
 public class UserConst {
 
-  public static final String ID = MyEntity.ID;
+  public static final String ID = IEntity.ID;
   public static final String ENTITY_NAME = "User";
   public static final String LOGIN = "login";
   public static final String PASSWORD = "password";

@@ -1,6 +1,6 @@
 package com.dsa.domain.court;
 
-import com.dsa.domain.MyEntity;
+import com.dsa.domain.IEntity;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CourtConstTest {
 
-  private static final String ID = MyEntity.ID;
+  private static final String ID = IEntity.ID;
   private static final String ENTITY_NAME = "Court";
   private static final String COURT_NAME = "courtName";
   private static final String COURT_INSTANCE = "courtInstance";

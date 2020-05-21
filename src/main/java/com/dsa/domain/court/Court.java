@@ -1,5 +1,7 @@
 package com.dsa.domain.court;
 
+import com.dsa.domain.IEntity;
+
 public class Court extends CourtEntity {
 
   private Court mainCourt;
@@ -9,8 +11,8 @@ public class Court extends CourtEntity {
   }
 
   public Court(long id, String courtName, CourtInstance courtInstance, Court mainCourt) {
-    super(id, courtName, courtInstance, getIdIfNotNull(mainCourt, 0));
-    this.mainCourt = mainCourt;
+    super(id, courtName, courtInstance, IEntity.getIdIfNotNull(mainCourt, 0));
+    this.setMainCourt(mainCourt);
   }
 
   public Court getMainCourt() {
@@ -26,7 +28,7 @@ public class Court extends CourtEntity {
 
   @Override
   public long getMainCourtId() {
-    return getIdIfNotNull(mainCourt, super.getMainCourtId());
+    return IEntity.getIdIfNotNull(mainCourt, super.getMainCourtId());
   }
 
 }

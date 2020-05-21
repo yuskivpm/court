@@ -77,6 +77,23 @@ class MainPageCommandTest {
     verify(request).setAttribute("curUser", user);
   }
 
+  @Test
+  void apply_WithAdminUser() throws SQLException {
+    System.out.println("Start apply_CorrectLogin");
+    when(request.getParameter(PARAM_NAME_LOGIN)).thenReturn(LOGIN_VALUE);
+    when(request.getParameter(PARAM_NAME_PASSWORD)).thenReturn(PASSWORD_VALUE);
+    when(request.getSessionAttribute(USER_SESSION_ID)).thenReturn("1");
+    when(resultSet.getString(ROLE)).thenReturn(Role.ADMIN.toString());
+    when(resultSet.next()).thenReturn(true);
+    User user = LoginLogic.checkLogin(LOGIN_VALUE, PASSWORD_VALUE);
+    assertNotNull(user);
+    when(resultSet.next()).thenReturn(true).thenReturn(false);
+    mainPageCommand.apply(request, user);
+    verify(request).setResponseType(ResponseType.FORWARD);
+    verify(request).setResponseValue(ConfigManager.getProperty("path.page.main." + user.getRole()));
+    verify(request).setAttribute("curUser", user);
+  }
+
 
   @BeforeAll
   static void beforeAll() throws SQLException, DbPoolException {

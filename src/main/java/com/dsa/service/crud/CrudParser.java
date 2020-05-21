@@ -1,26 +1,28 @@
 package com.dsa.service.crud;
 
-import com.dsa.controller.Controller;
 import com.dsa.controller.ControllerRequest;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-public class CrudParser {
+public class CrudParser implements ICrudParser {
 
   private static final String POST = "POST";
   private static final String PUT = "PUT";
   private static final String GET = "GET";
   private static final String DELETE = "DELETE";
   private static final String ID = "id";
+  public static final String METHOD = "method";
+  public static final String PATH_INFO = "pathInfo";
 
   @Contract(value = "null -> false", pure = true)
   public static boolean hasId(String id) {
     return (id != null && !id.isEmpty());
   }
 
-  public static CrudEnum getCrudOperation(@NotNull ControllerRequest request, @NotNull String entityPart) {
-    String method = request.getParameter(Controller.METHOD);
+  @Override
+  public CrudEnum getCrudOperation(@NotNull ControllerRequest request, @NotNull String entityPart) {
+    String method = request.getParameter(METHOD);
     if (method.equals(DELETE)) {
       return hasId(request.getParameter(ID)) ? CrudEnum.DELETE : CrudEnum.WRONG;
     }
@@ -33,15 +35,15 @@ public class CrudParser {
       if (!redirect.isEmpty()) {
         return hasIdValue ? CrudEnum.PREPARE_UPDATE_FORM : CrudEnum.WRONG;
       }
-      String path = request.getParameter(Controller.PATH_INFO);
+      String path = request.getParameter(PATH_INFO);
       path = path.length() <= entityPart.length() ? "" : path.substring(entityPart.length()).toUpperCase();
       if (hasIdValue) {
         if (path.startsWith("/" + DELETE)) {
           return CrudEnum.DELETE;
         }
-        return (path.length() <= 1) ? CrudEnum.READ : CrudEnum.UNKNOWN;
+        return path.length() <= 1 ? CrudEnum.READ : CrudEnum.UNKNOWN;
       }
-      return (path.length() <= 1) ? CrudEnum.READ_ALL : CrudEnum.UNKNOWN;
+      return path.length() <= 1 ? CrudEnum.READ_ALL : CrudEnum.UNKNOWN;
     }
     return CrudEnum.WRONG;
   }

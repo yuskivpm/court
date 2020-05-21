@@ -17,6 +17,7 @@ class ControllerTest {
 
   private static final String COMMAND = "command";
   private static final String COMMIT_QUERY = "commit";
+  private static Controller controller;
 
   @Test
   void execute() throws SQLException, DbPoolException {
@@ -26,7 +27,7 @@ class ControllerTest {
     ControllerRequest mainRequest = Mockito.mock(ControllerRequest.class);
     when(mainRequest.getParameter(COMMIT_QUERY)).thenReturn("");
     when(mainRequest.getParameter(COMMAND)).thenReturn("incorrect");
-    mainRequest = Controller.execute(mainRequest);
+    mainRequest = controller.execute(mainRequest);
     verify(mainRequest).getParameter(COMMIT_QUERY);
     verify(InitDbForTests.dbPool).getConnection();
     verify(InitDbForTests.connection).setAutoCommit(false);
@@ -40,7 +41,7 @@ class ControllerTest {
       request.setResponseType(ResponseType.FAIL);
       return request;
     });
-    Controller.execute(mainRequest1);
+    controller.execute(mainRequest1);
     verify(InitDbForTests.connection).rollback();
   }
 
@@ -54,6 +55,7 @@ class ControllerTest {
   @BeforeAll
   static void beforeAll() throws ClassNotFoundException {
     System.out.println("Start testing ControllerTest");
+    controller = new Controller();
   }
 
   @AfterAll

@@ -4,7 +4,7 @@ import com.dsa.controller.ControllerRequest;
 import com.dsa.dao.DbPoolException;
 import com.dsa.domain.user.Role;
 import com.dsa.domain.user.User;
-import com.dsa.domain.MyEntity;
+import com.dsa.domain.IEntity;
 import com.dsa.service.command.LoginCommand;
 import com.dsa.service.crud.AbstractCrud;
 
@@ -45,7 +45,7 @@ public class SueCrud extends AbstractCrud<Lawsuit, LawsuitDao> {
         long appealedLawsuitId = Long.parseLong(request.getParameter(APPEALED_LAWSUIT_ID));
         Date sueDate;
         try {
-          sueDate = MyEntity.strToDate(request.getParameter(SUE_DATE));
+          sueDate = IEntity.strToDate(request.getParameter(SUE_DATE));
         } catch (ParseException e) {
           sueDate = new Date();
         }

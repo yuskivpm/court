@@ -1,7 +1,7 @@
 package com.dsa.dao;
 
 import com.dsa.dao.service.IDbPool;
-import com.dsa.domain.MyEntity;
+import com.dsa.domain.IEntity;
 
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.Contract;
@@ -16,10 +16,10 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractEntityDao<E extends MyEntity> implements AutoCloseable {
+public abstract class AbstractEntityDao<E extends IEntity> implements AutoCloseable {
 
   protected static final Logger LOG = Logger.getLogger(AbstractEntityDao.class);
-  protected static final String ID = MyEntity.ID;
+  protected static final String ID = IEntity.ID;
   protected static final String NOT_NULL = "NOT NULL";
   protected static final String DEFAULT_NULL = "DEFAULT NULL";
   protected static final String VARCHAR_255 = " VARCHAR(255) ";

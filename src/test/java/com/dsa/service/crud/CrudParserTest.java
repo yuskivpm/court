@@ -12,7 +12,7 @@ import org.mockito.Mockito;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class CrudParserTest {
+class crudParserTest {
 
   private static final String POST = "POST";
   private static final String PUT = "PUT";
@@ -21,78 +21,83 @@ class CrudParserTest {
   private static final String ID = "id";
 
   private static ControllerRequest request;
+  private static CrudParser crudParser;
 
   @Test
   void hasId() {
     System.out.println("Start hasId");
-    assertFalse(CrudParser.hasId(null));
-    assertFalse(CrudParser.hasId(""));
-    assertTrue(CrudParser.hasId("1"));
+    assertFalse(crudParser.hasId(null));
+    assertFalse(crudParser.hasId(""));
+    assertTrue(crudParser.hasId("1"));
   }
 
   @Test
   void getCrudOperation_Delete() {
     System.out.println("Start getCrudOperation_Delete");
     when(request.getParameter(Controller.METHOD)).thenReturn(DELETE);
-    assertEquals(CrudParser.getCrudOperation(request, ""), CrudEnum.WRONG);
+    assertEquals(crudParser.getCrudOperation(request, ""), CrudEnum.WRONG);
     when(request.getParameter(ID)).thenReturn("1");
-    assertEquals(CrudParser.getCrudOperation(request, ""), CrudEnum.DELETE);
+    assertEquals(crudParser.getCrudOperation(request, ""), CrudEnum.DELETE);
   }
 
   @Test
   void getCrudOperation_Post() {
     System.out.println("Start getCrudOperation_Post");
     when(request.getParameter(Controller.METHOD)).thenReturn(POST);
-    assertEquals(CrudParser.getCrudOperation(request, ""), CrudEnum.CREATE);
+    assertEquals(crudParser.getCrudOperation(request, ""), CrudEnum.CREATE);
     when(request.getParameter(ID)).thenReturn("1");
-    assertEquals(CrudParser.getCrudOperation(request, ""), CrudEnum.UPDATE);
+    assertEquals(crudParser.getCrudOperation(request, ""), CrudEnum.UPDATE);
   }
 
   @Test
   void getCrudOperation_Put() {
     System.out.println("Start getCrudOperation_Put");
     when(request.getParameter(Controller.METHOD)).thenReturn(PUT);
-    assertEquals(CrudParser.getCrudOperation(request, ""), CrudEnum.CREATE);
+    assertEquals(crudParser.getCrudOperation(request, ""), CrudEnum.CREATE);
     when(request.getParameter(ID)).thenReturn("1");
-    assertEquals(CrudParser.getCrudOperation(request, ""), CrudEnum.UPDATE);
+    assertEquals(crudParser.getCrudOperation(request, ""), CrudEnum.UPDATE);
   }
 
   @Test
   void getCrudOperation_IncorrectMethod() {
     System.out.println("Start getCrudOperation_IncorrectMethod");
     when(request.getParameter(Controller.METHOD)).thenReturn("1");
-    assertEquals(CrudParser.getCrudOperation(request, ""), CrudEnum.WRONG);
+    assertEquals(crudParser.getCrudOperation(request, ""), CrudEnum.WRONG);
   }
 
   @Test
   void getCrudOperation_Get() {
     System.out.println("Start getCrudOperation_Get");
     when(request.getParameter(Controller.METHOD)).thenReturn(GET);
-    assertEquals(CrudParser.getCrudOperation(request, ""), CrudEnum.READ_ALL);
+    assertThrows(NullPointerException.class, () -> crudParser.getCrudOperation(request, ""));
+    when(request.getParameter("redirect")).thenReturn("");
+    when(request.getParameter(Controller.PATH_INFO)).thenReturn("");
+    assertEquals(crudParser.getCrudOperation(request, ""), CrudEnum.READ_ALL);
     when(request.getParameter(Controller.PATH_INFO)).thenReturn("12");
-    assertEquals(CrudParser.getCrudOperation(request, ""), CrudEnum.UNKNOWN);
+    assertEquals(crudParser.getCrudOperation(request, ""), CrudEnum.UNKNOWN);
     when(request.getParameter(ID)).thenReturn("1");
-    assertEquals(CrudParser.getCrudOperation(request, ""), CrudEnum.UNKNOWN);
-    when(request.getParameter(Controller.PATH_INFO)).thenReturn(null);
-    assertEquals(CrudParser.getCrudOperation(request, ""), CrudEnum.READ);
+    assertEquals(crudParser.getCrudOperation(request, ""), CrudEnum.UNKNOWN);
+    when(request.getParameter(Controller.PATH_INFO)).thenReturn("");
+    assertEquals(crudParser.getCrudOperation(request, ""), CrudEnum.READ);
     when(request.getParameter(Controller.PATH_INFO)).thenReturn("/" + DELETE);
-    assertEquals(CrudParser.getCrudOperation(request, ""), CrudEnum.DELETE);
+    assertEquals(crudParser.getCrudOperation(request, ""), CrudEnum.DELETE);
   }
 
   @BeforeAll
   static void beforeAll() {
-    System.out.println("Start testing CrudParserTest");
+    System.out.println("Start testing crudParserTest");
+    crudParser = new CrudParser();
   }
 
   @BeforeEach
   void beforeEach() {
-    System.out.println("BeforeEach CrudParserTest");
+    System.out.println("BeforeEach crudParserTest");
     request = Mockito.mock(ControllerRequest.class);
   }
 
   @AfterAll
   static void afterAll() {
-    System.out.println("Finish testing CrudParserTest");
+    System.out.println("Finish testing crudParserTest");
   }
 
 }

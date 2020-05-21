@@ -4,7 +4,7 @@
 <%@ page import="com.dsa.domain.user.Role" %>
 <%@ page import="com.dsa.domain.lawsuit.Lawsuit" %>
 <%@ page import="com.dsa.domain.court.CourtInstance" %>
-<%@ page import="com.dsa.domain.MyEntity" %>
+<%@ page import="com.dsa.domain.IEntity" %>
 <%@ page import="com.dsa.domain.court.CourtDao" %>
 <%@ page import="com.dsa.domain.user.UserDao" %>
 
@@ -80,10 +80,10 @@
             <td>
                 <input type="text" name="sueDate" size="45" required readonly
                         <c:if test="${editEntity != null}">
-                            value='<%= MyEntity.dateToStr(((Lawsuit) request.getAttribute("editEntity")).getSueDate()) %>'
+                            value='<%= IEntity.dateToStr(((Lawsuit) request.getAttribute("editEntity")).getSueDate()) %>'
                         </c:if>
                         <c:if test="${editEntity == null}">
-                            value='<%= MyEntity.dateToStr(new Date())%>'
+                            value='<%= IEntity.dateToStr(new Date())%>'
                         </c:if>
                 />
             </td>

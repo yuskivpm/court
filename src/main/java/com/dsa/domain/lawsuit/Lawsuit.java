@@ -1,5 +1,6 @@
 package com.dsa.domain.lawsuit;
 
+import com.dsa.domain.IEntity;
 import com.dsa.domain.court.Court;
 import com.dsa.domain.user.User;
 
@@ -35,16 +36,16 @@ public class Lawsuit extends LawsuitEntity {
   ) {
     super(id,
         sueDate,
-        getIdIfNotNull(court, 0),
-        getIdIfNotNull(suitor, 0),
+        IEntity.getIdIfNotNull(court, 0),
+        IEntity.getIdIfNotNull(suitor, 0),
         claimText,
-        getIdIfNotNull(defendant, 0),
+        IEntity.getIdIfNotNull(defendant, 0),
         defendantText,
-        getIdIfNotNull(judge, 0),
+        IEntity.getIdIfNotNull(judge, 0),
         startDate,
         verdictDate,
         verdictText,
-        getIdIfNotNull(appealedLawsuit, 0),
+        IEntity.getIdIfNotNull(appealedLawsuit, 0),
         appealStatus,
         executionDate);
     this.court = court;
@@ -111,27 +112,27 @@ public class Lawsuit extends LawsuitEntity {
 
   @Override
   public long getSuitorId() {
-    return getIdIfNotNull(suitor, super.getSuitorId());
+    return IEntity.getIdIfNotNull(suitor, super.getSuitorId());
   }
 
   @Override
   public long getDefendantId() {
-    return getIdIfNotNull(defendant, super.getDefendantId());
+    return IEntity.getIdIfNotNull(defendant, super.getDefendantId());
   }
 
   @Override
   public long getCourtId() {
-    return getIdIfNotNull(court, super.getCourtId());
+    return IEntity.getIdIfNotNull(court, super.getCourtId());
   }
 
   @Override
   public long getJudgeId() {
-    return getIdIfNotNull(judge, super.getJudgeId());
+    return IEntity.getIdIfNotNull(judge, super.getJudgeId());
   }
 
   @Override
   public long getAppealedLawsuitId() {
-    return getIdIfNotNull(appealedLawsuit, super.getAppealedLawsuitId());
+    return IEntity.getIdIfNotNull(appealedLawsuit, super.getAppealedLawsuitId());
   }
 
 }

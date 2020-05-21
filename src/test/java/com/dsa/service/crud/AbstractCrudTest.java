@@ -1,6 +1,6 @@
 package com.dsa.service.crud;
 
-import com.dsa.domain.MyEntity;
+import com.dsa.domain.IEntity;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -16,7 +16,7 @@ class AbstractCrudTest {
   @Test
   void idValue_Test() {
     System.out.println("Start idValue_Test");
-    assertEquals(MyEntity.ID, AbstractCrud.ID);
+    assertEquals(IEntity.ID, AbstractCrud.ID);
   }
 
   @Test
@@ -34,7 +34,7 @@ class AbstractCrudTest {
     final Date DEFAULT_VALUE = new Date();
     Date date = null;
     assertEquals(DEFAULT_VALUE, AbstractCrud.getNotNull("", DEFAULT_VALUE));
-    assertEquals(MyEntity.strToDate(MyEntity.dateToStr(DEFAULT_VALUE)), AbstractCrud.getNotNull(MyEntity.dateToStr(DEFAULT_VALUE), date));
+    assertEquals(IEntity.strToDate(IEntity.dateToStr(DEFAULT_VALUE)), AbstractCrud.getNotNull(IEntity.dateToStr(DEFAULT_VALUE), date));
   }
 
   @Test

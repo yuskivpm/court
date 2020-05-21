@@ -3,7 +3,7 @@ package com.dsa.domain.lawsuit;
 import com.dsa.controller.ControllerRequest;
 import com.dsa.dao.AbstractEntityDao;
 import com.dsa.dao.DbPoolException;
-import com.dsa.domain.MyEntity;
+import com.dsa.domain.IEntity;
 import com.dsa.domain.user.Role;
 
 import org.junit.jupiter.api.AfterAll;
@@ -71,7 +71,7 @@ class SueCrudTest {
     final String DEFENDANT_ID_VALUE = "4";
     final String COURT_ID_VALUE = "5";
     final String APPEALED_LAWSUIT_ID_VALUE = "6";
-    final String SUE_DATE_VALUE = MyEntity.dateToStr(new Date());
+    final String SUE_DATE_VALUE = IEntity.dateToStr(new Date());
     final String CLAIM_TEXT_VALUE = "CLAIM_TEXT_VALUE";
     when(request.getParameter(SUITOR_ID)).thenReturn(SUITOR_ID_VALUE);
     when(request.getParameter(DEFENDANT_ID)).thenReturn(DEFENDANT_ID_VALUE);
@@ -82,7 +82,7 @@ class SueCrudTest {
     Lawsuit lawsuit = sueCrud.createEntityFromParameters(request, 0);
     assertNotNull(lawsuit);
     assertEquals(0, lawsuit.getId());
-    assertEquals(MyEntity.strToDate(SUE_DATE_VALUE), lawsuit.getSueDate());
+    assertEquals(IEntity.strToDate(SUE_DATE_VALUE), lawsuit.getSueDate());
     assertEquals(CLAIM_TEXT_VALUE, lawsuit.getClaimText());
     assertEquals(Long.parseLong(SUITOR_ID_VALUE), lawsuit.getSuitorId());
     assertEquals(Long.parseLong(DEFENDANT_ID_VALUE), lawsuit.getDefendantId());

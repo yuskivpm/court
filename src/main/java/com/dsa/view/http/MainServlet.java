@@ -1,8 +1,8 @@
 package com.dsa.view.http;
 
-import com.dsa.controller.Controller;
 import com.dsa.controller.ControllerRequest;
 
+import com.dsa.controller.IController;
 import org.jetbrains.annotations.NotNull;
 
 import javax.servlet.ServletException;
@@ -14,6 +14,8 @@ import java.io.IOException;
 
 @WebServlet({"/api/*"})
 public class MainServlet extends HttpServlet {
+
+  private static IController controller;
 
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -39,7 +41,7 @@ public class MainServlet extends HttpServlet {
       @NotNull HttpServletRequest request,
       HttpServletResponse response
   ) throws ServletException, IOException {
-    ControllerRequest controllerRequest = Controller.execute(
+    ControllerRequest controllerRequest = controller.execute(
         HttpToControllerConverter.prepareRequestDataForController(request, true)
     );
     controllerRequest.getAttributes().forEach(request::setAttribute);
@@ -59,6 +61,10 @@ public class MainServlet extends HttpServlet {
         response.sendRedirect(request.getContextPath() + controllerRequest.getResponseValue());
         break;
     }
+  }
+
+  public static void setController(IController controller){
+    MainServlet.controller = controller;
   }
 
 }

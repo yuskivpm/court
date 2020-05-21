@@ -1,6 +1,5 @@
 package com.dsa.view.http;
 
-import com.dsa.controller.Controller;
 import com.dsa.controller.ControllerRequest;
 
 import org.jetbrains.annotations.NotNull;
@@ -14,21 +13,26 @@ import java.util.Map;
 
 class HttpToControllerConverter {
 
+  private static final String METHOD = "method";
+  private static final String PATH_INFO = "pathInfo";
+  private static final String QUERY_STRING = "queryString";
+  private static final String COMMAND = "command";
+
   private static void getMainRequestCommonData(
       @NotNull HttpServletRequest request,
       @NotNull ControllerRequest controllerRequest
   ) {
-    controllerRequest.setParameter(Controller.METHOD, request.getMethod());
-    controllerRequest.setParameter(Controller.PATH_INFO, request.getPathInfo() + "/");
-    controllerRequest.setParameter(Controller.QUERY_STRING, request.getQueryString());
+    controllerRequest.setParameter(METHOD, request.getMethod());
+    controllerRequest.setParameter(PATH_INFO, request.getPathInfo() + "/");
+    controllerRequest.setParameter(QUERY_STRING, request.getQueryString());
     Map<String, String[]> params = request.getParameterMap();
     params.forEach((name, values) -> {
       if (name != null && !name.isEmpty() && values != null) {
         controllerRequest.setParameter(name, String.join(",", values));
       }
     });
-    if (controllerRequest.getParameter(Controller.COMMAND).isEmpty()) {
-      controllerRequest.setParameter(Controller.COMMAND, request.getPathInfo() + "/");
+    if (controllerRequest.getParameter(COMMAND).isEmpty()) {
+      controllerRequest.setParameter(COMMAND, request.getPathInfo() + "/");
     }
   }
 

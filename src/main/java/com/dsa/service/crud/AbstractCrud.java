@@ -4,7 +4,7 @@ import com.dsa.controller.ControllerRequest;
 import com.dsa.controller.ResponseType;
 import com.dsa.dao.AbstractEntityDao;
 import com.dsa.dao.DbPoolException;
-import com.dsa.domain.MyEntity;
+import com.dsa.domain.IEntity;
 import com.dsa.service.command.RedirectCommand;
 
 import org.apache.log4j.Logger;
@@ -18,12 +18,13 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityDao>
+public abstract class AbstractCrud<E extends IEntity, D extends AbstractEntityDao>
     implements Function<ControllerRequest, ControllerRequest> {
 
-  protected static final String ID = MyEntity.ID;
+  protected static final String ID = IEntity.ID;
 
   private static final Logger log = Logger.getLogger(AbstractCrud.class);
+  private static ICrudParser crudParser;
 
   private final String path;
 
@@ -34,8 +35,8 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
 
   @Override
   public ControllerRequest apply(@NotNull ControllerRequest request) {
-    if (checkAuthority(request)) {
-      CrudEnum ce = CrudParser.getCrudOperation(request, getPath());
+    if (crudParser != null && checkAuthority(request)) {
+      CrudEnum ce = crudParser.getCrudOperation(request, getPath());
       switch (ce) {
         case PREPARE_UPDATE_FORM:
           return prepareEditForm(request);
@@ -56,7 +57,7 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
   private ControllerRequest executeCrudOperation(@NotNull ControllerRequest request, @NotNull CrudEnum ce) {
     String responseValue;
     try {
-      String id = request.getParameter("id");
+      String id = request.getParameter(ID);
       boolean result = false;
       String errorMessage = "\"db error\"";
       String successMessage = "";
@@ -77,7 +78,7 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
             result = true;
             break;
           case READ:
-            MyEntity resultEntity = entityDao.readEntity(getNotNull(id, 0));
+            IEntity resultEntity = entityDao.readEntity(getNotNull(id, 0));
             successMessage = resultEntity != null ? resultEntity.toString() : "";
             result = !successMessage.isEmpty();
             break;
@@ -99,7 +100,7 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
   private ControllerRequest prepareEditForm(@NotNull ControllerRequest request) {
     String id = request.getParameter("id");
     try (D entityDao = createEntityDao()) {
-      MyEntity entity = entityDao.loadAllSubEntities(entityDao.readEntity(ID, id));
+      IEntity entity = entityDao.loadAllSubEntities(entityDao.readEntity(ID, id));
       if (entity != null) {
         request = new RedirectCommand().apply(request);
         request.setAttribute("editEntity", entity);
@@ -122,7 +123,7 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
   }
 
   protected static Date getNotNull(@NotNull String tryValue, Date defaultValue) throws ParseException {
-    return tryValue.isEmpty() ? defaultValue : MyEntity.strToDate(tryValue);
+    return tryValue.isEmpty() ? defaultValue : IEntity.strToDate(tryValue);
   }
 
   public String getPath() {
@@ -134,5 +135,9 @@ public abstract class AbstractCrud<E extends MyEntity, D extends AbstractEntityD
   protected abstract E createEntityFromParameters(@NotNull ControllerRequest request, long id);
 
   protected abstract D createEntityDao() throws SQLException, DbPoolException;
+
+  public static void setCrudParser(ICrudParser crudParser){
+    AbstractCrud.crudParser = crudParser;
+  }
 
 }
